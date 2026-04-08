@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAddItem } from "../hooks/useItem";
 import Alert from "../components/Alert";
 import { Logo, QrIcon } from "../components/Icons";
-import PrintQRModal from "../components/PrintQRModal";
+import ItemSuccessModal from "../components/ItemSuccessModal";
 
 const BackIcon = () => (
   <svg
@@ -46,25 +46,12 @@ const UploadIcon = () => (
   </svg>
 );
 
-const CheckIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-    <path
-      d="M20 6L9 17l-5-5"
-      stroke="white"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 function AddItemPage() {
   const navigate = useNavigate();
   const { addItem, loading } = useAddItem();
 
   const [alert, setAlert] = useState({ message: "", type: "" });
   const [success, setSuccess] = useState(null);
-  const [showPrintModal, setShowPrintModal] = useState(false);
   const [preview, setPreview] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef();
@@ -116,133 +103,15 @@ function AddItemPage() {
   // Success Screen
   if (success) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          background: "#f8fafc",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "20px",
-        }}>
-        <div
-          style={{
-            background: "white",
-            borderRadius: "24px",
-            padding: "48px 40px",
-            boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
-            maxWidth: "440px",
-            width: "100%",
-            textAlign: "center",
-          }}>
-          <div
-            style={{
-              width: "80px",
-              height: "80px",
-              background: "linear-gradient(135deg, #22c55e, #16a34a)",
-              borderRadius: "50%",
-              margin: "0 auto 20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}>
-            <CheckIcon />
-          </div>
-
-          <h2
-            style={{
-              fontSize: "28px",
-              marginBottom: "12px",
-              color: "#0f172a",
-            }}>
-            Item Registered!
-          </h2>
-          <p style={{ color: "#64748b", marginBottom: "32px" }}>
-            <strong>{success.name}</strong> has been registered successfully.
-          </p>
-
-          {success.qr_code_url && (
-            <div style={{ marginBottom: "32px" }}>
-              <p
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  color: "#64748b",
-                  marginBottom: "12px",
-                }}>
-                <QrIcon /> Your item's QR code
-              </p>
-              <img
-                src={success.qr_code_url}
-                alt="QR"
-                style={{
-                  width: "160px",
-                  height: "160px",
-                  margin: "0 auto",
-                  border: "2px solid #e2e8f0",
-                  borderRadius: "12px",
-                  padding: "8px",
-                }}
-              />
-            </div>
-          )}
-
-          <div
-            style={{
-              display: "flex",
-              gap: "12px",
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}>
-            <button
-              onClick={() => navigate("/home")}
-              style={{
-                padding: "12px 24px",
-                border: "1px solid #e2e8f0",
-                borderRadius: "12px",
-                color: "#64748b",
-              }}>
-              Back to Home
-            </button>
-            <button
-              onClick={() => setShowPrintModal(true)}
-              style={{
-                padding: "12px 24px",
-                background: "#2563eb",
-                color: "white",
-                borderRadius: "12px",
-                fontWeight: "600",
-              }}>
-              🖨️ Print QR Code
-            </button>
-            <button
-              onClick={() => {
-                setSuccess(null);
-                setForm({ name: "", description: "" });
-                setImageFile(null);
-                setPreview(null);
-              }}
-              style={{
-                padding: "12px 24px",
-                background: "#2563eb",
-                color: "white",
-                borderRadius: "12px",
-                fontWeight: "600",
-              }}>
-              Register Another
-            </button>
-          </div>
-        </div>
-
-        <PrintQRModal
-          isOpen={showPrintModal}
-          onClose={() => setShowPrintModal(false)}
-          qrCodeUrl={success?.qr_code_url}
-          itemName={success?.name}
-        />
-      </div>
+      <ItemSuccessModal
+        success={success}
+        onRegisterAnother={() => {
+          setSuccess(null);
+          setForm({ name: "", description: "" });
+          setImageFile(null);
+          setPreview(null);
+        }}
+      />
     );
   }
 
@@ -257,6 +126,7 @@ function AddItemPage() {
         />
       )}
 
+      {/* Simple Navbar */}
       <nav
         style={{
           background: "white",
@@ -293,21 +163,43 @@ function AddItemPage() {
               color: "#64748b",
               borderRadius: "12px",
               border: "1px solid #e2e8f0",
+              background: "transparent",
+              cursor: "pointer",
+              fontSize: "14px",
+              fontWeight: "600",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#f1f5f9";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
             }}>
             <BackIcon /> Back
           </button>
         </div>
       </nav>
 
+      {/* Form Container */}
       <div
         style={{ maxWidth: "640px", margin: "0 auto", padding: "40px 20px" }}>
-        <h1 style={{ fontSize: "32px", color: "#0f172a", marginBottom: "8px" }}>
+        <h1
+          style={{
+            fontSize: "32px",
+            fontWeight: "700",
+            color: "#0f172a",
+            marginBottom: "8px",
+          }}>
           Register an Item
         </h1>
-        <p style={{ color: "#64748b", marginBottom: "40px" }}>
+        <p
+          style={{
+            color: "#64748b",
+            marginBottom: "32px",
+            fontSize: "15px",
+          }}>
           Add your item to generate a QR code for easy recovery.
         </p>
-
         <form
           onSubmit={handleSubmit}
           style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
@@ -316,9 +208,10 @@ function AddItemPage() {
             <label
               style={{
                 display: "block",
-                marginBottom: "8px",
+                marginBottom: "12px",
                 fontWeight: "600",
-                color: "#374151",
+                color: "#0f172a",
+                fontSize: "15px",
               }}>
               Item Photo
             </label>
@@ -332,7 +225,7 @@ function AddItemPage() {
               onDragLeave={() => setDragOver(false)}
               style={{
                 border: `2px dashed ${
-                  dragOver ? "#3b82f6"
+                  dragOver ? "#2563eb"
                   : preview ? "#22c55e"
                   : "#cbd5e1"
                 }`,
@@ -344,9 +237,10 @@ function AddItemPage() {
                 background:
                   dragOver ? "#eff6ff"
                   : preview ? "#f0fdf4"
-                  : "#f8fafc",
+                  : "white",
                 cursor: "pointer",
                 overflow: "hidden",
+                transition: "all 0.2s",
               }}>
               {preview ?
                 <img
@@ -359,14 +253,15 @@ function AddItemPage() {
                   <p
                     style={{
                       marginTop: "16px",
-                      color: "#475569",
+                      color: "#0f172a",
                       fontWeight: "500",
+                      fontSize: "15px",
                     }}>
                     Click or drag photo here
                   </p>
                   <p
                     style={{
-                      color: "#94a3b8",
+                      color: "#64748b",
                       fontSize: "14px",
                       marginTop: "4px",
                     }}>
@@ -384,40 +279,57 @@ function AddItemPage() {
             />
           </div>
 
-          {/* Name & Description */}
+          {/* Item Name */}
           <div>
             <label
               style={{
                 display: "block",
-                marginBottom: "8px",
+                marginBottom: "12px",
                 fontWeight: "600",
-                color: "#374151",
+                color: "#0f172a",
+                fontSize: "15px",
               }}>
-              Item Name <span style={{ color: "red" }}>*</span>
+              Item Name {/* <span style={{ color: "#f87171" }}>*</span> */}
             </label>
             <input
               name="name"
               required
               value={form.name}
               onChange={handleChange}
-              placeholder="e.g. Blue Umbrella..."
+              placeholder="e.g., Blue Backpack"
               style={{
                 width: "100%",
-                padding: "16px",
-                border: "1.5px solid #e2e8f0",
+                padding: "12px 16px",
                 borderRadius: "12px",
-                fontSize: "16px",
+                border: "1px solid #cbd5e1",
+                fontSize: "15px",
+                fontFamily: "inherit",
+                color: "#0f172a",
+                background: "white",
+                transition: "all 0.2s",
+                boxSizing: "border-box",
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "#2563eb";
+                e.currentTarget.style.boxShadow =
+                  "0 0 0 3px rgba(37,99,235,0.1)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "#cbd5e1";
+                e.currentTarget.style.boxShadow = "none";
               }}
             />
           </div>
 
+          {/* Item Description */}
           <div>
             <label
               style={{
                 display: "block",
-                marginBottom: "8px",
+                marginBottom: "12px",
                 fontWeight: "600",
-                color: "#374151",
+                color: "#0f172a",
+                fontSize: "15px",
               }}>
               Description
             </label>
@@ -426,48 +338,91 @@ function AddItemPage() {
               value={form.description}
               onChange={handleChange}
               rows={4}
-              placeholder="Color, brand, serial number..."
+              placeholder="Add details about your item..."
               style={{
                 width: "100%",
-                padding: "16px",
-                border: "1.5px solid #e2e8f0",
+                padding: "12px 16px",
                 borderRadius: "12px",
+                border: "1px solid #cbd5e1",
+                fontSize: "15px",
+                fontFamily: "inherit",
+                color: "#0f172a",
+                minHeight: "120px",
+                background: "white",
                 resize: "vertical",
-                fontSize: "16px",
+                transition: "all 0.2s",
+                boxSizing: "border-box",
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "#2563eb";
+                e.currentTarget.style.boxShadow =
+                  "0 0 0 3px rgba(37,99,235,0.1)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "#cbd5e1";
+                e.currentTarget.style.boxShadow = "none";
               }}
             />
           </div>
 
+          {/* Info Box */}
           <div
             style={{
-              background: "#eff6ff",
-              border: "1px solid #bfdbfe",
+              background:
+                "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(29,78,216,0.08) 100%)",
+              border: "1px solid rgba(37,99,235,0.2)",
               borderRadius: "16px",
               padding: "20px",
               display: "flex",
               gap: "16px",
+              alignItems: "flex-start",
             }}>
-            <QrIcon />
-            <p style={{ color: "#1e40af", lineHeight: "1.5" }}>
-              A unique QR code will be generated. Print it and attach it to the
-              item.
+            <QrIcon style={{ marginTop: "2px", flexShrink: 0 }} />
+            <p
+              style={{
+                color: "#1e3a8a",
+                lineHeight: "1.6",
+                margin: 0,
+                fontSize: "15px",
+              }}>
+              A unique QR code will be generated. Print it and attach it to your
+              item for easy recovery if lost.
             </p>
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
             style={{
-              padding: "18px",
-              background: loading ? "#93c5fd" : "#2563eb",
+              padding: "14px 24px",
+              background:
+                loading ? "#cbd5e1" : (
+                  "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                ),
               color: "white",
-              fontWeight: "700",
-              fontSize: "17px",
-              borderRadius: "14px",
               border: "none",
+              borderRadius: "12px",
+              fontSize: "16px",
+              fontWeight: "600",
               cursor: loading ? "not-allowed" : "pointer",
+              transition: "all 0.2s",
+              marginTop: "8px",
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow =
+                  "0 8px 16px rgba(37,99,235,0.3)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!loading) {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }
             }}>
-            {loading ? "Registering..." : "Register & Generate QR Code"}
+            {loading ? "Registering..." : "Register Item"}
           </button>
         </form>
       </div>

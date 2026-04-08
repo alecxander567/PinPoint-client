@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { NAV } from "./navConfig";
 import { Logo, PlusIcon } from "./Icons";
 
 function Navbar({ activePage, setActivePage, onLogout }) {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   return (
     <nav className="navbar hidden-mobile">
@@ -15,7 +15,7 @@ function Navbar({ activePage, setActivePage, onLogout }) {
 
       {/* Nav links */}
       <div className="navbar__links">
-        {NAV.map(({ key, label }) => (
+        {NAV.map(({ key, label, Icon }) => (
           <button
             key={key}
             onClick={() => setActivePage(key)}
@@ -29,7 +29,7 @@ function Navbar({ activePage, setActivePage, onLogout }) {
       {/* Right actions - FIXED */}
       <div className="navbar__actions">
         <button
-          onClick={() => navigate("/add-item")} 
+          onClick={() => navigate("/add-item")}
           className="btn btn--primary">
           <PlusIcon />
           Add Item
