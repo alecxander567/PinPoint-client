@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap");
+
 @import "tailwindcss";
 
 @keyframes fade-in {
@@ -13,4 +15,24 @@
 
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #printable-qr,
+  #printable-qr * {
+    visibility: visible;
+  }
+
+  #printable-qr {
+    position: absolute;
+    left: 50%;
+    top: 50px;
+    transform: translateX(-50%);
+    padding: 30px;
+    border: 3px solid #e2e8f0 !important;
+  }
 }

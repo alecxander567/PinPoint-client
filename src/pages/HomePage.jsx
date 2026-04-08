@@ -1,64 +1,125 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import { useLogout } from "../hooks/auth";
+import Navbar from "../components/Navbar";
+import FooterNav from "../components/Footer";
+import { Logo, PlusIcon } from "../components/Icons";
+import { NAV } from "../components/navConfig";
+import "../css/HomePage.css";
 
-function HomePage() {
-  const { logout } = useLogout();
-  const name = localStorage.getItem("name");
+/* ── Page Content ───────────────────────────────────────── */
+function PageContent({ page, name, onAddItem }) {
+  if (page === "home") {
+    return (
+      <div className="home-hero">
+        <div className="home-hero__avatar">
+          <div className="home-hero__avatar-ring">
+            <Logo size={40} />
+          </div>
+          <span className="home-hero__status-dot" />
+        </div>
+
+        <h1 className="home-hero__title">Welcome back, {name}!</h1>
+        <p className="home-hero__subtitle">
+          Helping your community recover lost items. Use the navigation to get
+          started.
+        </p>
+
+        <div className="home-hero__stats">
+          {[
+            { label: "Your Items", value: "0", accent: "#2563eb" },
+            { label: "Matches Found", value: "0", accent: "#16a34a" },
+            { label: "Reports", value: "0", accent: "#d97706" },
+          ].map((c) => (
+            <div key={c.label} className="stat-card">
+              <div className="stat-card__value" style={{ color: c.accent }}>
+                {c.value}
+              </div>
+              <div className="stat-card__label">{c.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <button onClick={onAddItem} className="btn--cta">
+          <PlusIcon />
+          Register an Item
+        </button>
+      </div>
+    );
+  }
+
+  const labels = {
+    lost: "Lost Items",
+    returned: "Returned Items",
+    activity: "Activity Logs",
+    reports: "Reports",
+    profile: "Profile",
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <svg width="24" height="24" viewBox="0 0 36 36" fill="none">
-            <circle cx="15" cy="15" r="8" stroke="#1d4ed8" strokeWidth="2" />
-            <path
-              d="M21 21l6 6"
-              stroke="#1d4ed8"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M15 11v4M13 13h4"
-              stroke="#1d4ed8"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-          <span className="text-blue-700 font-medium text-lg">Item Finder</span>
+    <div className="page-placeholder">
+      <div className="page-placeholder__icon-wrap">
+        {NAV.find((n) => n.key === page)?.Icon({ active: true })}
+      </div>
+      <h2 className="page-placeholder__title">{labels[page]}</h2>
+      <p className="page-placeholder__desc">This section is coming soon.</p>
+    </div>
+  );
+}
+
+/* ── Main Component ─────────────────────────────────────── */
+function HomePage() {
+  const navigate = useNavigate(); 
+  const { logout } = useLogout();
+  const name = localStorage.getItem("name") || "User";
+  const [activePage, setActivePage] = useState("home");
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#f8fafc",
+        display: "flex",
+        flexDirection: "column",
+      }}>
+      {/* Desktop Navbar */}
+      <Navbar
+        activePage={activePage}
+        setActivePage={setActivePage}
+        onLogout={logout}
+      />
+
+      {/* Mobile Header */}
+      <div className="mobile-header show-mobile">
+        <div className="mobile-header__brand">
+          <Logo size={24} />
+          <span className="mobile-header__brand-text">Item Finder</span>
         </div>
         <button
-          onClick={logout}
-          className="text-sm text-gray-500 hover:text-red-500 border border-gray-200 hover:border-red-300 px-4 py-2 rounded-lg transition-colors">
-          Log out
+          onClick={() => navigate("/add-item")}
+          className="mobile-header__add-btn">
+          <PlusIcon />
         </button>
       </div>
 
-      {/* Body */}
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] text-center px-6">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-          <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
-            <circle cx="15" cy="15" r="8" stroke="#1d4ed8" strokeWidth="2" />
-            <path
-              d="M21 21l6 6"
-              stroke="#1d4ed8"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M15 11v4M13 13h4"
-              stroke="#1d4ed8"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
-        <h1 className="text-2xl font-medium text-gray-900 mb-2">
-          Welcome back, {name}!
-        </h1>
-        <p className="text-sm text-gray-500 max-w-xs">
-          Your homepage is coming soon. Use the navigation to get started.
-        </p>
-      </div>
+      {/* Page Body */}
+      <main
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          paddingBottom: "80px",
+        }}
+        className="main-content">
+        <PageContent
+          page={activePage}
+          name={name}
+          onAddItem={() => navigate("/add-item")} 
+        />
+      </main>
+
+      {/* Mobile Footer Nav */}
+      <FooterNav activePage={activePage} setActivePage={setActivePage} />
     </div>
   );
 }
