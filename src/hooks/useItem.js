@@ -15,7 +15,13 @@ export function useAddItem() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const addItem = async ({ owner_id, name, description, image }) => {
+  const addItem = async ({
+    owner_id,
+    name,
+    description,
+    owner_fb_account_url,
+    image,
+  }) => {
     setLoading(true);
     setError(null);
     try {
@@ -23,6 +29,7 @@ export function useAddItem() {
       formData.append("owner_id", owner_id);
       formData.append("name", name);
       formData.append("description", description || "");
+      formData.append("owner_fb_account_url", owner_fb_account_url || "");
       formData.append("image", image);
       const response = await api.post("/api/items/add/", formData);
       return { data: response.data };
@@ -81,7 +88,10 @@ export function useEditItem() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const editItem = async (item_id, { name, description, image }) => {
+  const editItem = async (
+    item_id,
+    { name, description, owner_fb_account_url, image },
+  ) => {
     setLoading(true);
     setError(null);
     try {
@@ -89,6 +99,8 @@ export function useEditItem() {
       if (name) formData.append("name", name);
       if (description !== undefined)
         formData.append("description", description);
+      if (owner_fb_account_url !== undefined)
+        formData.append("owner_fb_account_url", owner_fb_account_url);
       if (image) formData.append("image", image);
 
       const response = await api.put(`/api/items/${item_id}/update/`, formData);

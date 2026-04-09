@@ -5,6 +5,8 @@ import HomePage from "./pages/HomePage";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
 import AddItemPage from "./pages/AddItemPage";
+import FoundItemPage from "./pages/FoundItemPage";
+import ReportsPage from "./pages/ReportsPage";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/add-item" element={<AddItemPage />} />
+        <Route path="/found/:itemId" element={<FoundItemPage />} />
+        <Route path="/reports" element={<ReportsPage />} />
       </Routes>
     </BrowserRouter>
   );

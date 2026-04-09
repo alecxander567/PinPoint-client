@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useLogout } from "../hooks/auth";
 import { useGetUserItems, useDeleteItem } from "../hooks/useItem";
 import Navbar from "../components/Navbar";
@@ -12,7 +12,6 @@ import { Logo, PlusIcon } from "../components/Icons";
 import { NAV } from "../components/navConfig";
 import "../css/HomePage.css";
 
-/* ── Skeleton Components ─────────────────────────────────── */
 function SkeletonCard() {
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md">
@@ -64,15 +63,7 @@ function SkeletonLoader() {
   );
 }
 
-/* ── Page Content ───────────────────────────────────────── */
-function PageContent({
-  page,
-  name,
-  items,
-  loading,
-  onItemUpdated,
-  onItemDeleted,
-}) {
+function PageContent({ page, name, items, loading, onItemUpdated, onItemDeleted }) {
   const [selectedItemQR, setSelectedItemQR] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
   const [deletingItem, setDeletingItem] = useState(null);
@@ -129,24 +120,23 @@ function PageContent({
           .search-input-light:focus { outline: none; border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(147,197,253,0.3); }
         `}</style>
 
-        {/* Hero */}
         <div
           style={{
             background:
               "linear-gradient(145deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%)",
             color: "white",
             padding: "28px 24px 24px",
-          }}>
+          }}
+        >
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-            {/* Avatar + Name + Stats */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "20px",
                 flexWrap: "wrap",
-              }}>
-              {/* Avatar */}
+              }}
+            >
               <div
                 style={{
                   width: "56px",
@@ -158,11 +148,11 @@ function PageContent({
                   alignItems: "center",
                   justifyContent: "center",
                   flexShrink: 0,
-                }}>
+                }}
+              >
                 <Logo size={28} color="white" />
               </div>
 
-              {/* Name + subtitle */}
               <div style={{ flex: 1, minWidth: "180px" }}>
                 <h1
                   style={{
@@ -171,7 +161,8 @@ function PageContent({
                     fontWeight: "800",
                     margin: "0 0 2px 0",
                     lineHeight: 1.2,
-                  }}>
+                  }}
+                >
                   Welcome back, {name}!
                 </h1>
                 <p
@@ -180,12 +171,12 @@ function PageContent({
                     opacity: 0.8,
                     margin: 0,
                     fontFamily: "'Nunito', sans-serif",
-                  }}>
+                  }}
+                >
                   Helping your community recover lost items
                 </p>
               </div>
 
-              {/* Stats badges */}
               <div
                 style={{
                   display: "flex",
@@ -196,7 +187,8 @@ function PageContent({
                   overflow: "hidden",
                   flexShrink: 0,
                   border: "1px solid rgba(255,255,255,0.1)",
-                }}>
+                }}
+              >
                 {[
                   { label: "Items", value: items.length, color: "#fbbf24" },
                   { label: "Matches", value: 0, color: "#34d399" },
@@ -211,10 +203,9 @@ function PageContent({
                       justifyContent: "center",
                       padding: "14px 28px",
                       borderRight:
-                        i < arr.length - 1 ?
-                          "1px solid rgba(255,255,255,0.1)"
-                        : "none",
-                    }}>
+                        i < arr.length - 1 ? "1px solid rgba(255,255,255,0.1)" : "none",
+                    }}
+                  >
                     <span
                       style={{
                         fontFamily: "'Poppins', sans-serif",
@@ -222,7 +213,8 @@ function PageContent({
                         fontSize: "28px",
                         color: c.color,
                         lineHeight: 1,
-                      }}>
+                      }}
+                    >
                       {c.value}
                     </span>
                     <span
@@ -233,7 +225,8 @@ function PageContent({
                         marginTop: "4px",
                         fontWeight: "700",
                         letterSpacing: "0.02em",
-                      }}>
+                      }}
+                    >
                       {c.label}
                     </span>
                   </div>
@@ -243,7 +236,6 @@ function PageContent({
           </div>
         </div>
 
-        {/* Search Bar — below hero, right-aligned */}
         <div
           style={{
             maxWidth: "1200px",
@@ -251,7 +243,8 @@ function PageContent({
             padding: "16px 20px 0",
             display: "flex",
             justifyContent: "flex-end",
-          }}>
+          }}
+        >
           <div style={{ position: "relative", width: "300px" }}>
             <svg
               style={{
@@ -269,7 +262,8 @@ function PageContent({
               stroke="currentColor"
               strokeWidth="2.5"
               strokeLinecap="round"
-              strokeLinejoin="round">
+              strokeLinejoin="round"
+            >
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
@@ -313,20 +307,21 @@ function PageContent({
                   color: "#64748b",
                   fontSize: "13px",
                   lineHeight: 1,
-                }}>
+                }}
+              >
                 ×
               </button>
             )}
           </div>
         </div>
 
-        {/* Items Grid */}
         <div
           style={{
             maxWidth: "1200px",
             margin: "0 auto",
             padding: "24px 20px 40px",
-          }}>
+          }}
+        >
           {items.length > 0 && (
             <>
               <h2
@@ -336,20 +331,21 @@ function PageContent({
                   fontWeight: "700",
                   color: "#0f172a",
                   marginBottom: "24px",
-                }}>
-                {search ?
-                  `Results for "${search}" (${filteredItems.length})`
-                : `Your Items (${items.length})`}
+                }}
+              >
+                {search
+                  ? `Results for "${search}" (${filteredItems.length})`
+                  : `Your Items (${items.length})`}
               </h2>
 
-              {filteredItems.length > 0 ?
+              {filteredItems.length > 0 ? (
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(220px, 1fr))",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
                     gap: "20px",
-                  }}>
+                  }}
+                >
                   {filteredItems.map((item) => (
                     <div
                       key={item.id}
@@ -362,16 +358,14 @@ function PageContent({
                         transition: "box-shadow 0.2s, transform 0.2s",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.boxShadow =
-                          "0 8px 24px rgba(0,0,0,0.13)";
+                        e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.13)";
                         e.currentTarget.style.transform = "translateY(-2px)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.boxShadow =
-                          "0 2px 12px rgba(0,0,0,0.08)";
+                        e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.08)";
                         e.currentTarget.style.transform = "translateY(0)";
-                      }}>
-                      {/* Image */}
+                      }}
+                    >
                       <div
                         style={{
                           background: "#f8fafc",
@@ -381,7 +375,8 @@ function PageContent({
                           justifyContent: "center",
                           minHeight: "180px",
                           position: "relative",
-                        }}>
+                        }}
+                      >
                         <button
                           onClick={() => setSelectedItemQR(item)}
                           className="btn btn--primary"
@@ -392,7 +387,8 @@ function PageContent({
                             padding: "5px 12px",
                             fontSize: "12px",
                             borderRadius: "8px",
-                          }}>
+                          }}
+                        >
                           View QR
                         </button>
                         <img
@@ -406,7 +402,6 @@ function PageContent({
                         />
                       </div>
 
-                      {/* Info */}
                       <div style={{ padding: "16px" }}>
                         <h3
                           style={{
@@ -415,7 +410,8 @@ function PageContent({
                             fontWeight: "700",
                             color: "#0f172a",
                             margin: "0 0 6px 0",
-                          }}>
+                          }}
+                        >
                           {item.name}
                         </h3>
                         <p
@@ -425,9 +421,30 @@ function PageContent({
                             color: "#64748b",
                             lineHeight: "1.5",
                             margin: "0 0 14px 0",
-                          }}>
+                          }}
+                        >
                           {item.description || "No description"}
                         </p>
+
+                        {item.owner_fb_account_url && (
+                          <a
+                            href={item.owner_fb_account_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              display: "block",
+                              fontFamily: "'Nunito', sans-serif",
+                              fontSize: "12px",
+                              color: "#2563eb",
+                              lineHeight: "1.5",
+                              margin: "0 0 14px 0",
+                              textDecoration: "none",
+                              wordBreak: "break-word",
+                            }}
+                          >
+                            {item.owner_fb_account_url}
+                          </a>
+                        )}
 
                         {item.qr_code_url && (
                           <div
@@ -435,7 +452,8 @@ function PageContent({
                               display: "flex",
                               justifyContent: "center",
                               marginBottom: "14px",
-                            }}>
+                            }}
+                          >
                             <img
                               src={item.qr_code_url}
                               alt="QR Code"
@@ -450,7 +468,6 @@ function PageContent({
                           </div>
                         )}
 
-                        {/* Action buttons */}
                         <div style={{ display: "flex", gap: "8px" }}>
                           <button
                             onClick={() => setDeletingItem(item)}
@@ -466,12 +483,9 @@ function PageContent({
                               borderRadius: "10px",
                               boxShadow: "0 2px 8px rgba(239,68,68,0.2)",
                             }}
-                            onMouseEnter={(e) =>
-                              (e.currentTarget.style.background = "#dc2626")
-                            }
-                            onMouseLeave={(e) =>
-                              (e.currentTarget.style.background = "#ef4444")
-                            }>
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "#dc2626")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "#ef4444")}
+                          >
                             Delete
                           </button>
                           <button
@@ -483,7 +497,8 @@ function PageContent({
                               padding: "9px",
                               fontSize: "13px",
                               borderRadius: "10px",
-                            }}>
+                            }}
+                          >
                             Edit
                           </button>
                         </div>
@@ -491,23 +506,23 @@ function PageContent({
                     </div>
                   ))}
                 </div>
-              : <div style={{ textAlign: "center", padding: "60px 24px" }}>
+              ) : (
+                <div style={{ textAlign: "center", padding: "60px 24px" }}>
                   <p
                     style={{
                       fontFamily: "'Nunito', sans-serif",
                       color: "#64748b",
                       fontSize: "15px",
                       marginBottom: "12px",
-                    }}>
+                    }}
+                  >
                     No items match "<strong>{search}</strong>"
                   </p>
-                  <button
-                    onClick={() => setSearch("")}
-                    className="btn btn--ghost">
+                  <button onClick={() => setSearch("")} className="btn btn--ghost">
                     Clear search
                   </button>
                 </div>
-              }
+              )}
             </>
           )}
 
@@ -523,7 +538,6 @@ function PageContent({
           )}
         </div>
 
-        {/* Modals & Alerts */}
         <PrintQRModal
           isOpen={!!selectedItemQR}
           onClose={() => setSelectedItemQR(null)}
@@ -537,10 +551,7 @@ function PageContent({
           onSaved={(updatedItem) => {
             onItemUpdated(updatedItem);
             setEditingItem(null);
-            showAlert(
-              `"${updatedItem.name}" was updated successfully.`,
-              "success",
-            );
+            showAlert(`"${updatedItem.name}" was updated successfully.`, "success");
           }}
         />
         <DeleteConfirmModal
@@ -559,9 +570,9 @@ function PageContent({
     lost: "Lost Items",
     returned: "Returned Items",
     activity: "Activity Logs",
-    reports: "Reports",
     profile: "Profile",
   };
+
   return (
     <div className="page-placeholder">
       <div className="page-placeholder__icon-wrap">
@@ -573,26 +584,37 @@ function PageContent({
   );
 }
 
-/* ── Main Component ─────────────────────────────────────── */
 function HomePage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useLogout();
   const name = localStorage.getItem("name") || "User";
-  const user_id = localStorage.getItem("user_id");
+  const userId = localStorage.getItem("user_id");
   const [activePage, setActivePage] = useState("home");
   const { items, setItems, fetchUserItems, loading } = useGetUserItems();
 
   useEffect(() => {
-    if (user_id) fetchUserItems(user_id);
-  }, [user_id]);
+    if (userId) fetchUserItems(userId);
+  }, [userId]);
+
+  const currentPage =
+    location.state?.activePage && location.state.activePage !== "reports"
+      ? location.state.activePage
+      : activePage;
 
   const handleItemUpdated = (updatedItem) =>
-    setItems((prev) =>
-      prev.map((i) => (i.id === updatedItem.id ? updatedItem : i)),
-    );
+    setItems((prev) => prev.map((i) => (i.id === updatedItem.id ? updatedItem : i)));
 
   const handleItemDeleted = (deletedId) =>
     setItems((prev) => prev.filter((i) => i.id !== deletedId));
+
+  const handleSetActivePage = (page) => {
+    if (page === "reports") {
+      navigate("/reports");
+      return;
+    }
+    setActivePage(page);
+  };
 
   return (
     <div
@@ -601,40 +623,32 @@ function HomePage() {
         background: "#f8fafc",
         display: "flex",
         flexDirection: "column",
-      }}>
-      {/* Desktop Navbar */}
-      <Navbar
-        activePage={activePage}
-        setActivePage={setActivePage}
-        onLogout={logout}
-      />
+      }}
+    >
+      <Navbar activePage={currentPage} setActivePage={handleSetActivePage} onLogout={logout} />
 
-      {/* Mobile Header */}
       <div className="mobile-header show-mobile">
         <div className="mobile-header__brand">
           <Logo size={24} />
           <span className="mobile-header__brand-text">Item Finder</span>
         </div>
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-          <button
-            onClick={() => navigate("/add-item")}
-            className="mobile-header__add-btn">
+          <button onClick={() => navigate("/add-item")} className="mobile-header__add-btn">
             <PlusIcon />
           </button>
           <button
             onClick={logout}
             className="btn btn--ghost"
-            style={{ padding: "6px 14px", fontSize: "12px" }}>
+            style={{ padding: "6px 14px", fontSize: "12px" }}
+          >
             Logout
           </button>
         </div>
       </div>
 
-      <main
-        className="main-content"
-        style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <main className="main-content" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <PageContent
-          page={activePage}
+          page={currentPage}
           name={name}
           items={items}
           loading={loading}
@@ -643,7 +657,7 @@ function HomePage() {
         />
       </main>
 
-      <FooterNav activePage={activePage} setActivePage={setActivePage} />
+      <FooterNav activePage={currentPage} setActivePage={handleSetActivePage} />
     </div>
   );
 }

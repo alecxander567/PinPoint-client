@@ -71,30 +71,18 @@ const PrintQRModal = ({ isOpen, onClose, qrCodeUrl, itemName }) => {
           <p
             style={{
               color: "#64748b",
-              marginBottom: "28px",
+              marginBottom: "24px",
               fontSize: "14.5px",
             }}>
             Print this and attach it to your item
           </p>
 
-          <div style={{ display: "flex", gap: "12px" }}>
-            <button
-              onClick={onClose}
-              style={{
-                flex: 1,
-                padding: "14px",
-                border: "1px solid #e2e8f0",
-                borderRadius: "12px",
-                fontSize: "16px",
-                background: "white",
-              }}>
-              Close
-            </button>
-
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <button
               onClick={handlePrint}
               style={{
-                flex: 1,
+                width: "100%",
                 padding: "14px",
                 background: "#2563eb",
                 color: "white",
@@ -105,9 +93,43 @@ const PrintQRModal = ({ isOpen, onClose, qrCodeUrl, itemName }) => {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "8px",
+                cursor: "pointer",
+                border: "none",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#1d4ed8";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#2563eb";
               }}>
               <PrinterIcon />
               Print Now
+            </button>
+
+            <button
+              onClick={onClose}
+              style={{
+                width: "100%",
+                padding: "14px",
+                border: "1.5px solid #e2e8f0",
+                borderRadius: "12px",
+                fontSize: "16px",
+                background: "white",
+                color: "#64748b",
+                cursor: "pointer",
+                fontWeight: "500",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#f8fafc";
+                e.currentTarget.style.borderColor = "#cbd5e1";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "white";
+                e.currentTarget.style.borderColor = "#e2e8f0";
+              }}>
+              Cancel
             </button>
           </div>
         </div>

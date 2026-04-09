@@ -56,7 +56,11 @@ function AddItemPage() {
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef();
 
-  const [form, setForm] = useState({ name: "", description: "" });
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    owner_fb_account_url: "",
+  });
   const [imageFile, setImageFile] = useState(null);
 
   const owner_id = localStorage.getItem("user_id");
@@ -85,11 +89,20 @@ function AddItemPage() {
       });
       return;
     }
+    if (!form.owner_fb_account_url.trim()) {
+      setAlert({
+        message:
+          "Please provide your Facebook account URL so the finder can contact you.",
+        type: "error",
+      });
+      return;
+    }
 
     const result = await addItem({
       owner_id,
       name: form.name,
       description: form.description,
+      owner_fb_account_url: form.owner_fb_account_url,
       image: imageFile,
     });
 
@@ -107,7 +120,7 @@ function AddItemPage() {
         success={success}
         onRegisterAnother={() => {
           setSuccess(null);
-          setForm({ name: "", description: "" });
+          setForm({ name: "", description: "", owner_fb_account_url: "" });
           setImageFile(null);
           setPreview(null);
         }}
@@ -182,7 +195,13 @@ function AddItemPage() {
 
       {/* Form Container */}
       <div
-        style={{ maxWidth: "640px", margin: "0 auto", padding: "40px 20px" }}>
+        style={{
+          maxWidth: "640px",
+          margin: "0 auto",
+          padding: "40px 20px 40px 20px",
+          width: "100%",
+          boxSizing: "border-box",
+        }}>
         <h1
           style={{
             fontSize: "32px",
@@ -297,6 +316,49 @@ function AddItemPage() {
               value={form.name}
               onChange={handleChange}
               placeholder="e.g., Blue Backpack"
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                border: "1px solid #cbd5e1",
+                fontSize: "15px",
+                fontFamily: "inherit",
+                color: "#0f172a",
+                background: "white",
+                transition: "all 0.2s",
+                boxSizing: "border-box",
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "#2563eb";
+                e.currentTarget.style.boxShadow =
+                  "0 0 0 3px rgba(37,99,235,0.1)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "#cbd5e1";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            />
+          </div>
+
+          {/* Facebook Account URL */}
+          <div>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "12px",
+                fontWeight: "600",
+                color: "#0f172a",
+                fontSize: "15px",
+              }}>
+              My Facebook Account URL
+            </label>
+            <input
+              type="url"
+              name="owner_fb_account_url"
+              required
+              value={form.owner_fb_account_url}
+              onChange={handleChange}
+              placeholder="e.g., https://facebook.com/yourprofile"
               style={{
                 width: "100%",
                 padding: "12px 16px",

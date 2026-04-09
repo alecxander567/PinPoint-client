@@ -4,6 +4,7 @@ import { useEditItem } from "../hooks/useItem";
 const initialFormState = {
   name: "",
   description: "",
+  owner_fb_account_url: "",
   imageFile: null,
   imagePreview: null,
   error: "",
@@ -22,6 +23,8 @@ function formReducer(state, action) {
       return { ...state, name: action.payload };
     case "SET_DESCRIPTION":
       return { ...state, description: action.payload };
+    case "SET_FB_URL":
+      return { ...state, owner_fb_account_url: action.payload };
     case "SET_IMAGE_FILE":
       return { ...state, imageFile: action.payload };
     case "SET_IMAGE_PREVIEW":
@@ -46,6 +49,7 @@ export default function EditItemModal({ isOpen, onClose, item, onSaved }) {
         payload: {
           name: item.name || "",
           description: item.description || "",
+          owner_fb_account_url: item.owner_fb_account_url || "",
           imagePreview: item.image_url || null,
         },
       });
@@ -83,11 +87,19 @@ export default function EditItemModal({ isOpen, onClose, item, onSaved }) {
       dispatch({ type: "SET_ERROR", payload: "Item name is required." });
       return;
     }
+    if (!formState.owner_fb_account_url.trim()) {
+      dispatch({
+        type: "SET_ERROR",
+        payload: "Facebook account URL is required.",
+      });
+      return;
+    }
     dispatch({ type: "SET_ERROR", payload: "" });
 
     const result = await editItem(item.id, {
       name: formState.name.trim(),
       description: formState.description.trim(),
+      owner_fb_account_url: formState.owner_fb_account_url.trim(),
       image: formState.imageFile || undefined,
     });
 
@@ -130,13 +142,15 @@ export default function EditItemModal({ isOpen, onClose, item, onSaved }) {
           background: "white",
           borderRadius: "20px",
           width: "100%",
-          maxWidth: "540px",
-          margin: "0 auto 0 0",
-          marginRight: "20px",
+          maxWidth: "800px",
+          margin: "0 auto",
           boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
           overflow: "hidden",
           transform: visible ? "translateY(0)" : "translateY(16px)",
           transition: "transform 0.3s",
+          maxHeight: "90vh",
+          display: "flex",
+          flexDirection: "column",
         }}>
         {/* Header */}
         <div
@@ -147,6 +161,7 @@ export default function EditItemModal({ isOpen, onClose, item, onSaved }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            flexShrink: 0,
           }}>
           <div>
             <h2
@@ -196,61 +211,121 @@ export default function EditItemModal({ isOpen, onClose, item, onSaved }) {
           </button>
         </div>
 
-        {/* Body */}
+        {/* Body - Scrollable */}
         <div
           style={{
             padding: "24px",
             display: "flex",
             flexDirection: "column",
             gap: "18px",
+            overflowY: "auto",
+            flex: 1,
           }}>
-          {/* Item Name */}
-          <div>
-            <label
-              style={{
-                display: "block",
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "11px",
-                fontWeight: "700",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "#94a3b8",
-                marginBottom: "6px",
-              }}>
-              Item Name
-            </label>
-            <input
-              type="text"
-              value={formState.name}
-              onChange={(e) =>
-                dispatch({ type: "SET_NAME", payload: e.target.value })
-              }
-              placeholder="e.g. Black Wallet"
-              style={{
-                width: "100%",
-                padding: "11px 14px",
-                borderRadius: "12px",
-                border: "1.5px solid #e2e8f0",
-                background: "#f8fafc",
-                fontFamily: "'Nunito', sans-serif",
-                fontSize: "14px",
-                color: "#0f172a",
-                outline: "none",
-                transition: "all 0.15s",
-                boxSizing: "border-box",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#3b82f6";
-                e.currentTarget.style.background = "white";
-                e.currentTarget.style.boxShadow =
-                  "0 0 0 3px rgba(59,130,246,0.12)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "#e2e8f0";
-                e.currentTarget.style.background = "#f8fafc";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            />
+          {/* Two Column Row: Name and Facebook URL */}
+          <div
+            style={{
+              display: "flex",
+              gap: "16px",
+              flexWrap: "wrap",
+            }}>
+            {/* Item Name */}
+            <div style={{ flex: 1, minWidth: "200px" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "#94a3b8",
+                  marginBottom: "6px",
+                }}>
+                Item Name
+              </label>
+              <input
+                type="text"
+                value={formState.name}
+                onChange={(e) =>
+                  dispatch({ type: "SET_NAME", payload: e.target.value })
+                }
+                placeholder="e.g. Black Wallet"
+                style={{
+                  width: "100%",
+                  padding: "11px 14px",
+                  borderRadius: "12px",
+                  border: "1.5px solid #e2e8f0",
+                  background: "#f8fafc",
+                  fontFamily: "'Nunito', sans-serif",
+                  fontSize: "14px",
+                  color: "#0f172a",
+                  outline: "none",
+                  transition: "all 0.15s",
+                  boxSizing: "border-box",
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "#3b82f6";
+                  e.currentTarget.style.background = "white";
+                  e.currentTarget.style.boxShadow =
+                    "0 0 0 3px rgba(59,130,246,0.12)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "#e2e8f0";
+                  e.currentTarget.style.background = "#f8fafc";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              />
+            </div>
+
+            {/* Facebook Account URL */}
+            <div style={{ flex: 1, minWidth: "200px" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "#94a3b8",
+                  marginBottom: "6px",
+                }}>
+                Facebook Account URL
+              </label>
+              <input
+                type="url"
+                required
+                value={formState.owner_fb_account_url}
+                onChange={(e) =>
+                  dispatch({ type: "SET_FB_URL", payload: e.target.value })
+                }
+                placeholder="https://facebook.com/profile"
+                style={{
+                  width: "100%",
+                  padding: "11px 14px",
+                  borderRadius: "12px",
+                  border: "1.5px solid #e2e8f0",
+                  background: "#f8fafc",
+                  fontFamily: "'Nunito', sans-serif",
+                  fontSize: "14px",
+                  color: "#0f172a",
+                  outline: "none",
+                  transition: "all 0.15s",
+                  boxSizing: "border-box",
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "#3b82f6";
+                  e.currentTarget.style.background = "white";
+                  e.currentTarget.style.boxShadow =
+                    "0 0 0 3px rgba(59,130,246,0.12)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "#e2e8f0";
+                  e.currentTarget.style.background = "#f8fafc";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              />
+            </div>
           </div>
 
           {/* Description */}
@@ -397,7 +472,10 @@ export default function EditItemModal({ isOpen, onClose, item, onSaved }) {
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            padding: "0 24px 24px",
+            padding: "16px 24px 24px",
+            borderTop: "1px solid #e2e8f0",
+            backgroundColor: "white",
+            flexShrink: 0,
           }}>
           <button
             onClick={handleClose}

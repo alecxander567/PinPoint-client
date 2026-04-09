@@ -1,6 +1,6 @@
 import { NAV } from "./navConfig";
 
-const MOBILE_NAV_KEYS = ["home", "lost", "returned", "activity", "profile"];
+const MOBILE_NAV_KEYS = ["home", "lost", "returned", "activity", "reports", "profile"];
 
 function FooterNav({ activePage, setActivePage }) {
   return (
