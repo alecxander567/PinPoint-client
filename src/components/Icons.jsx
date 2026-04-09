@@ -16,6 +16,7 @@ export const Logo = ({ size = 28, color = "#2563eb" }) => (
       strokeLinecap="round"
     />
   </svg>
+  
 );
 
 export const HomeIcon = ({ active }) => (
