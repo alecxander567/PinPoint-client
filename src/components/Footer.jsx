@@ -1,8 +1,19 @@
 import { NAV } from "./navConfig";
+import ReportBadge from "./ReportBadge";
+import { useReportCount } from "../hooks/useReportCount";
 
-const MOBILE_NAV_KEYS = ["home", "lost", "returned", "activity", "reports", "profile"];
+const MOBILE_NAV_KEYS = [
+  "home",
+  "lost",
+  "returned",
+  "activity",
+  "reports",
+  "profile",
+];
 
 function FooterNav({ activePage, setActivePage }) {
+  const { reportCount } = useReportCount();
+
   return (
     <div className="footer-nav show-mobile">
       {MOBILE_NAV_KEYS.map((key) => {
@@ -13,7 +24,10 @@ function FooterNav({ activePage, setActivePage }) {
             key={key}
             onClick={() => setActivePage(key)}
             className={`footer-nav__item ${active ? "footer-nav__item--active" : ""}`}>
-            <item.Icon active={active} />
+            <span style={{ position: "relative", display: "inline-flex" }}>
+              <item.Icon active={active} />
+              {key === "reports" && <ReportBadge count={reportCount} />}
+            </span>
             <span className="footer-nav__label">{item.label}</span>
             {active && <span className="footer-nav__dot" />}
           </button>

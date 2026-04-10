@@ -9,7 +9,6 @@ const PrintQRModal = ({ isOpen, onClose, qrCodeUrl, itemName }) => {
 
   return (
     <>
-      {/* Modal Overlay */}
       <div
         style={{
           position: "fixed",
@@ -41,7 +40,6 @@ const PrintQRModal = ({ isOpen, onClose, qrCodeUrl, itemName }) => {
             Print QR Code
           </h3>
 
-          {/* Printable Area */}
           <div
             id="printable-area"
             style={{
@@ -135,7 +133,6 @@ const PrintQRModal = ({ isOpen, onClose, qrCodeUrl, itemName }) => {
         </div>
       </div>
 
-      {/* Print Styles */}
       <style>
         {`
           @media print {

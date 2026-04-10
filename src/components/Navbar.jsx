@@ -1,32 +1,35 @@
 import { useNavigate } from "react-router-dom";
 import { NAV } from "./navConfig";
 import { Logo, PlusIcon } from "./Icons";
+import ReportBadge from "./ReportBadge";
+import { useReportCount } from "../hooks/useReportCount";
 
 function Navbar({ activePage, setActivePage, onLogout }) {
   const navigate = useNavigate();
+  const { reportCount } = useReportCount();
 
   return (
     <nav className="navbar hidden-mobile">
-      {/* Brand */}
       <a href="/" className="navbar__brand">
         <Logo size={28} />
         <span className="navbar__brand-text">Item Finder</span>
       </a>
 
-      {/* Nav links */}
       <div className="navbar__links">
         {NAV.map(({ key, label, Icon }) => (
           <button
             key={key}
             onClick={() => setActivePage(key)}
             className={`navbar__link ${activePage === key ? "navbar__link--active" : ""}`}>
-            <Icon active={activePage === key} />
+            <span style={{ position: "relative", display: "inline-flex" }}>
+              <Icon active={activePage === key} />
+              {key === "reports" && <ReportBadge count={reportCount} />}
+            </span>
             {label}
           </button>
         ))}
       </div>
 
-      {/* Right actions - FIXED */}
       <div className="navbar__actions">
         <button
           onClick={() => navigate("/add-item")}

@@ -125,9 +125,9 @@ export function useFoundItemReport(itemId) {
     } catch (err) {
       const message =
         err.response?.data?.error ||
-          err.response?.data?.detail ||
-          err.message ||
-          "Unable to submit the report.";
+        err.response?.data?.detail ||
+        err.message ||
+        "Unable to submit the report.";
       return { error: message };
     } finally {
       setSubmitting(false);
@@ -202,7 +202,9 @@ export function useGetOwnerReports() {
           report_ids: reportIds,
         },
       });
-      setReports((current) => current.filter((report) => !reportIds.includes(report.id)));
+      setReports((current) =>
+        current.filter((report) => !reportIds.includes(report.id)),
+      );
       return { data: response.data };
     } catch (err) {
       const message =
@@ -216,5 +218,13 @@ export function useGetOwnerReports() {
     }
   };
 
-  return { reports, loading, deleting, error, fetchOwnerReports, deleteOwnerReports };
+  return {
+    reports,
+    setReports,
+    loading,
+    deleting,
+    error,
+    fetchOwnerReports,
+    deleteOwnerReports,
+  };
 }
