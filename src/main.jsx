@@ -3,11 +3,14 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { ReportCountProvider } from "./components/ReportCountProvider";
+import { ItemCountProvider } from "./components/CountProviderItem.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ReportCountProvider>
-      <App />
+      <ItemCountProvider>
+        <App />
+      </ItemCountProvider>
     </ReportCountProvider>
   </StrictMode>,
 );

@@ -5,6 +5,7 @@ import { useGetUserItems } from "../hooks/useItem";
 import { useGetOwnerReports } from "../hooks/useReport";
 import { useResolveReport } from "../hooks/useResolveReport";
 import { useReportCount } from "../hooks/useReportCount";
+import { useItemCount } from "../hooks/useItemcount";
 import Navbar from "../components/Navbar";
 import FooterNav from "../components/Footer";
 import Alert from "../components/Alert";
@@ -308,6 +309,7 @@ function ReportsPage() {
   const { logout } = useLogout();
   const userId = localStorage.getItem("user_id");
   const { setReportCount } = useReportCount();
+  const { setReturnedCount, setLostCount } = useItemCount();
 
   const { items, loading, fetchUserItems } = useGetUserItems();
   const {
@@ -330,16 +332,14 @@ function ReportsPage() {
     setReportCount(reports.length);
   }, [reports.length]);
 
-  const handleSetActivePage = (page) => {
-    if (page === "reports") return;
-    navigate("/home", { state: { activePage: page } });
-  };
-
   const handleDeleteReports = (reportIds) =>
     deleteOwnerReports(userId, reportIds);
 
-  const handleReportResolved = (reportId) =>
+  const handleReportResolved = (reportId) => {
     setReports((prev) => prev.filter((r) => r.id !== reportId));
+    setReturnedCount((prev) => prev + 1);
+    setLostCount((prev) => Math.max(0, prev - 1));
+  };
 
   return (
     <div
@@ -349,11 +349,7 @@ function ReportsPage() {
         display: "flex",
         flexDirection: "column",
       }}>
-      <Navbar
-        activePage="reports"
-        setActivePage={handleSetActivePage}
-        onLogout={logout}
-      />
+      <Navbar activePage="reports" onLogout={logout} />
 
       <div className="mobile-header show-mobile">
         <div className="mobile-header__brand">
@@ -389,7 +385,7 @@ function ReportsPage() {
         />
       </main>
 
-      <FooterNav activePage="reports" setActivePage={handleSetActivePage} />
+      <FooterNav activePage="reports" />
     </div>
   );
 }

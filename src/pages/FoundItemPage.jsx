@@ -6,19 +6,16 @@ import { useFoundItemReport } from "../hooks/useReport";
 
 function getMessengerUrl(facebookUrl) {
   if (!facebookUrl) return "";
-
   try {
     const url = new URL(facebookUrl);
     const rawPath = url.pathname.replace(/^\/+|\/+$/g, "");
     const firstSegment = rawPath.split("/")[0];
-
     if (
       firstSegment &&
       !["profile.php", "people", "pg", "share", "groups"].includes(firstSegment)
     ) {
       return `https://m.me/${firstSegment}`;
     }
-
     return facebookUrl;
   } catch {
     return facebookUrl;
@@ -47,24 +44,19 @@ function FoundItemPage() {
     }
   };
 
+  const contactUrl = getMessengerUrl(item?.owner_fb_account_url);
+
   const handleSubmit = async () => {
     const result = await submitReport();
-
     if (result?.error) {
       setAlert({ message: result.error, type: "error" });
       return;
     }
-
-    const contactUrl = getMessengerUrl(item?.owner_fb_account_url);
-    if (contactUrl && typeof window !== "undefined") {
-      window.open(contactUrl, "_blank", "noopener,noreferrer");
-    }
-
     setAlert({
       message:
-        contactUrl
-          ? "Report submitted successfully. Opening the owner's Messenger contact."
-          : "Report submitted successfully.",
+        contactUrl ?
+          "Report submitted successfully. Opening the owner's Messenger contact."
+        : "Report submitted successfully.",
       type: "success",
     });
   };
@@ -76,8 +68,7 @@ function FoundItemPage() {
         color: "#0f172a",
         background:
           "radial-gradient(circle at top left, rgba(14,165,233,0.18), transparent 30%), radial-gradient(circle at bottom right, rgba(59,130,246,0.14), transparent 28%), linear-gradient(135deg, #f8fbff 0%, #eef5ff 52%, #e4efff 100%)",
-      }}
-    >
+      }}>
       <div
         style={{
           position: "fixed",
@@ -103,6 +94,7 @@ function FoundItemPage() {
         submitting={submitting}
         locating={locating}
         error={error}
+        contactUrl={contactUrl}
         onChange={updateField}
         onUseCurrentLocation={handleUseCurrentLocation}
         onSubmit={handleSubmit}

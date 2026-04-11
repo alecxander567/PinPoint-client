@@ -47,7 +47,12 @@ function fileInputButtonStyle(isSmallMobile) {
 
 function LoadingSkeleton() {
   return (
-    <div style={{ maxWidth: "1180px", margin: "0 auto", padding: "24px 16px 40px" }}>
+    <div
+      style={{
+        maxWidth: "1180px",
+        margin: "0 auto",
+        padding: "24px 16px 40px",
+      }}>
       <div style={{ display: "grid", gap: "20px" }}>
         <div style={{ ...cardStyle(), padding: "32px" }}>
           <div
@@ -91,6 +96,7 @@ export default function FoundItemReport({
   submitting,
   locating,
   error,
+  contactUrl,
   onChange,
   onUseCurrentLocation,
   onSubmit,
@@ -101,7 +107,6 @@ export default function FoundItemReport({
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
-
     const handleResize = () => setViewportWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -121,13 +126,22 @@ export default function FoundItemReport({
   const isMobile = viewportWidth < 900;
   const isSmallMobile = viewportWidth < 640;
 
+  const mapsUrlMatch = form.location.match(
+    /https:\/\/maps\.google\.com\/\?q=[\d.,-]+/,
+  );
+
   if (loading) {
     return <LoadingSkeleton />;
   }
 
   if (error || !item) {
     return (
-      <div style={{ maxWidth: "920px", margin: "0 auto", padding: "32px 16px 40px" }}>
+      <div
+        style={{
+          maxWidth: "920px",
+          margin: "0 auto",
+          padding: "32px 16px 40px",
+        }}>
         <div style={{ ...cardStyle(), padding: "32px", textAlign: "center" }}>
           <p
             style={{
@@ -137,8 +151,7 @@ export default function FoundItemReport({
               textTransform: "uppercase",
               fontWeight: 800,
               color: "#dc2626",
-            }}
-          >
+            }}>
             Item unavailable
           </p>
           <h1
@@ -149,8 +162,7 @@ export default function FoundItemReport({
               fontWeight: 800,
               color: "#0f172a",
               fontFamily: "'Poppins', sans-serif",
-            }}
-          >
+            }}>
             This QR link could not be loaded.
           </h1>
           <p
@@ -160,9 +172,9 @@ export default function FoundItemReport({
               color: "#475569",
               fontSize: "16px",
               lineHeight: 1.7,
-            }}
-          >
-            {error || "The item record was not found or is temporarily unavailable."}
+            }}>
+            {error ||
+              "The item record was not found or is temporarily unavailable."}
           </p>
         </div>
       </div>
@@ -177,14 +189,15 @@ export default function FoundItemReport({
         margin: "0 auto",
         padding: isSmallMobile ? "16px 12px 28px" : "24px 16px 40px",
         boxSizing: "border-box",
-      }}
-    >
+      }}>
       <section
         style={{
           ...cardStyle(),
-          padding: isSmallMobile ? "18px 16px" : isMobile ? "24px 20px" : "36px",
-        }}
-      >
+          padding:
+            isSmallMobile ? "18px 16px"
+            : isMobile ? "24px 20px"
+            : "36px",
+        }}>
         <p
           style={{
             margin: 0,
@@ -193,8 +206,7 @@ export default function FoundItemReport({
             textTransform: "uppercase",
             fontWeight: 800,
             color: "#0369a1",
-          }}
-        >
+          }}>
           Item Finder
         </p>
         <div
@@ -205,8 +217,7 @@ export default function FoundItemReport({
             alignItems: isMobile ? "stretch" : "flex-end",
             gap: "24px",
             marginTop: "16px",
-          }}
-        >
+          }}>
           <div style={{ maxWidth: "720px", minWidth: 0 }}>
             <h1
               style={{
@@ -216,8 +227,7 @@ export default function FoundItemReport({
                 fontWeight: 800,
                 color: "#0f172a",
                 fontFamily: "'Poppins', sans-serif",
-              }}
-            >
+              }}>
               Report where you found this item.
             </h1>
             <p
@@ -227,8 +237,7 @@ export default function FoundItemReport({
                 fontSize: isSmallMobile ? "14px" : "16px",
                 lineHeight: 1.75,
                 maxWidth: "620px",
-              }}
-            >
+              }}>
               Share the exact landmark, location, and any identifying details so
               the owner can verify the sighting quickly.
             </p>
@@ -242,12 +251,23 @@ export default function FoundItemReport({
               background: "#eff6ff",
               border: "1px solid #dbeafe",
               boxSizing: "border-box",
-            }}
-          >
-            <p style={{ margin: 0, color: "#0f172a", fontSize: "14px", fontWeight: 800 }}>
+            }}>
+            <p
+              style={{
+                margin: 0,
+                color: "#0f172a",
+                fontSize: "14px",
+                fontWeight: 800,
+              }}>
               Help return this item faster
             </p>
-            <p style={{ margin: "6px 0 0", color: "#0369a1", fontSize: "13px", lineHeight: 1.6 }}>
+            <p
+              style={{
+                margin: "6px 0 0",
+                color: "#0369a1",
+                fontSize: "13px",
+                lineHeight: 1.6,
+              }}>
               Upload a clear landmark image and share your current location.
             </p>
           </div>
@@ -257,44 +277,49 @@ export default function FoundItemReport({
       <section
         style={{
           display: "grid",
-          gridTemplateColumns: isMobile
-            ? "minmax(0, 1fr)"
-            : isTablet
-              ? "minmax(0, 1fr) minmax(0, 1fr)"
-              : "minmax(0, 1.05fr) minmax(0, 0.95fr)",
+          gridTemplateColumns:
+            isMobile ? "minmax(0, 1fr)"
+            : isTablet ? "minmax(0, 1fr) minmax(0, 1fr)"
+            : "minmax(0, 1.05fr) minmax(0, 0.95fr)",
           gap: "20px",
           marginTop: "20px",
           alignItems: "start",
-        }}
-      >
+        }}>
         <article
           style={{
             ...cardStyle(),
             padding: isSmallMobile ? "16px" : "20px",
             minWidth: 0,
-          }}
-        >
+          }}>
           <div
             style={{
               borderRadius: "24px",
               overflow: "hidden",
               background: "#e2e8f0",
-              minHeight: isSmallMobile ? "180px" : isMobile ? "220px" : "280px",
+              minHeight:
+                isSmallMobile ? "180px"
+                : isMobile ? "220px"
+                : "280px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               padding: isSmallMobile ? "16px" : "22px",
               boxSizing: "border-box",
-            }}
-          >
+            }}>
             {item.image_url ?
               <img
                 src={item.image_url}
                 alt={item.name}
                 style={{
                   width: "100%",
-                  maxWidth: isSmallMobile ? "190px" : isMobile ? "240px" : "320px",
-                  height: isSmallMobile ? "140px" : isMobile ? "180px" : "220px",
+                  maxWidth:
+                    isSmallMobile ? "190px"
+                    : isMobile ? "240px"
+                    : "320px",
+                  height:
+                    isSmallMobile ? "140px"
+                    : isMobile ? "180px"
+                    : "220px",
                   objectFit: "contain",
                   display: "block",
                   margin: "0 auto",
@@ -302,16 +327,19 @@ export default function FoundItemReport({
               />
             : <div
                 style={{
-                  minHeight: isSmallMobile ? "180px" : isMobile ? "220px" : "280px",
+                  minHeight:
+                    isSmallMobile ? "180px"
+                    : isMobile ? "220px"
+                    : "280px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   padding: "24px",
                   textAlign: "center",
                   color: "#64748b",
-                  background: "linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%)",
-                }}
-              >
+                  background:
+                    "linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%)",
+                }}>
                 No item image available
               </div>
             }
@@ -326,8 +354,7 @@ export default function FoundItemReport({
                 textTransform: "uppercase",
                 fontWeight: 800,
                 color: "#0369a1",
-              }}
-            >
+              }}>
               Item details
             </p>
             <h2
@@ -338,8 +365,7 @@ export default function FoundItemReport({
                 fontWeight: 800,
                 color: "#0f172a",
                 fontFamily: "'Poppins', sans-serif",
-              }}
-            >
+              }}>
               {item.name}
             </h2>
             <p
@@ -349,9 +375,9 @@ export default function FoundItemReport({
                 fontSize: isSmallMobile ? "14px" : "15px",
                 lineHeight: 1.8,
                 wordBreak: "break-word",
-              }}
-            >
-              {item.description || "The owner did not add a description for this item."}
+              }}>
+              {item.description ||
+                "The owner did not add a description for this item."}
             </p>
             <a
               href={item.owner_fb_account_url || "https://facebook.com/"}
@@ -370,8 +396,7 @@ export default function FoundItemReport({
                 fontSize: isSmallMobile ? "13px" : "14px",
                 fontWeight: 800,
                 textAlign: "center",
-              }}
-            >
+              }}>
               Contact owner on Facebook
             </a>
           </div>
@@ -382,8 +407,7 @@ export default function FoundItemReport({
             ...cardStyle(),
             padding: isSmallMobile ? "16px" : "20px",
             minWidth: 0,
-          }}
-        >
+          }}>
           <p
             style={{
               margin: 0,
@@ -392,20 +416,21 @@ export default function FoundItemReport({
               textTransform: "uppercase",
               fontWeight: 800,
               color: "#0369a1",
-            }}
-          >
+            }}>
             Submit report
           </p>
           <h2
             style={{
               margin: "12px 0 0",
-              fontSize: isSmallMobile ? "24px" : isMobile ? "28px" : "34px",
+              fontSize:
+                isSmallMobile ? "24px"
+                : isMobile ? "28px"
+                : "34px",
               lineHeight: 1.1,
               fontWeight: 800,
               color: "#0f172a",
               fontFamily: "'Poppins', sans-serif",
-            }}
-          >
+            }}>
             Tell the owner where you saw it.
           </h2>
           <p
@@ -414,33 +439,47 @@ export default function FoundItemReport({
               color: "#475569",
               fontSize: isSmallMobile ? "13px" : "14px",
               lineHeight: 1.7,
-            }}
-          >
+            }}>
             Specific details help the owner confirm the item faster.
           </p>
 
           <form
             onSubmit={(event) => {
               event.preventDefault();
+              if (contactUrl) {
+                window.open(contactUrl, "_blank", "noopener,noreferrer");
+              }
               onSubmit();
             }}
-            style={{ display: "grid", gap: isSmallMobile ? "14px" : "16px", marginTop: "22px" }}
-          >
+            style={{
+              display: "grid",
+              gap: isSmallMobile ? "14px" : "16px",
+              marginTop: "22px",
+            }}>
             <div style={{ display: "grid", gap: "8px" }}>
-              <span style={{ fontSize: "14px", fontWeight: 800, color: "#0f172a" }}>
+              <span
+                style={{ fontSize: "14px", fontWeight: 800, color: "#0f172a" }}>
                 Landmark image
               </span>
-              <label style={fileInputButtonStyle(isSmallMobile)}>
-                {form.landmarkImage ? "Change uploaded image" : "Upload a landmark image"}
-                <input
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={(event) =>
-                    onChange("landmarkImage", event.target.files?.[0] || null)
-                  }
-                />
-              </label>
+              <button
+                type="button"
+                style={fileInputButtonStyle(isSmallMobile)}
+                onClick={() =>
+                  document.getElementById("landmark-input").click()
+                }>
+                {form.landmarkImage ?
+                  "Change uploaded image"
+                : "Upload a landmark image"}
+              </button>
+              <input
+                id="landmark-input"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={(event) =>
+                  onChange("landmarkImage", event.target.files?.[0] || null)
+                }
+              />
               {form.landmarkImage && landmarkPreviewUrl && (
                 <div
                   style={{
@@ -448,8 +487,7 @@ export default function FoundItemReport({
                     background: "#ffffff",
                     borderRadius: "18px",
                     padding: "12px",
-                  }}
-                >
+                  }}>
                   <img
                     src={landmarkPreviewUrl}
                     alt="Landmark preview"
@@ -474,15 +512,13 @@ export default function FoundItemReport({
                       fontWeight: 700,
                       cursor: "pointer",
                       padding: 0,
-                    }}
-                  >
+                    }}>
                     Remove image
                   </button>
                 </div>
               )}
             </div>
-
-            <label style={{ display: "grid", gap: "8px" }}>
+            <div style={{ display: "grid", gap: "8px" }}>
               <div
                 style={{
                   display: "flex",
@@ -490,9 +526,13 @@ export default function FoundItemReport({
                   justifyContent: "space-between",
                   gap: "10px",
                   flexWrap: "wrap",
-                }}
-              >
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "#0f172a" }}>
+                }}>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: 800,
+                    color: "#0f172a",
+                  }}>
                   Location
                 </span>
                 <button
@@ -508,8 +548,7 @@ export default function FoundItemReport({
                     fontSize: "12px",
                     fontWeight: 800,
                     cursor: locating ? "not-allowed" : "pointer",
-                  }}
-                >
+                  }}>
                   {locating ? "Getting location..." : "Use current location"}
                 </button>
               </div>
@@ -520,10 +559,44 @@ export default function FoundItemReport({
                 placeholder="Tap 'Use current location' to share GPS coordinates, or paste a maps link"
                 style={fieldStyle()}
               />
-            </label>
-
+              {mapsUrlMatch && (
+                <a
+                  href={mapsUrlMatch[0]}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "8px 14px",
+                    borderRadius: "999px",
+                    background: "#f0fdf4",
+                    border: "1px solid #bbf7d0",
+                    color: "#15803d",
+                    fontSize: "13px",
+                    fontWeight: 800,
+                    textDecoration: "none",
+                    width: "fit-content",
+                  }}>
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  View on Google Maps
+                </a>
+              )}
+            </div>
             <label style={{ display: "grid", gap: "8px" }}>
-              <span style={{ fontSize: "14px", fontWeight: 800, color: "#0f172a" }}>
+              <span
+                style={{ fontSize: "14px", fontWeight: 800, color: "#0f172a" }}>
                 Message
               </span>
               <textarea
@@ -548,15 +621,14 @@ export default function FoundItemReport({
                 fontSize: isSmallMobile ? "13px" : "14px",
                 fontWeight: 800,
                 cursor: submitting ? "not-allowed" : "pointer",
-                boxShadow: submitting ? "none" : "0 10px 24px rgba(2, 132, 199, 0.22)",
-              }}
-            >
+                boxShadow:
+                  submitting ? "none" : "0 10px 24px rgba(2, 132, 199, 0.22)",
+              }}>
               {submitting ? "Submitting report..." : "Submit report"}
             </button>
           </form>
         </article>
       </section>
-
     </div>
   );
 }

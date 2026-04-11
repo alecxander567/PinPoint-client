@@ -30,7 +30,6 @@ function ReportCard({
         maxWidth: "100%",
         boxSizing: "border-box",
       }}>
-      {/* Header */}
       <div
         style={{
           padding: "18px 18px 14px",
@@ -84,10 +83,44 @@ function ReportCard({
           }}
         />
       </div>
+      {report.item_image_url && (
+        <div style={{ padding: "18px 18px 0" }}>
+          <div
+            style={{
+              background: "#f8fafc",
+              borderRadius: "16px",
+              padding: "12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+            <img
+              src={report.item_image_url}
+              alt={report.item_name}
+              style={{
+                width: "100%",
+                height: "160px",
+                objectFit: "contain",
+                borderRadius: "10px",
+                display: "block",
+              }}
+            />
+          </div>
+        </div>
+      )}
 
-      {/* Landmark image */}
       {report.landmark_image_url && (
         <div style={{ padding: "18px 18px 0" }}>
+          <p
+            style={{
+              margin: "0 0 8px",
+              fontSize: "12px",
+              fontWeight: 800,
+              color: "#64748b",
+              textTransform: "uppercase",
+            }}>
+            Landmark
+          </p>
           <img
             src={report.landmark_image_url}
             alt="Landmark"
@@ -103,41 +136,81 @@ function ReportCard({
         </div>
       )}
 
-      {/* Body */}
       <div style={{ padding: "18px" }}>
         <div style={{ display: "grid", gap: "12px", marginBottom: "16px" }}>
           {[
             { label: "Location", value: report.location, maxHeight: "88px" },
             { label: "Message", value: report.message, maxHeight: "96px" },
-          ].map(({ label, value, maxHeight }) => (
-            <div key={label}>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "12px",
-                  fontWeight: 800,
-                  color: "#64748b",
-                  textTransform: "uppercase",
-                }}>
-                {label}
-              </p>
-              <p
-                style={{
-                  margin: "6px 0 0",
-                  color: "#334155",
-                  lineHeight: 1.7,
-                  whiteSpace: "pre-wrap",
-                  wordBreak: "break-word",
-                  maxHeight,
-                  overflow: "auto",
-                }}>
-                {value}
-              </p>
-            </div>
-          ))}
+          ].map(({ label, value, maxHeight }) => {
+            const mapsUrlMatch =
+              label === "Location" ?
+                value?.match(/https:\/\/maps\.google\.com\/\?q=[\d.,-]+/)
+              : null;
+
+            return (
+              <div key={label}>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "12px",
+                    fontWeight: 800,
+                    color: "#64748b",
+                    textTransform: "uppercase",
+                  }}>
+                  {label}
+                </p>
+                <p
+                  style={{
+                    margin: "6px 0 0",
+                    color: "#334155",
+                    lineHeight: 1.7,
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    maxHeight,
+                    overflow: "auto",
+                  }}>
+                  {value}
+                </p>
+                {mapsUrlMatch && (
+                  <a
+                    href={mapsUrlMatch[0]}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      marginTop: "8px",
+                      padding: "8px 14px",
+                      borderRadius: "999px",
+                      background: "#f0fdf4",
+                      border: "1px solid #bbf7d0",
+                      color: "#15803d",
+                      fontSize: "13px",
+                      fontWeight: 800,
+                      textDecoration: "none",
+                      width: "fit-content",
+                    }}>
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    View on Google Maps
+                  </a>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        {/* Resolve button */}
         <button
           onClick={() => onResolve(report.id, report.item_name)}
           disabled={isResolving}

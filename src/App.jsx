@@ -7,6 +7,8 @@ import ResetPasswordPage from "./pages/ResetPassword";
 import AddItemPage from "./pages/AddItemPage";
 import FoundItemPage from "./pages/FoundItemPage";
 import ReportsPage from "./pages/ReportsPage";
+import LostItemsPage from "./pages/LostItemPage";
+import ReturnedItemsPage from "./pages/ReturnedItemsPage";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/add-item" element={<AddItemPage />} />
         <Route path="/found/:itemId" element={<FoundItemPage />} />
         <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/lost-item" element={<LostItemsPage />} />
+        <Route path="/returned" element={<ReturnedItemsPage />} />
       </Routes>
     </BrowserRouter>
   );

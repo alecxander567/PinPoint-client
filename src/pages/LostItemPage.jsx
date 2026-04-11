@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useLogout } from "../hooks/auth";
-import { useGetUserItems, useDeleteItem } from "../hooks/useItem";
-import { useToggleItemLost } from "../hooks/useItemStatus";
+import { useGetLostItems } from "../hooks/useGetLostItem";
+import { useDeleteItem } from "../hooks/useItem";
 import Navbar from "../components/Navbar";
 import FooterNav from "../components/Footer";
 import PrintQRModal from "../components/PrintQRModal";
@@ -12,36 +12,13 @@ import Alert from "../components/Alert";
 import SkeletonLoader from "../components/SkeletonLoader";
 import StatsBar from "../components/Statsbar";
 import SearchInput from "../components/SearchInput";
-import ItemCard from "../components/ItemCard";
 import { Logo, PlusIcon } from "../components/Icons";
-import { NAV } from "../components/navConfig";
-import "../css/HomePage.css";
-import { useGetOwnerReports } from "../hooks/useReport";
 import { useReportCount } from "../hooks/useReportCount";
+import { useGetOwnerReports } from "../hooks/useReport";
 import { useItemCount } from "../hooks/useItemcount";
+import LostItemCard from "../components/LostItemCard";
 
-const shimmerStyles = `
-  @keyframes shimmer {
-    0%   { background-position: -600px 0; }
-    100% { background-position:  600px 0; }
-  }
-  .skeleton-block {
-    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-    background-size: 600px 100%;
-    animation: shimmer 1.4s infinite linear;
-    border-radius: 6px;
-  }
-  .skeleton-dark {
-    background: linear-gradient(90deg, rgba(255,255,255,0.12) 25%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.12) 75%) !important;
-    background-size: 600px 100% !important;
-    animation: shimmer 1.4s infinite linear !important;
-  }
-  .search-input-light::placeholder { color: #94a3b8; }
-  .search-input-light:focus {
-    outline: none;
-    border-color: #93c5fd;
-    box-shadow: 0 0 0 3px rgba(147,197,253,0.3);
-  }
+const headerStyles = `
   @media (max-width: 640px) {
     .page-header-inner {
       flex-direction: column !important;
@@ -54,14 +31,9 @@ const shimmerStyles = `
   }
 `;
 
-function PageContent({
-  page,
-  items,
-  loading,
-  onItemUpdated,
-  onItemDeleted,
-  onLostCountChange,
-}) {
+const now = Date.now(); 
+
+function LostPageContent({ lostItems, setLostItems, loading }) {
   const [selectedItemQR, setSelectedItemQR] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
   const [deletingItem, setDeletingItem] = useState(null);
@@ -69,12 +41,11 @@ function PageContent({
   const [search, setSearch] = useState("");
 
   const { deleteItem, loading: deleteLoading } = useDeleteItem();
-  const { toggleItemLost, togglingId } = useToggleItemLost();
 
   const showAlert = (message, type = "success") => setAlert({ message, type });
   const clearAlert = () => setAlert({ message: "", type: "success" });
 
-  const filteredItems = items.filter(
+  const filteredItems = lostItems.filter(
     (item) =>
       item.name.toLowerCase().includes(search.toLowerCase()) ||
       (item.description || "").toLowerCase().includes(search.toLowerCase()),
@@ -88,74 +59,45 @@ function PageContent({
         "error",
       );
     } else {
-      onItemDeleted(deletingItem.id);
+      setLostItems((prev) => prev.filter((i) => i.id !== deletingItem.id));
       showAlert(`"${deletingItem.name}" was deleted successfully.`, "success");
     }
     setDeletingItem(null);
   };
 
-  const handleToggleLost = async (itemId) => {
-    const result = await toggleItemLost(itemId);
-    if (result.error) {
-      showAlert(result.error, "error");
-      return;
-    }
-    onItemUpdated({
-      ...items.find((i) => i.id === itemId),
-      status: result.status,
-    });
-
-    if (result.status === "lost") {
-      onLostCountChange((prev) => prev + 1);
-    } else {
-      onLostCountChange((prev) => Math.max(0, prev - 1));
-    }
-
-    showAlert(
-      result.status === "lost" ?
-        "Item marked as lost."
-      : "Item marked as found.",
-      "success",
-    );
-  };
-
-  if (page !== "home") {
-    const labels = {
-      lost: "Lost Items",
-      returned: "Returned Items",
-      activity: "Activity Logs",
-      profile: "Profile",
-    };
-    return (
-      <div className="page-placeholder">
-        <div className="page-placeholder__icon-wrap">
-          {NAV.find((n) => n.key === page)?.Icon({ active: true })}
-        </div>
-        <h2 className="page-placeholder__title">{labels[page]}</h2>
-        <p className="page-placeholder__desc">This section is coming soon.</p>
-      </div>
-    );
-  }
-
-  if (loading) return <SkeletonLoader />;
-
-  const homeStats = [
-    { label: "Items", value: items.length, color: "#fbbf24" },
+  const stats = [
+    { label: "Lost", value: lostItems.length, color: "#f87171" },
     {
-      label: "Lost",
-      value: items.filter((i) => i.status === "lost").length,
-      color: "#f87171",
+      label: "Recent",
+      value: lostItems.filter((i) => {
+        const diff = (now - new Date(i.created_at)) / (1000 * 60 * 60 * 24); 
+        return diff <= 7;
+      }).length,
+      color: "#fbbf24",
     },
     {
-      label: "Found",
-      value: items.filter((i) => i.status === "found").length,
-      color: "#34d399",
+      label: "Oldest",
+      value:
+        lostItems.length > 0 ?
+          Math.floor(
+            (now - 
+              new Date(
+                lostItems.reduce((a, b) =>
+                  new Date(a.created_at) < new Date(b.created_at) ? a : b,
+                ).created_at,
+              )) /
+              (1000 * 60 * 60 * 24),
+          ) + "d"
+        : "—",
+      color: "#94a3b8",
     },
   ];
 
+  if (loading) return <SkeletonLoader />;
+
   return (
     <div style={{ width: "100%", minHeight: "calc(100vh - 144px)" }}>
-      <style>{shimmerStyles}</style>
+      <style>{headerStyles}</style>
 
       <div
         style={{
@@ -199,7 +141,7 @@ function PageContent({
                   margin: 0,
                   lineHeight: 1.15,
                 }}>
-                Homepage
+                Lost Items
               </h1>
               <p
                 style={{
@@ -208,11 +150,11 @@ function PageContent({
                   opacity: 0.82,
                   fontFamily: "'Nunito', sans-serif",
                 }}>
-                Manage your registered items and track their status
+                Items currently marked as lost — edit or delete them here
               </p>
             </div>
 
-            <StatsBar stats={homeStats} />
+            <StatsBar stats={stats} />
           </div>
         </div>
       </div>
@@ -221,7 +163,7 @@ function PageContent({
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "24px 20px 0",
+          padding: "24px 20px 40px",
         }}>
         <div
           style={{
@@ -232,36 +174,15 @@ function PageContent({
             flexWrap: "wrap",
             marginBottom: "24px",
           }}>
-          {items.length > 0 && (
-            <h2
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "16px",
-                fontWeight: "700",
-                color: "#0f172a",
-                margin: 0,
-              }}>
-              {search ?
-                `Results for "${search}" (${filteredItems.length})`
-              : `Your Items (${items.length})`}
-            </h2>
-          )}
           <SearchInput
             value={search}
             onChange={setSearch}
-            placeholder="Search your items..."
-            width="min(300px, 100%)"
+            placeholder="Search lost items..."
+            width="min(360px, 100%)"
           />
         </div>
-      </div>
 
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "0 20px 40px",
-        }}>
-        {items.length > 0 && filteredItems.length > 0 && (
+        {filteredItems.length > 0 ?
           <div
             style={{
               display: "grid",
@@ -269,38 +190,14 @@ function PageContent({
               gap: "20px",
             }}>
             {filteredItems.map((item) => (
-              <ItemCard
+              <LostItemCard
                 key={item.id}
                 item={item}
-                togglingId={togglingId}
-                onToggleLost={handleToggleLost}
-                onEdit={setEditingItem}
-                onDelete={setDeletingItem}
                 onViewQR={setSelectedItemQR}
               />
             ))}
           </div>
-        )}
-
-        {items.length > 0 && filteredItems.length === 0 && (
-          <div style={{ textAlign: "center", padding: "60px 24px" }}>
-            <p
-              style={{
-                fontFamily: "'Nunito', sans-serif",
-                color: "#64748b",
-                fontSize: "15px",
-                marginBottom: "12px",
-              }}>
-              No items match "<strong>{search}</strong>"
-            </p>
-            <button onClick={() => setSearch("")} className="btn btn--ghost">
-              Clear search
-            </button>
-          </div>
-        )}
-
-        {items.length === 0 && (
-          <div
+        : <div
             style={{
               background: "white",
               borderRadius: "24px",
@@ -308,7 +205,6 @@ function PageContent({
               boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
               padding: "56px 24px",
               textAlign: "center",
-              marginTop: "8px",
             }}>
             <h2
               style={{
@@ -317,7 +213,7 @@ function PageContent({
                 fontSize: "28px",
                 color: "#0f172a",
               }}>
-              No items yet
+              {search ? "No matching items" : "No lost items"}
             </h2>
             <p
               style={{
@@ -327,11 +223,13 @@ function PageContent({
                 fontSize: "15px",
                 lineHeight: 1.7,
               }}>
-              Register your first item to get started. Once added, you can
-              generate a QR code and track its status here.
+              {search ?
+                "Try a different search term or clear the search field."
+              : "Great news — none of your items are marked as lost right now. If something goes missing, mark it as lost from the Homepage."
+              }
             </p>
           </div>
-        )}
+        }
       </div>
 
       <PrintQRModal
@@ -345,7 +243,9 @@ function PageContent({
         onClose={() => setEditingItem(null)}
         item={editingItem}
         onSaved={(updatedItem) => {
-          onItemUpdated(updatedItem);
+          setLostItems((prev) =>
+            prev.map((i) => (i.id === updatedItem.id ? updatedItem : i)),
+          );
           setEditingItem(null);
           showAlert(
             `"${updatedItem.name}" was updated successfully.`,
@@ -365,24 +265,22 @@ function PageContent({
   );
 }
 
-function HomePage() {
-  const location = useLocation();
+function LostItemsPage() {
   const navigate = useNavigate();
   const { logout } = useLogout();
-
   const userId = localStorage.getItem("user_id");
 
-  const initialPage = location.state?.activePage;
-  const activePage =
-    initialPage && initialPage !== "reports" ? initialPage : "home";
-  const { items, setItems, fetchUserItems, loading } = useGetUserItems();
-
+  const { lostItems, setLostItems, fetchLostItems, loading } =
+    useGetLostItems();
   const { reports, fetchOwnerReports } = useGetOwnerReports();
   const { setReportCount } = useReportCount();
   const { setLostCount } = useItemCount();
 
   useEffect(() => {
-    if (userId) fetchOwnerReports(userId);
+    if (userId) {
+      fetchLostItems(userId);
+      fetchOwnerReports(userId);
+    }
   }, [userId]);
 
   useEffect(() => {
@@ -390,24 +288,20 @@ function HomePage() {
   }, [reports.length]);
 
   useEffect(() => {
-    if (userId) fetchUserItems(userId);
-  }, [userId]);
+    setLostCount(lostItems.filter((i) => i.status === "lost").length);
+  }, [lostItems]);
 
-  useEffect(() => {
-    setLostCount(items.filter((i) => i.status === "lost").length);
-  }, [items]);
-
-  useEffect(() => {
-    navigate(location.pathname, { replace: true, state: {} });
-  }, []);
-
-  const handleItemUpdated = (updatedItem) =>
-    setItems((prev) =>
-      prev.map((i) => (i.id === updatedItem.id ? updatedItem : i)),
-    );
-
-  const handleItemDeleted = (deletedId) =>
-    setItems((prev) => prev.filter((i) => i.id !== deletedId));
+  const handleSetActivePage = (page) => {
+    if (page === "reports") {
+      navigate("/reports");
+      return;
+    }
+    if (page === "home") {
+      navigate("/home");
+      return;
+    }
+    navigate(`/${page}`);
+  };
 
   return (
     <div
@@ -417,7 +311,11 @@ function HomePage() {
         display: "flex",
         flexDirection: "column",
       }}>
-      <Navbar activePage={activePage} onLogout={logout} />
+      <Navbar
+        activePage="lost"
+        setActivePage={handleSetActivePage}
+        onLogout={logout}
+      />
 
       <div className="mobile-header show-mobile">
         <div className="mobile-header__brand">
@@ -442,19 +340,16 @@ function HomePage() {
       <main
         className="main-content"
         style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <PageContent
-          page={activePage}
-          items={items}
+        <LostPageContent
+          lostItems={lostItems}
+          setLostItems={setLostItems}
           loading={loading}
-          onItemUpdated={handleItemUpdated}
-          onItemDeleted={handleItemDeleted}
-          onLostCountChange={setLostCount}
         />
       </main>
 
-      <FooterNav activePage={activePage} />
+      <FooterNav activePage="lost" setActivePage={handleSetActivePage} />
     </div>
   );
 }
 
-export default HomePage;
+export default LostItemsPage;

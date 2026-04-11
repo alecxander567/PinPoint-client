@@ -3,10 +3,34 @@ import { NAV } from "./navConfig";
 import { Logo, PlusIcon } from "./Icons";
 import ReportBadge from "./ReportBadge";
 import { useReportCount } from "../hooks/useReportCount";
+import { useItemCount } from "../hooks/useItemcount";
 
-function Navbar({ activePage, setActivePage, onLogout }) {
+function Navbar({ activePage, onLogout }) {
   const navigate = useNavigate();
   const { reportCount } = useReportCount();
+  const { lostCount, returnedCount } = useItemCount();
+
+  const handleNavClick = (key) => {
+    if (key === "lost") {
+      navigate("/lost-item");
+      return;
+    }
+    if (key === "returned") {
+      navigate("/returned");
+      return;
+    }
+    if (key === "reports") {
+      navigate("/reports");
+      return;
+    }
+    if (key === "home") {
+      navigate("/home");
+      return;
+    }
+    navigate(`/${key}`);
+  };
+
+  const renderNavIcon = (Icon, isActive) => <Icon active={isActive} />;
 
   return (
     <nav className="navbar hidden-mobile">
@@ -19,11 +43,21 @@ function Navbar({ activePage, setActivePage, onLogout }) {
         {NAV.map(({ key, label, Icon }) => (
           <button
             key={key}
-            onClick={() => setActivePage(key)}
-            className={`navbar__link ${activePage === key ? "navbar__link--active" : ""}`}>
+            onClick={() => handleNavClick(key)}
+            className={`navbar__link ${
+              activePage === key ? "navbar__link--active" : ""
+            }`}>
             <span style={{ position: "relative", display: "inline-flex" }}>
-              <Icon active={activePage === key} />
-              {key === "reports" && <ReportBadge count={reportCount} />}
+              {renderNavIcon(Icon, activePage === key)}
+              {key === "reports" && reportCount > 0 && (
+                <ReportBadge count={reportCount} />
+              )}
+              {key === "lost" && lostCount > 0 && (
+                <ReportBadge count={lostCount} />
+              )}
+              {key === "returned" && returnedCount > 0 && (
+                <ReportBadge count={returnedCount} />
+              )}
             </span>
             {label}
           </button>
