@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSignup } from "../hooks/auth";
 import Alert from "../components/Alert";
-import "../css/SignupPage.css";
 
 const EyeIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -114,7 +113,7 @@ const ShieldIcon = () => (
 );
 
 const SearchPlusIcon = () => (
-  <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+  <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
     <circle cx="15" cy="15" r="9" stroke="white" strokeWidth="2.5" />
     <path
       d="M22 22l6 6"
@@ -214,6 +213,32 @@ const features = [
   },
 ];
 
+// Reusable input field component
+const InputField = ({ label, icon, rightSlot, inputProps }) => (
+  <div className="flex flex-col gap-1.5">
+    {label && (
+      <label className="text-sm font-semibold text-slate-700">{label}</label>
+    )}
+    <div className="relative">
+      {icon && (
+        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-blue-400 flex items-center pointer-events-none">
+          {icon}
+        </span>
+      )}
+      <input
+        {...inputProps}
+        className={`w-full ${icon ? "pl-10" : "pl-4"} ${rightSlot ? "pr-11" : "pr-4"} py-3 rounded-xl bg-white text-slate-800 placeholder-slate-400 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+        style={{ border: "1px solid #dbeafe" }}
+      />
+      {rightSlot && (
+        <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center">
+          {rightSlot}
+        </span>
+      )}
+    </div>
+  </div>
+);
+
 function SignupPage() {
   const { signup, loading } = useSignup();
   const navigate = useNavigate();
@@ -243,7 +268,7 @@ function SignupPage() {
   };
 
   return (
-    <div className="signup-wrapper">
+    <div className="flex min-h-screen w-full overflow-hidden">
       {alert.message && (
         <Alert
           message={alert.message}
@@ -252,164 +277,234 @@ function SignupPage() {
         />
       )}
 
-      {/* Left Panel */}
-      <div className="signup-left">
-        <div className="signup-left-inner">
-          <div className="signup-logo-ring">
+      <div
+        className="hidden lg:flex w-1/2 flex-col justify-center relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
+        }}>
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 340,
+            height: 340,
+            top: -90,
+            left: -90,
+            background: "rgba(255,255,255,0.07)",
+          }}
+        />
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 420,
+            height: 420,
+            bottom: -110,
+            right: -110,
+            background: "rgba(99,102,241,0.18)",
+          }}
+        />
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 220,
+            height: 220,
+            top: "42%",
+            left: "38%",
+            background: "rgba(147,197,253,0.12)",
+            filter: "blur(48px)",
+          }}
+        />
+
+        <div className="relative z-10 px-14 py-16 flex flex-col">
+          <div
+            className="flex items-center justify-center w-14 h-14 rounded-2xl mb-7 flex-shrink-0"
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}>
             <SearchPlusIcon />
           </div>
-          <div className="signup-badge">
-            <span className="signup-badge-dot" />
-            Community Platform
+
+          <div
+            className="flex items-center gap-2 w-fit rounded-full px-4 py-1.5 mb-5"
+            style={{
+              background: "rgba(255,255,255,0.1)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}>
+            <span className="w-2 h-2 rounded-full bg-blue-300 animate-pulse" />
+            <span
+              className="text-sm font-medium"
+              style={{ color: "rgba(255,255,255,0.8)" }}>
+              Community Platform
+            </span>
           </div>
-          <h1 className="signup-brand-title">Item Finder</h1>
-          <p className="signup-brand-desc">
+
+          <h1 className="text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
+            PinPoint
+          </h1>
+          <p
+            className="text-lg leading-relaxed mb-10"
+            style={{ color: "#bfdbfe", maxWidth: "22rem" }}>
             The smartest way to find and report lost items in your community.
           </p>
-          <div className="signup-features">
+
+          <div className="flex flex-col gap-4">
             {features.map((f) => (
-              <div key={f.label} className="signup-feature-item">
-                <div className="signup-feature-icon">{f.icon}</div>
-                {f.label}
+              <div key={f.label} className="flex items-center gap-4">
+                <div
+                  className="flex items-center justify-center w-10 h-10 rounded-xl flex-shrink-0"
+                  style={{
+                    background: "rgba(255,255,255,0.15)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                  }}>
+                  {f.icon}
+                </div>
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: "#e0e7ff" }}>
+                  {f.label}
+                </span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Right Panel */}
-      <div className="signup-right">
-        <div className="signup-right-inner">
-          <div className="signup-form-header">
-            <p className="signup-form-eyebrow">Get started</p>
-            <h2 className="signup-form-title">Create your account</h2>
-            <p className="signup-form-subtitle">
+      <div
+        className="flex flex-1 items-center justify-center px-6 py-10"
+        style={{
+          background:
+            "linear-gradient(155deg, #ffffff 0%, #eff6ff 50%, #eef2ff 100%)",
+        }}>
+        <div className="w-full max-w-sm">
+          <div className="flex items-center gap-3 mb-8 lg:hidden">
+            <div
+              className="flex items-center justify-center w-10 h-10 rounded-xl"
+              style={{
+                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
+              }}>
+              <SearchPlusIcon />
+            </div>
+            <span className="text-xl font-bold text-blue-900">Item Finder</span>
+          </div>
+
+          <div className="mb-7">
+            <p className="text-xs font-bold uppercase tracking-widest mb-1 text-blue-500">
+              Get started
+            </p>
+            <h2 className="text-3xl font-bold text-slate-800 mb-1">
+              Create your account
+            </h2>
+            <p className="text-sm text-slate-500">
               Join Item Finder and never lose track again
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="signup-form">
-            {/* Name Row */}
-            <div className="signup-name-row">
-              <div className="signup-field">
-                <label>First name</label>
-                <div className="signup-input-wrap">
-                  <span className="signup-input-icon">
-                    <UserIcon />
-                  </span>
-                  <input
-                    name="first_name"
-                    type="text"
-                    placeholder="Juan"
-                    onChange={handleChange}
-                    required
-                    className="signup-input"
-                  />
-                </div>
-              </div>
-              <div className="signup-field">
-                <label>Last name</label>
-                <div className="signup-input-wrap">
-                  <input
-                    name="last_name"
-                    type="text"
-                    placeholder="Dela Cruz"
-                    onChange={handleChange}
-                    required
-                    className="signup-input signup-input-no-icon"
-                  />
-                </div>
-              </div>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex gap-3">
+              <InputField
+                label="First name"
+                icon={<UserIcon />}
+                inputProps={{
+                  name: "first_name",
+                  type: "text",
+                  placeholder: "Juan",
+                  onChange: handleChange,
+                  required: true,
+                }}
+              />
+              <InputField
+                label="Last name"
+                inputProps={{
+                  name: "last_name",
+                  type: "text",
+                  placeholder: "Dela Cruz",
+                  onChange: handleChange,
+                  required: true,
+                }}
+              />
             </div>
 
-            {/* Email */}
-            <div className="signup-field">
-              <label>Email address</label>
-              <div className="signup-input-wrap">
-                <span className="signup-input-icon">
-                  <MailIcon />
-                </span>
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="juan@email.com"
-                  onChange={handleChange}
-                  required
-                  className="signup-input"
-                />
-              </div>
-            </div>
+            <InputField
+              label="Email address"
+              icon={<MailIcon />}
+              inputProps={{
+                name: "email",
+                type: "email",
+                placeholder: "juan@email.com",
+                onChange: handleChange,
+                required: true,
+              }}
+            />
 
-            {/* Password */}
-            <div className="signup-field">
-              <label>Password</label>
-              <div className="signup-input-wrap">
-                <span className="signup-input-icon">
-                  <LockIcon />
-                </span>
-                <input
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="At least 8 characters"
-                  onChange={handleChange}
-                  required
-                  className="signup-input"
-                />
+            <InputField
+              label="Password"
+              icon={<LockIcon />}
+              rightSlot={
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="signup-eye-btn">
+                  className="text-blue-400 hover:text-blue-600 transition-colors flex items-center">
                   {showPassword ?
                     <EyeOffIcon />
                   : <EyeIcon />}
                 </button>
-              </div>
-            </div>
+              }
+              inputProps={{
+                name: "password",
+                type: showPassword ? "text" : "password",
+                placeholder: "At least 8 characters",
+                onChange: handleChange,
+                required: true,
+              }}
+            />
 
-            {/* Confirm Password */}
-            <div className="signup-field">
-              <label>Confirm password</label>
-              <div className="signup-input-wrap">
-                <span className="signup-input-icon">
-                  <LockIcon />
-                </span>
-                <input
-                  name="confirm_password"
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Repeat your password"
-                  onChange={handleChange}
-                  required
-                  className="signup-input"
-                />
+            <InputField
+              label="Confirm password"
+              icon={<LockIcon />}
+              rightSlot={
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="signup-eye-btn">
+                  className="text-blue-400 hover:text-blue-600 transition-colors flex items-center">
                   {showConfirmPassword ?
                     <EyeOffIcon />
                   : <EyeIcon />}
                 </button>
-              </div>
-            </div>
+              }
+              inputProps={{
+                name: "confirm_password",
+                type: showConfirmPassword ? "text" : "password",
+                placeholder: "Repeat your password",
+                onChange: handleChange,
+                required: true,
+              }}
+            />
 
-            {/* Trust Badge */}
-            <div className="signup-trust-badge">
-              <ShieldIcon />
+            <div
+              className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-medium text-blue-700"
+              style={{ background: "#eff6ff", border: "1px solid #dbeafe" }}>
+              <span className="text-blue-500 flex items-center flex-shrink-0">
+                <ShieldIcon />
+              </span>
               Your data is safe and encrypted
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="signup-submit-btn">
+              className="w-full py-3 rounded-xl text-white font-semibold text-sm shadow-md hover:shadow-lg hover:opacity-90 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{
+                background: "linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%)",
+              }}>
               {loading ?
-                <span className="signup-btn-loading">
+                <span className="flex items-center justify-center gap-2">
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="signup-spinner">
+                    className="animate-spin">
                     <circle
                       cx="12"
                       cy="12"
@@ -431,8 +526,13 @@ function SignupPage() {
             </button>
           </form>
 
-          <p className="signup-footer">
-            Already have an account? <a href="/login">Sign in</a>
+          <p className="text-center text-sm text-slate-500 mt-5">
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="font-semibold text-blue-600 hover:text-indigo-700 transition-colors">
+              Sign in
+            </a>
           </p>
         </div>
       </div>

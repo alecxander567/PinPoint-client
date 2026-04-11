@@ -39,9 +39,7 @@ function FoundItemPage() {
 
   const handleUseCurrentLocation = async () => {
     const result = await fillCurrentLocation();
-    if (result?.error) {
-      setAlert({ message: result.error, type: "error" });
-    }
+    if (result?.error) setAlert({ message: result.error, type: "error" });
   };
 
   const contactUrl = getMessengerUrl(item?.owner_fb_account_url);
@@ -63,23 +61,22 @@ function FoundItemPage() {
 
   return (
     <div
+      className="min-h-screen"
       style={{
-        minHeight: "100vh",
-        color: "#0f172a",
         background:
-          "radial-gradient(circle at top left, rgba(14,165,233,0.18), transparent 30%), radial-gradient(circle at bottom right, rgba(59,130,246,0.14), transparent 28%), linear-gradient(135deg, #f8fbff 0%, #eef5ff 52%, #e4efff 100%)",
+          "linear-gradient(135deg, #f8fafc 0%, #eef5ff 52%, #e4efff 100%)",
       }}>
+      {/* Subtle grid overlay */}
       <div
+        className="fixed inset-0 pointer-events-none"
         style={{
-          position: "fixed",
-          inset: 0,
-          pointerEvents: "none",
-          opacity: 0.4,
+          opacity: 0.35,
           backgroundImage:
-            "linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px)",
+            "linear-gradient(rgba(148,163,184,0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.09) 1px, transparent 1px)",
           backgroundSize: "30px 30px",
         }}
       />
+
       {alert.message && (
         <Alert
           message={alert.message}
@@ -87,6 +84,7 @@ function FoundItemPage() {
           onClose={() => setAlert({ message: "", type: "success" })}
         />
       )}
+
       <FoundItemReport
         item={item}
         form={form}

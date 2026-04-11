@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useLogin } from "../hooks/auth";
 import Alert from "../components/Alert";
-import "../css/LoginPage.css";
 
 const EyeIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -82,7 +81,7 @@ const LockIcon = () => (
 );
 
 const SearchPlusIcon = () => (
-  <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+  <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
     <circle cx="15" cy="15" r="9" stroke="white" strokeWidth="2.5" />
     <path
       d="M22 22l6 6"
@@ -198,7 +197,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="login-wrapper">
+    <div className="flex min-h-screen w-full overflow-hidden">
       {alert.message && (
         <Alert
           message={alert.message}
@@ -207,48 +206,137 @@ function LoginPage() {
         />
       )}
 
-      {/* Left Panel */}
-      <div className="login-left">
-        <div className="login-left-inner">
-          <div className="login-logo-ring">
+      <div
+        className="hidden lg:flex w-1/2 flex-col justify-center relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
+        }}>
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 340,
+            height: 340,
+            top: -90,
+            left: -90,
+            background: "rgba(255,255,255,0.07)",
+          }}
+        />
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 420,
+            height: 420,
+            bottom: -110,
+            right: -110,
+            background: "rgba(99,102,241,0.18)",
+          }}
+        />
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 220,
+            height: 220,
+            top: "42%",
+            left: "38%",
+            background: "rgba(147,197,253,0.12)",
+            filter: "blur(48px)",
+          }}
+        />
+
+        <div className="relative z-10 px-14 py-16 flex flex-col">
+          <div
+            className="flex items-center justify-center w-14 h-14 rounded-2xl mb-7 flex-shrink-0"
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}>
             <SearchPlusIcon />
           </div>
-          <div className="login-badge">
-            <span className="login-badge-dot" />
-            Community Platform
+
+          <div
+            className="flex items-center gap-2 w-fit rounded-full px-4 py-1.5 mb-5"
+            style={{
+              background: "rgba(255,255,255,0.1)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}>
+            <span className="w-2 h-2 rounded-full bg-blue-300 animate-pulse" />
+            <span
+              className="text-sm font-medium"
+              style={{ color: "rgba(255,255,255,0.8)" }}>
+              Community Platform
+            </span>
           </div>
-          <h1 className="login-brand-title">Item Finder</h1>
-          <p className="login-brand-desc">
+
+          <h1 className="text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
+            PinPoint
+          </h1>
+
+          <p
+            className="text-lg leading-relaxed mb-10"
+            style={{ color: "#bfdbfe", maxWidth: "22rem" }}>
             The smartest way to find and report lost items in your community.
           </p>
-          <div className="login-features">
+
+          <div className="flex flex-col gap-4">
             {features.map((f) => (
-              <div key={f.label} className="login-feature-item">
-                <div className="login-feature-icon">{f.icon}</div>
-                {f.label}
+              <div key={f.label} className="flex items-center gap-4">
+                <div
+                  className="flex items-center justify-center w-10 h-10 rounded-xl flex-shrink-0"
+                  style={{
+                    background: "rgba(255,255,255,0.15)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                  }}>
+                  {f.icon}
+                </div>
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: "#e0e7ff" }}>
+                  {f.label}
+                </span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Right Panel */}
-      <div className="login-right">
-        <div className="login-right-inner">
-          <div className="login-form-header">
-            <p className="login-form-eyebrow">Welcome back</p>
-            <h2 className="login-form-title">Sign in to your account</h2>
-            <p className="login-form-subtitle">
+      <div
+        className="flex flex-1 items-center justify-center px-6 py-12"
+        style={{
+          background:
+            "linear-gradient(155deg, #ffffff 0%, #eff6ff 50%, #eef2ff 100%)",
+        }}>
+        <div className="w-full max-w-sm">
+          <div className="flex items-center gap-3 mb-8 lg:hidden">
+            <div
+              className="flex items-center justify-center w-10 h-10 rounded-xl"
+              style={{
+                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
+              }}>
+              <SearchPlusIcon />
+            </div>
+            <span className="text-xl font-bold text-blue-900">Item Finder</span>
+          </div>
+
+          <div className="mb-8">
+            <p className="text-xs font-bold uppercase tracking-widest mb-1 text-blue-500">
+              Welcome back
+            </p>
+            <h2 className="text-3xl font-bold text-slate-800 mb-1">
+              Sign in to your account
+            </h2>
+            <p className="text-sm text-slate-500">
               Enter your credentials to continue
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="login-form">
-            {/* Email */}
-            <div className="login-field">
-              <label>Email address</label>
-              <div className="login-input-wrap">
-                <span className="login-input-icon">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-semibold text-slate-700">
+                Email address
+              </label>
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-blue-400 flex items-center pointer-events-none">
                   <MailIcon />
                 </span>
                 <input
@@ -257,21 +345,25 @@ function LoginPage() {
                   placeholder="juan@email.com"
                   onChange={handleChange}
                   required
-                  className="login-input"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white text-slate-800 placeholder-slate-400 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{ border: "1px solid #dbeafe" }}
                 />
               </div>
             </div>
 
-            {/* Password */}
-            <div className="login-field">
-              <div className="login-field-row">
-                <label>Password</label>
-                <a href="/forgot-password" className="login-forgot-link">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-semibold text-slate-700">
+                  Password
+                </label>
+                <a
+                  href="/forgot-password"
+                  className="text-xs font-medium text-blue-600 hover:text-indigo-700 transition-colors">
                   Forgot password?
                 </a>
               </div>
-              <div className="login-input-wrap">
-                <span className="login-input-icon">
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-blue-400 flex items-center pointer-events-none">
                   <LockIcon />
                 </span>
                 <input
@@ -280,12 +372,13 @@ function LoginPage() {
                   placeholder="Your password"
                   onChange={handleChange}
                   required
-                  className="login-input"
+                  className="w-full pl-10 pr-11 py-3 rounded-xl bg-white text-slate-800 placeholder-slate-400 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{ border: "1px solid #dbeafe" }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="login-eye-btn">
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-600 transition-colors flex items-center">
                   {showPassword ?
                     <EyeOffIcon />
                   : <EyeIcon />}
@@ -296,15 +389,18 @@ function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="login-submit-btn">
+              className="w-full py-3 rounded-xl text-white font-semibold text-sm shadow-md hover:shadow-lg hover:opacity-90 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed mt-1"
+              style={{
+                background: "linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%)",
+              }}>
               {loading ?
-                <span className="login-btn-loading">
+                <span className="flex items-center justify-center gap-2">
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="login-spinner">
+                    className="animate-spin">
                     <circle
                       cx="12"
                       cy="12"
@@ -326,8 +422,13 @@ function LoginPage() {
             </button>
           </form>
 
-          <p className="login-footer">
-            Don't have an account? <a href="/register">Create one</a>
+          <p className="text-center text-sm text-slate-500 mt-6">
+            Don't have an account?{" "}
+            <a
+              href="/register"
+              className="font-semibold text-blue-600 hover:text-indigo-700 transition-colors">
+              Create one
+            </a>
           </p>
         </div>
       </div>

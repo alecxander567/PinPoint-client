@@ -10,23 +10,9 @@ import Navbar from "../components/Navbar";
 import FooterNav from "../components/Footer";
 import Alert from "../components/Alert";
 import SkeletonLoader from "../components/SkeletonLoader";
-import StatsBar from "../components/Statsbar";
 import SearchInput from "../components/SearchInput";
 import ReportCard from "../components/ReportCard";
 import { Logo, PlusIcon } from "../components/Icons";
-
-const headerStyles = `
-  @media (max-width: 640px) {
-    .page-header-inner {
-      flex-direction: column !important;
-      align-items: center !important;
-      text-align: center !important;
-    }
-    .page-header-text {
-      text-align: center !important;
-    }
-  }
-`;
 
 function ReportsContent({
   reports,
@@ -104,137 +90,170 @@ function ReportsContent({
 
   if (loading || reportsLoading) return <SkeletonLoader />;
 
-  const reportsStats = [
-    { label: "Reports", value: reports.length, color: "#f87171" },
-    {
-      label: "Items",
-      value: new Set(reports.map((r) => r.item)).size,
-      color: "#34d399",
-    },
-    { label: "Selected", value: selectedReports.length, color: "#fbbf24" },
-  ];
+  const totalReports = reports.length;
+  const uniqueItems = new Set(reports.map((r) => r.item)).size;
 
   return (
-    <div style={{ width: "100%", minHeight: "calc(100vh - 144px)" }}>
-      <style>{headerStyles}</style>
-
+    <div className="w-full" style={{ minHeight: "calc(100vh - 144px)" }}>
       <div
+        className="px-6 py-8 relative overflow-hidden"
         style={{
           background:
-            "linear-gradient(145deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%)",
-          color: "white",
-          padding: "28px 24px 24px",
+            "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
+          borderBottom: "1px solid rgba(99,102,241,0.3)",
         }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 340,
+            height: 340,
+            top: -90,
+            right: -90,
+            background: "rgba(255,255,255,0.06)",
+          }}
+        />
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 220,
+            height: 220,
+            bottom: -80,
+            left: 40,
+            background: "rgba(147,197,253,0.1)",
+            filter: "blur(48px)",
+          }}
+        />
+
+        <div className="max-w-screen-xl mx-auto relative z-10 flex flex-col items-center text-center gap-5 lg:flex-row lg:items-center lg:text-left lg:gap-6">
           <div
-            className="page-header-inner"
+            className="flex items-center justify-center w-14 h-14 rounded-2xl flex-shrink-0"
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "20px",
-              flexWrap: "wrap",
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.2)",
             }}>
+            <Logo size={28} color="white" />
+          </div>
+
+          <div>
+            <h1
+              className="text-3xl font-extrabold leading-tight tracking-tight m-0 text-white"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              Finder Reports
+            </h1>
+            <p
+              className="mt-1.5 text-sm"
+              style={{ color: "#bfdbfe", fontFamily: "'Nunito', sans-serif" }}>
+              Review uploaded landmark photos, locations, and messages for your
+              items
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 flex-wrap lg:ml-auto">
             <div
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
               style={{
-                width: "56px",
-                height: "56px",
-                borderRadius: "12px",
-                background: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.25)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
               }}>
-              <Logo size={28} color="white" />
+              <span className="text-2xl font-bold text-red-300 leading-none">
+                {totalReports}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                Reports
+              </span>
             </div>
 
             <div
-              className="page-header-text"
-              style={{ flex: 1, minWidth: "180px" }}>
-              <h1
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "clamp(24px, 4vw, 34px)",
-                  fontWeight: "800",
-                  margin: 0,
-                  lineHeight: 1.15,
-                }}>
-                Finder Reports
-              </h1>
-              <p
-                style={{
-                  margin: "6px 0 0",
-                  fontSize: "13px",
-                  opacity: 0.82,
-                  fontFamily: "'Nunito', sans-serif",
-                }}>
-                Review uploaded landmark photos, locations, and messages for
-                your items
-              </p>
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
+              }}>
+              <span className="text-2xl font-bold text-emerald-300 leading-none">
+                {uniqueItems}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                Items
+              </span>
             </div>
 
-            <StatsBar stats={reportsStats} />
+            <div
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
+              }}>
+              <span className="text-2xl font-bold text-amber-300 leading-none">
+                {selectedReports.length}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                Selected
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "24px 20px 40px",
-        }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "16px",
-            flexWrap: "wrap",
-            marginBottom: "24px",
-          }}>
-          <SearchInput
-            value={reportSearch}
-            onChange={setReportSearch}
-            placeholder="Search reports..."
-            width="min(360px, 100%)"
-          />
+      <div className="max-w-screen-xl mx-auto px-5 pt-6 pb-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div className="flex flex-wrap items-center gap-3">
+            {reports.length > 0 && (
+              <h2
+                className="text-base font-bold text-slate-800 m-0"
+                style={{ fontFamily: "'Poppins', sans-serif" }}>
+                {reportSearch ?
+                  `Results for "${reportSearch}" (${filteredReports.length})`
+                : `Reports (${reports.length})`}
+              </h2>
+            )}
+          </div>
 
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <div className="flex flex-wrap items-center gap-3">
+            <SearchInput
+              value={reportSearch}
+              onChange={setReportSearch}
+              placeholder="Search reports..."
+              width="min(260px, 100%)"
+            />
+
             <button
               onClick={handleSelectAllReports}
               disabled={!filteredReports.length}
+              className="px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
               style={{
-                padding: "10px 16px",
-                borderRadius: "10px",
                 border: "1px solid #cbd5e1",
                 background: "white",
                 color: "#0f172a",
-                fontSize: "13px",
-                fontWeight: "800",
                 cursor: filteredReports.length ? "pointer" : "not-allowed",
+                opacity: filteredReports.length ? 1 : 0.5,
               }}>
               {allVisibleSelected ? "Unselect All" : "Select All"}
             </button>
+
             <button
               onClick={handleDeleteSelectedReports}
               disabled={!selectedReports.length || reportsDeleting}
+              className="px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
               style={{
-                padding: "10px 16px",
-                borderRadius: "10px",
-                border: "none",
                 background:
                   !selectedReports.length || reportsDeleting ?
                     "#cbd5e1"
-                  : "#ef4444",
-                color: "white",
-                fontSize: "13px",
-                fontWeight: "800",
+                  : "linear-gradient(135deg, #ef4444, #dc2626)",
+                border: "none",
                 cursor:
                   !selectedReports.length || reportsDeleting ?
                     "not-allowed"
                   : "pointer",
+                boxShadow:
+                  selectedReports.length && !reportsDeleting ?
+                    "0 4px 12px rgba(239,68,68,0.3)"
+                  : "none",
               }}>
               {reportsDeleting ?
                 "Deleting..."
@@ -243,15 +262,15 @@ function ReportsContent({
             </button>
           </div>
         </div>
+      </div>
 
-        {filteredReports.length ?
+      <div className="max-w-screen-xl mx-auto px-5 pb-10">
+        {/* Has reports + has results */}
+        {reports.length > 0 && filteredReports.length > 0 && (
           <div
+            className="grid gap-5"
             style={{
-              display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-              gap: "18px",
-              width: "100%",
-              boxSizing: "border-box",
             }}>
             {filteredReports.map((report) => (
               <ReportCard
@@ -264,39 +283,79 @@ function ReportsContent({
               />
             ))}
           </div>
-        : <div
-            style={{
-              background: "white",
-              borderRadius: "24px",
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
-              padding: "56px 24px",
-              textAlign: "center",
-            }}>
-            <h2
+        )}
+
+        {reports.length > 0 && filteredReports.length === 0 && (
+          <div className="text-center py-16 px-6">
+            <p
+              className="text-sm mb-3 text-slate-500"
+              style={{ fontFamily: "'Nunito', sans-serif" }}>
+              No reports match "
+              <strong className="text-slate-800">{reportSearch}</strong>"
+            </p>
+            <button
+              onClick={() => setReportSearch("")}
+              className="px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors"
               style={{
-                margin: 0,
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "28px",
-                color: "#0f172a",
+                border: "1px solid rgba(99,102,241,0.4)",
+                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
               }}>
-              {reportSearch ? "No matching reports" : "No reports yet"}
+              Clear search
+            </button>
+          </div>
+        )}
+
+        {reports.length === 0 && (
+          <div
+            className="mt-2 rounded-3xl text-center px-6 py-14"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(99,102,241,0.15)",
+              boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
+            }}>
+            <div
+              className="flex items-center justify-center w-16 h-16 rounded-2xl mx-auto mb-5"
+              style={{
+                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
+                opacity: 0.85,
+              }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M14 2v6h6"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M16 13H8M16 17H8M10 9H8"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+            <h2
+              className="text-2xl font-bold text-slate-800 m-0"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              No reports yet
             </h2>
             <p
-              style={{
-                margin: "12px auto 0",
-                maxWidth: "520px",
-                color: "#64748b",
-                fontSize: "15px",
-                lineHeight: 1.7,
-              }}>
-              {reportSearch ?
-                "Try a different search term or clear the report search field."
-              : "Once a finder submits a report from your QR page, it will appear here with the uploaded landmark image, shared location, and message."
-              }
+              className="mt-3 mx-auto text-sm leading-relaxed text-slate-500"
+              style={{ maxWidth: "480px", fontFamily: "'Nunito', sans-serif" }}>
+              Once a finder submits a report from your QR page, it will appear
+              here with the uploaded landmark image, shared location, and
+              message.
             </p>
           </div>
-        }
+        )}
       </div>
 
       <Alert message={alert.message} type={alert.type} onClose={clearAlert} />
@@ -343,37 +402,47 @@ function ReportsPage() {
 
   return (
     <div
-      style={{
-        minHeight: "100vh",
-        background: "#f8fafc",
-        display: "flex",
-        flexDirection: "column",
-      }}>
+      className="flex flex-col min-h-screen"
+      style={{ background: "#f8fafc" }}>
       <Navbar activePage="reports" onLogout={logout} />
 
-      <div className="mobile-header show-mobile">
-        <div className="mobile-header__brand">
-          <Logo size={24} />
-          <span className="mobile-header__brand-text">Item Finder</span>
+      <div
+        className="flex items-center justify-between px-4 py-3 lg:hidden"
+        style={{
+          background: "linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%)",
+          borderBottom: "1px solid rgba(255,255,255,0.1)",
+        }}>
+        <div className="flex items-center gap-2">
+          <Logo size={22} color="white" />
+          <span
+            className="text-white font-bold text-base"
+            style={{ fontFamily: "'Poppins', sans-serif" }}>
+            Item Finder
+          </span>
         </div>
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <div className="flex items-center gap-2">
           <button
             onClick={() => navigate("/add-item")}
-            className="mobile-header__add-btn">
+            className="flex items-center justify-center w-9 h-9 rounded-xl text-white transition-colors"
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}>
             <PlusIcon />
           </button>
           <button
             onClick={logout}
-            className="btn btn--ghost"
-            style={{ padding: "6px 14px", fontSize: "12px" }}>
+            className="px-3 py-1.5 rounded-xl text-white text-xs font-semibold transition-colors"
+            style={{
+              background: "rgba(255,255,255,0.12)",
+              border: "1px solid rgba(255,255,255,0.18)",
+            }}>
             Logout
           </button>
         </div>
       </div>
 
-      <main
-        className="main-content"
-        style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <main className="flex flex-1 flex-col pb-16">
         <ReportsContent
           items={items}
           reports={reports}

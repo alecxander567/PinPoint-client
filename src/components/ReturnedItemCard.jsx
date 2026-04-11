@@ -1,104 +1,31 @@
 function ReturnedItemCard({ report, onViewQR }) {
   return (
-    <article
-      style={{
-        background: "white",
-        borderRadius: "22px",
-        border: "1px solid #e2e8f0",
-        boxShadow: "0 10px 28px rgba(15,23,42,0.06)",
-        overflow: "hidden",
-        width: "100%",
-        maxWidth: "100%",
-        boxSizing: "border-box",
-      }}>
-
-      <div
-        style={{
-          padding: "18px 18px 14px",
-          borderBottom: "1px solid #f1f5f9",
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: "12px",
-        }}>
+    <article className="bg-white border border-slate-200 rounded-2xl shadow-md overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-lg">
+      <div className="px-5 pt-5 pb-4 border-b border-slate-100 flex items-start justify-between gap-3">
         <div>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "11px",
-              fontWeight: 800,
-              color: "#0284c7",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-            }}>
+          <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider text-indigo-600">
             {report.item_name}
           </p>
-          <h3
-            style={{
-              margin: "10px 0 0",
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "22px",
-              lineHeight: 1.2,
-              color: "#0f172a",
-            }}>
+          <h3 className="mt-2 text-lg font-bold font-poppins text-slate-800">
             Returned item
           </h3>
         </div>
 
-        <div
-          style={{
-            background: "#f0fdf4",
-            color: "#16a34a",
-            border: "1px solid #bbf7d0",
-            borderRadius: "20px",
-            padding: "4px 12px",
-            fontSize: "11px",
-            fontWeight: 800,
-            fontFamily: "'Nunito', sans-serif",
-            display: "flex",
-            alignItems: "center",
-            gap: "5px",
-            textTransform: "uppercase",
-            letterSpacing: "0.04em",
-            whiteSpace: "nowrap",
-            flexShrink: 0,
-          }}>
-          <span
-            style={{
-              width: "6px",
-              height: "6px",
-              borderRadius: "50%",
-              background: "#34d399",
-              display: "inline-block",
-            }}
-          />
+        <div className="bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full px-3 py-1 text-[11px] font-extrabold font-nunito uppercase tracking-wide flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           Returned
         </div>
       </div>
 
-      <div style={{ padding: "18px 18px 0" }}>
-        <div
-          style={{
-            background: "#f8fafc",
-            borderRadius: "16px",
-            minHeight: "160px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            overflow: "hidden",
-          }}>
+      <div className="px-5 pt-5">
+        <div className="bg-slate-50 rounded-xl min-h-[160px] flex items-center justify-center relative overflow-hidden">
           {report.item_image_url ?
             <img
               src={report.item_image_url}
               alt={report.item_name}
-              style={{
-                maxWidth: "100%",
-                maxHeight: "160px",
-                objectFit: "contain",
-              }}
+              className="max-w-full max-h-[160px] object-contain"
             />
-          : <span style={{ fontSize: "40px", color: "#cbd5e1" }}>📦</span>}
+          : <span className="text-4xl text-slate-300">📦</span>}
 
           {report.item_qr_code_url && (
             <button
@@ -108,111 +35,45 @@ function ReturnedItemCard({ report, onViewQR }) {
                   name: report.item_name,
                 })
               }
-              style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                background: "white",
-                border: "1px solid #e2e8f0",
-                borderRadius: "10px",
-                padding: "5px 12px",
-                fontSize: "12px",
-                fontWeight: 800,
-                fontFamily: "'Nunito', sans-serif",
-                cursor: "pointer",
-                color: "#0f172a",
-              }}>
+              className="absolute top-2 right-2 px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 transition">
               View QR
             </button>
           )}
         </div>
       </div>
 
-      <div style={{ padding: "18px" }}>
-        <div style={{ display: "grid", gap: "12px", marginBottom: "16px" }}>
+      <div className="px-5 pb-5 pt-4">
+        <div className="grid gap-3 mb-4">
           {report.item_description && (
-            <div key="description">
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "12px",
-                  fontWeight: 800,
-                  color: "#64748b",
-                  textTransform: "uppercase",
-                }}>
+            <div>
+              <p className="m-0 text-[12px] font-extrabold uppercase text-slate-500">
                 Description
               </p>
-              <p
-                style={{
-                  margin: "6px 0 0",
-                  color: "#334155",
-                  lineHeight: 1.7,
-                  whiteSpace: "pre-wrap",
-                  wordBreak: "break-word",
-                }}>
+              <p className="mt-1 text-slate-700 leading-relaxed whitespace-pre-wrap break-words">
                 {report.item_description}
               </p>
             </div>
           )}
 
           {report.location && (
-            <div key="location">
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "12px",
-                  fontWeight: 800,
-                  color: "#64748b",
-                  textTransform: "uppercase",
-                }}>
+            <div>
+              <p className="m-0 text-[12px] font-extrabold uppercase text-slate-500">
                 Location
               </p>
-              <p
-                style={{
-                  margin: "6px 0 0",
-                  color: "#334155",
-                  lineHeight: 1.7,
-                  wordBreak: "break-word",
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "6px",
-                }}>
-                <span
-                  style={{ fontSize: "14px", flexShrink: 0, marginTop: "2px" }}>
-                  📍
-                </span>
+              <p className="mt-1 text-slate-700 leading-relaxed break-words flex items-start gap-1.5">
+                <span className="text-sm flex-shrink-0 mt-[2px]">📍</span>
                 {report.location}
               </p>
             </div>
           )}
 
           {report.message && (
-            <div key="message">
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "12px",
-                  fontWeight: 800,
-                  color: "#64748b",
-                  textTransform: "uppercase",
-                }}>
+            <div>
+              <p className="m-0 text-[12px] font-extrabold uppercase text-slate-500">
                 Message
               </p>
-              <p
-                style={{
-                  margin: "6px 0 0",
-                  color: "#334155",
-                  lineHeight: 1.7,
-                  whiteSpace: "pre-wrap",
-                  wordBreak: "break-word",
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "6px",
-                }}>
-                <span
-                  style={{ fontSize: "14px", flexShrink: 0, marginTop: "2px" }}>
-                  💬
-                </span>
+              <p className="mt-1 text-slate-700 leading-relaxed whitespace-pre-wrap break-words flex items-start gap-1.5">
+                <span className="text-sm flex-shrink-0 mt-[2px]">💬</span>
                 {report.message}
               </p>
             </div>
@@ -220,50 +81,24 @@ function ReturnedItemCard({ report, onViewQR }) {
         </div>
 
         {report.landmark_image_url && (
-          <div style={{ marginBottom: "16px" }}>
-            <p
-              style={{
-                margin: "0 0 8px",
-                fontSize: "12px",
-                fontWeight: 800,
-                color: "#64748b",
-                textTransform: "uppercase",
-              }}>
+          <div className="mb-4">
+            <p className="m-0 mb-2 text-[12px] font-extrabold uppercase text-slate-500">
               Landmark photo
             </p>
             <img
               src={report.landmark_image_url}
               alt="Landmark"
-              style={{
-                width: "100%",
-                height: "120px",
-                borderRadius: "12px",
-                objectFit: "cover",
-                display: "block",
-                background: "#f8fafc",
-              }}
+              className="w-full h-[120px] rounded-lg object-cover bg-slate-50"
             />
           </div>
         )}
 
         {report.item_qr_code_url && (
-          <div
-            style={{
-              borderTop: "1px solid #f1f5f9",
-              paddingTop: "14px",
-              display: "flex",
-              justifyContent: "center",
-            }}>
+          <div className="border-t border-slate-100 pt-4 flex justify-center">
             <img
               src={report.item_qr_code_url}
               alt="QR Code"
-              style={{
-                width: "88px",
-                height: "88px",
-                border: "1px solid #e2e8f0",
-                borderRadius: "10px",
-                padding: "4px",
-              }}
+              className="w-[88px] h-[88px] rounded-lg p-1.5 bg-white border border-slate-300 shadow-sm"
             />
           </div>
         )}

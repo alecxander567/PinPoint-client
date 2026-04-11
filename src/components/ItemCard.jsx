@@ -1,16 +1,5 @@
 import StatusToggle from "./StatusToggle";
 
-/**
- * ItemCard — displays a single item with image, QR, status toggle, and actions.
- *
- * Props:
- *   item: object
- *   togglingId: string | null
- *   onToggleLost: (itemId) => void
- *   onEdit: (item) => void
- *   onDelete: (item) => void
- *   onViewQR: (item) => void
- */
 function ItemCard({
   item,
   togglingId,
@@ -20,74 +9,28 @@ function ItemCard({
   onViewQR,
 }) {
   return (
-    <div
-      style={{
-        background: "white",
-        borderRadius: "16px",
-        overflow: "hidden",
-        boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-        border: "1px solid #f1f5f9",
-        transition: "box-shadow 0.2s, transform 0.2s",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.13)";
-        e.currentTarget.style.transform = "translateY(-2px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.08)";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}>
-      {/* Image area */}
-      <div
-        style={{
-          background: "#f8fafc",
-          padding: "20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "180px",
-          position: "relative",
-        }}>
-        <button
-          onClick={() => onViewQR(item)}
-          className="btn btn--primary"
-          style={{
-            position: "absolute",
-            top: "8px",
-            right: "8px",
-            padding: "5px 12px",
-            fontSize: "12px",
-            borderRadius: "8px",
-          }}>
-          View QR
-        </button>
+    <div className="group bg-white border border-indigo-100 rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-md">
+      <div className="relative flex items-center justify-center p-6 min-h-[190px] bg-gradient-to-b from-slate-50 to-slate-100">
+        <span
+          className={`absolute top-3 left-3 w-2 h-2 rounded-full ${
+            item.status === "lost" ? "bg-red-500" : "bg-emerald-500"
+          }`}
+        />
+
         <img
           src={item.image_url}
           alt={item.name}
-          style={{ maxWidth: "100%", maxHeight: "150px", objectFit: "contain" }}
+          className="max-w-full max-h-[150px] object-contain transition-transform duration-200 group-hover:scale-105"
         />
       </div>
 
-      {/* Body */}
-      <div style={{ padding: "16px" }}>
-        <h3
-          style={{
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: "14px",
-            fontWeight: "700",
-            color: "#0f172a",
-            margin: "0 0 6px 0",
-          }}>
+      <div className="h-px bg-gradient-to-r from-transparent via-indigo-200 to-transparent" />
+
+      <div className="p-4">
+        <h3 className="text-sm font-bold text-slate-800 mb-1 truncate font-poppins">
           {item.name}
         </h3>
-        <p
-          style={{
-            fontFamily: "'Nunito', sans-serif",
-            fontSize: "13px",
-            color: "#64748b",
-            lineHeight: "1.5",
-            margin: "0 0 14px 0",
-          }}>
+        <p className="text-[12px] text-slate-600 leading-relaxed mb-3 line-clamp-2 font-nunito">
           {item.description || "No description"}
         </p>
 
@@ -96,37 +39,20 @@ function ItemCard({
             href={item.owner_fb_account_url}
             target="_blank"
             rel="noreferrer"
-            style={{
-              display: "block",
-              fontFamily: "'Nunito', sans-serif",
-              fontSize: "12px",
-              color: "#2563eb",
-              lineHeight: "1.5",
-              margin: "0 0 14px 0",
-              textDecoration: "none",
-              wordBreak: "break-word",
-            }}>
+            className="flex items-center gap-1 text-[11px] text-indigo-600 hover:text-indigo-500 mb-3 truncate transition-colors font-nunito">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+            </svg>
             {item.owner_fb_account_url}
           </a>
         )}
 
         {item.qr_code_url && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginBottom: "14px",
-            }}>
+          <div className="flex justify-center mb-3">
             <img
               src={item.qr_code_url}
               alt="QR Code"
-              style={{
-                width: "90px",
-                height: "90px",
-                border: "2px solid #e2e8f0",
-                borderRadius: "8px",
-                padding: "4px",
-              }}
+              className="w-[88px] h-[88px] rounded-xl p-1.5 bg-white border border-slate-200 shadow-sm"
             />
           </div>
         )}
@@ -137,38 +63,21 @@ function ItemCard({
           togglingId={togglingId}
         />
 
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div className="flex flex-col sm:flex-row gap-2 mt-3">
           <button
-            onClick={() => onDelete(item)}
-            className="btn"
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              padding: "9px",
-              fontSize: "13px",
-              background: "#ef4444",
-              color: "white",
-              border: "none",
-              borderRadius: "10px",
-              boxShadow: "0 2px 8px rgba(239,68,68,0.2)",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#dc2626")}
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = "#ef4444")
-            }>
-            Delete
+            onClick={() => onViewQR(item)}
+            className="flex-1 py-2 text-[12px] font-semibold rounded-lg text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 transition-all">
+            QR
           </button>
           <button
             onClick={() => onEdit(item)}
-            className="btn btn--primary"
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              padding: "9px",
-              fontSize: "13px",
-              borderRadius: "10px",
-            }}>
+            className="flex-1 py-2 text-[12px] font-semibold rounded-lg text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-300 transition-all">
             Edit
+          </button>
+          <button
+            onClick={() => onDelete(item)}
+            className="flex-1 py-2 text-[12px] font-semibold rounded-lg text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 hover:border-red-300 transition-all">
+            Delete
           </button>
         </div>
       </div>

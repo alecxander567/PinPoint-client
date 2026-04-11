@@ -10,12 +10,7 @@ export default function DeleteConfirmModal({
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(
-      () => {
-        setVisible(isOpen);
-      },
-      isOpen ? 10 : 0,
-    );
+    const t = setTimeout(() => setVisible(isOpen), isOpen ? 10 : 0);
     return () => clearTimeout(t);
   }, [isOpen]);
 
@@ -35,17 +30,11 @@ export default function DeleteConfirmModal({
 
   return (
     <div
+      className="fixed inset-0 z-[1500] flex items-center justify-center px-4"
       style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 1500,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "16px",
         background: "rgba(15,23,42,0.55)",
         backdropFilter: "blur(4px)",
-        transition: "opacity 0.3s",
+        transition: "opacity 0.26s",
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
       }}
@@ -53,149 +42,80 @@ export default function DeleteConfirmModal({
         if (e.target === e.currentTarget) handleClose();
       }}>
       <div
+        className="w-full overflow-hidden rounded-2xl bg-white"
         style={{
-          background: "white",
-          borderRadius: "20px",
-          width: "100%",
-          maxWidth: "360px",
-          margin: "0 auto 0 0",
-          marginRight: "20px",
+          maxWidth: "340px",
           boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
-          overflow: "hidden",
-          transform: visible ? "translateY(0)" : "translateY(16px)",
-          transition: "transform 0.3s",
+          transform: visible ? "translateY(0)" : "translateY(14px)",
+          transition: "transform 0.26s",
         }}>
-        {/* Top accent bar */}
         <div
+          className="flex items-center justify-between px-5 py-4"
           style={{
-            height: "4px",
-            background: "linear-gradient(90deg, #ef4444, #f87171)",
-          }}
-        />
-
-        {/* Body */}
-        <div
-          style={{
-            padding: "32px 28px 24px",
-            textAlign: "center",
+            background:
+              "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
           }}>
-          {/* Icon */}
-          <div
-            style={{
-              width: "64px",
-              height: "64px",
-              borderRadius: "50%",
-              background: "#fef2f2",
-              border: "1px solid #fecaca",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 20px",
-            }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <div>
+            <p
+              className="text-[10px] font-bold uppercase tracking-widest m-0"
+              style={{ color: "#bfdbfe", fontFamily: "'Poppins', sans-serif" }}>
+              Confirm Action
+            </p>
+            <h2
+              className="text-base font-extrabold text-white m-0 leading-tight"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              Delete Item
+            </h2>
+          </div>
+
+          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-red-500/20 border border-red-400/30">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path
                 d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"
-                stroke="#ef4444"
+                stroke="#fca5a5"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
           </div>
+        </div>
 
+        <div className="px-5 py-5 text-center">
           <p
-            style={{
-              fontSize: "11px",
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: "700",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "#f87171",
-              marginBottom: "8px",
-            }}>
-            Confirm Action
-          </p>
-          <h2
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "20px",
-              fontWeight: "800",
-              color: "#0f172a",
-              margin: "0 0 10px 0",
-            }}>
-            Delete item?
-          </h2>
-          <p
-            style={{
-              fontFamily: "'Nunito', sans-serif",
-              fontSize: "14px",
-              color: "#64748b",
-              lineHeight: 1.6,
-              margin: 0,
-            }}>
+            className="text-sm text-slate-500 leading-relaxed m-0"
+            style={{ fontFamily: "'Nunito', sans-serif" }}>
             Are you sure you want to delete{" "}
-            <span style={{ fontWeight: "700", color: "#0f172a" }}>
-              "{itemName}"
-            </span>
-            ? This cannot be undone.
+            <span className="font-bold text-slate-800">"{itemName}"</span>? This
+            cannot be undone.
           </p>
         </div>
 
-        {/* Actions */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            padding: "0 28px 28px",
-          }}>
+        <div className="flex gap-2.5 px-5 pb-5">
           <button
             onClick={handleClose}
             disabled={loading}
+            className="flex-1 py-2.5 rounded-xl text-sm font-bold text-slate-500 border border-slate-200 bg-white transition-colors hover:bg-slate-50 hover:border-slate-300"
             style={{
-              width: "100%",
-              padding: "12px",
-              borderRadius: "12px",
-              border: "1.5px solid #e2e8f0",
-              background: "white",
-              color: "#64748b",
               fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: "700",
-              cursor: "pointer",
-              transition: "all 0.15s",
               opacity: loading ? 0.5 : 1,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#f8fafc";
-              e.currentTarget.style.borderColor = "#cbd5e1";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "white";
-              e.currentTarget.style.borderColor = "#e2e8f0";
+              cursor: loading ? "not-allowed" : "pointer",
             }}>
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
+            className="flex-1 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
             style={{
-              width: "100%",
-              padding: "12px",
-              borderRadius: "12px",
-              border: "none",
-              background: "linear-gradient(135deg, #ef4444, #dc2626)",
-              color: "white",
               fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: "700",
-              cursor: loading ? "not-allowed" : "pointer",
-              transition: "all 0.15s",
-              opacity: loading ? 0.6 : 1,
+              background: "linear-gradient(135deg, #ef4444, #dc2626)",
               boxShadow: "0 4px 12px rgba(239,68,68,0.3)",
+              opacity: loading ? 0.6 : 1,
+              cursor: loading ? "not-allowed" : "pointer",
             }}
             onMouseEnter={(e) => {
-              if (!loading) e.currentTarget.style.opacity = "0.9";
+              if (!loading) e.currentTarget.style.opacity = "0.88";
             }}
             onMouseLeave={(e) => {
               if (!loading) e.currentTarget.style.opacity = "1";

@@ -7,8 +7,8 @@ import ItemSuccessModal from "../components/ItemSuccessModal";
 
 const BackIcon = () => (
   <svg
-    width="18"
-    height="18"
+    width="16"
+    height="16"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -20,16 +20,16 @@ const BackIcon = () => (
 );
 
 const UploadIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
     <path
       d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"
-      stroke="#94a3b8"
+      stroke="#93c5fd"
       strokeWidth="1.5"
       strokeLinecap="round"
     />
     <polyline
       points="17 8 12 3 7 8"
-      stroke="#94a3b8"
+      stroke="#93c5fd"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -39,12 +39,21 @@ const UploadIcon = () => (
       y1="3"
       x2="12"
       y2="15"
-      stroke="#94a3b8"
+      stroke="#93c5fd"
       strokeWidth="1.5"
       strokeLinecap="round"
     />
   </svg>
 );
+
+const labelClass =
+  "block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5";
+const inputClass = `
+  w-full px-4 py-3 rounded-xl text-sm text-slate-800
+  border border-slate-200 bg-slate-50
+  outline-none transition-all duration-150
+  focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100
+`;
 
 function AddItemPage() {
   const navigate = useNavigate();
@@ -113,7 +122,6 @@ function AddItemPage() {
     }
   };
 
-  // Success Screen
   if (success) {
     return (
       <ItemSuccessModal
@@ -128,9 +136,10 @@ function AddItemPage() {
     );
   }
 
-  // Main Form
   return (
-    <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ background: "#f8fafc" }}>
       {alert.message && (
         <Alert
           message={alert.message}
@@ -139,101 +148,65 @@ function AddItemPage() {
         />
       )}
 
-      {/* Simple Navbar */}
       <nav
+        className="sticky top-0 z-50 flex-shrink-0"
         style={{
-          background: "white",
-          borderBottom: "1px solid #e2e8f0",
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
-          boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+          background:
+            "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
+          borderBottom: "1px solid rgba(99,102,241,0.3)",
         }}>
-        <div
-          style={{
-            maxWidth: "1280px",
-            margin: "0 auto",
-            padding: "0 24px",
-            height: "64px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <Logo />
+        <div className="max-w-screen-lg mx-auto px-5 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div
+              className="flex items-center justify-center w-8 h-8 rounded-xl"
+              style={{
+                background: "rgba(255,255,255,0.15)",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}>
+              <Logo size={18} color="white" />
+            </div>
             <span
-              style={{ fontSize: "22px", fontWeight: "600", color: "#1e3a8a" }}>
+              className="text-white font-bold text-base"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
               Item Finder
             </span>
           </div>
+
           <button
             onClick={() => navigate("/home")}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition-colors"
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              padding: "8px 16px",
-              color: "#64748b",
-              borderRadius: "12px",
-              border: "1px solid #e2e8f0",
-              background: "transparent",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "600",
-              transition: "all 0.2s",
+              background: "rgba(255,255,255,0.12)",
+              border: "1px solid rgba(255,255,255,0.2)",
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#f1f5f9";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-            }}>
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = "rgba(255,255,255,0.22)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "rgba(255,255,255,0.12)")
+            }>
             <BackIcon /> Back
           </button>
         </div>
       </nav>
 
-      {/* Form Container */}
-      <div
-        style={{
-          maxWidth: "640px",
-          margin: "0 auto",
-          padding: "40px 20px 40px 20px",
-          width: "100%",
-          boxSizing: "border-box",
-        }}>
-        <h1
-          style={{
-            fontSize: "32px",
-            fontWeight: "700",
-            color: "#0f172a",
-            marginBottom: "8px",
-          }}>
-          Register an Item
-        </h1>
-        <p
-          style={{
-            color: "#64748b",
-            marginBottom: "32px",
-            fontSize: "15px",
-          }}>
-          Add your item to generate a QR code for easy recovery.
-        </p>
-        <form
-          onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-          {/* Image Upload */}
+      <div className="flex-1 max-w-lg mx-auto w-full px-5 py-8 box-border">
+        <div className="mb-7">
+          <h1
+            className="text-2xl font-extrabold text-slate-900 m-0"
+            style={{ fontFamily: "'Poppins', sans-serif" }}>
+            Register an Item
+          </h1>
+          <p
+            className="mt-1.5 text-sm text-slate-500"
+            style={{ fontFamily: "'Nunito', sans-serif" }}>
+            Add your item to generate a QR code for easy recovery.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "12px",
-                fontWeight: "600",
-                color: "#0f172a",
-                fontSize: "15px",
-              }}>
-              Item Photo
-            </label>
+            <label className={labelClass}>Item Photo</label>
             <div
               onClick={() => fileRef.current.click()}
               onDrop={handleDrop}
@@ -242,49 +215,42 @@ function AddItemPage() {
                 setDragOver(true);
               }}
               onDragLeave={() => setDragOver(false)}
+              className="relative flex items-center justify-center rounded-2xl border-2 border-dashed overflow-hidden cursor-pointer transition-all duration-200"
               style={{
-                border: `2px dashed ${
-                  dragOver ? "#2563eb"
+                minHeight: "180px",
+                borderColor:
+                  dragOver ? "#3b82f6"
                   : preview ? "#22c55e"
-                  : "#cbd5e1"
-                }`,
-                borderRadius: "16px",
-                minHeight: "220px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                  : "#cbd5e1",
                 background:
                   dragOver ? "#eff6ff"
                   : preview ? "#f0fdf4"
                   : "white",
-                cursor: "pointer",
-                overflow: "hidden",
-                transition: "all 0.2s",
               }}>
               {preview ?
                 <img
                   src={preview}
                   alt="Preview"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  className="w-full h-full object-cover absolute inset-0"
                 />
-              : <div style={{ textAlign: "center", padding: "32px" }}>
-                  <UploadIcon />
-                  <p
+              : <div className="flex flex-col items-center gap-2 py-8 px-6 text-center">
+                  <div
+                    className="flex items-center justify-center w-12 h-12 rounded-xl mb-1"
                     style={{
-                      marginTop: "16px",
-                      color: "#0f172a",
-                      fontWeight: "500",
-                      fontSize: "15px",
+                      background: "rgba(29,78,216,0.08)",
+                      border: "1px solid rgba(29,78,216,0.15)",
                     }}>
+                    <UploadIcon />
+                  </div>
+                  <p
+                    className="text-sm font-semibold text-slate-700 m-0"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}>
                     Click or drag photo here
                   </p>
                   <p
-                    style={{
-                      color: "#64748b",
-                      fontSize: "14px",
-                      marginTop: "4px",
-                    }}>
-                    PNG, JPG, WEBP • Max 10MB
+                    className="text-xs text-slate-400 m-0"
+                    style={{ fontFamily: "'Nunito', sans-serif" }}>
+                    PNG, JPG, WEBP · Max 10MB
                   </p>
                 </div>
               }
@@ -293,195 +259,92 @@ function AddItemPage() {
               ref={fileRef}
               type="file"
               accept="image/*"
-              style={{ display: "none" }}
+              className="hidden"
               onChange={(e) => handleFile(e.target.files[0])}
             />
           </div>
 
-          {/* Item Name */}
           <div>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "12px",
-                fontWeight: "600",
-                color: "#0f172a",
-                fontSize: "15px",
-              }}>
-              Item Name {/* <span style={{ color: "#f87171" }}>*</span> */}
-            </label>
+            <label className={labelClass}>Item Name</label>
             <input
               name="name"
               required
               value={form.name}
               onChange={handleChange}
               placeholder="e.g., Blue Backpack"
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                borderRadius: "12px",
-                border: "1px solid #cbd5e1",
-                fontSize: "15px",
-                fontFamily: "inherit",
-                color: "#0f172a",
-                background: "white",
-                transition: "all 0.2s",
-                boxSizing: "border-box",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#2563eb";
-                e.currentTarget.style.boxShadow =
-                  "0 0 0 3px rgba(37,99,235,0.1)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "#cbd5e1";
-                e.currentTarget.style.boxShadow = "none";
-              }}
+              className={inputClass}
+              style={{ fontFamily: "'Nunito', sans-serif" }}
             />
           </div>
 
-          {/* Facebook Account URL */}
           <div>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "12px",
-                fontWeight: "600",
-                color: "#0f172a",
-                fontSize: "15px",
-              }}>
-              My Facebook Account URL
-            </label>
+            <label className={labelClass}>My Facebook Account URL</label>
             <input
               type="url"
               name="owner_fb_account_url"
               required
               value={form.owner_fb_account_url}
               onChange={handleChange}
-              placeholder="e.g., https://facebook.com/yourprofile"
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                borderRadius: "12px",
-                border: "1px solid #cbd5e1",
-                fontSize: "15px",
-                fontFamily: "inherit",
-                color: "#0f172a",
-                background: "white",
-                transition: "all 0.2s",
-                boxSizing: "border-box",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#2563eb";
-                e.currentTarget.style.boxShadow =
-                  "0 0 0 3px rgba(37,99,235,0.1)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "#cbd5e1";
-                e.currentTarget.style.boxShadow = "none";
-              }}
+              placeholder="https://facebook.com/yourprofile"
+              className={inputClass}
+              style={{ fontFamily: "'Nunito', sans-serif" }}
             />
           </div>
 
-          {/* Item Description */}
           <div>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "12px",
-                fontWeight: "600",
-                color: "#0f172a",
-                fontSize: "15px",
-              }}>
-              Description
-            </label>
+            <label className={labelClass}>Description</label>
             <textarea
               name="description"
               value={form.description}
               onChange={handleChange}
-              rows={4}
+              rows={3}
               placeholder="Add details about your item..."
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                borderRadius: "12px",
-                border: "1px solid #cbd5e1",
-                fontSize: "15px",
-                fontFamily: "inherit",
-                color: "#0f172a",
-                minHeight: "120px",
-                background: "white",
-                resize: "vertical",
-                transition: "all 0.2s",
-                boxSizing: "border-box",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#2563eb";
-                e.currentTarget.style.boxShadow =
-                  "0 0 0 3px rgba(37,99,235,0.1)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "#cbd5e1";
-                e.currentTarget.style.boxShadow = "none";
-              }}
+              className={`${inputClass} resize-none`}
+              style={{ fontFamily: "'Nunito', sans-serif" }}
             />
           </div>
 
-          {/* Info Box */}
           <div
+            className="flex gap-3 items-start rounded-2xl px-4 py-3"
             style={{
               background:
-                "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(29,78,216,0.08) 100%)",
-              border: "1px solid rgba(37,99,235,0.2)",
-              borderRadius: "16px",
-              padding: "20px",
-              display: "flex",
-              gap: "16px",
-              alignItems: "flex-start",
+                "linear-gradient(135deg, rgba(29,78,216,0.07), rgba(55,48,163,0.07))",
+              border: "1px solid rgba(29,78,216,0.18)",
             }}>
             <QrIcon style={{ marginTop: "2px", flexShrink: 0 }} />
             <p
-              style={{
-                color: "#1e3a8a",
-                lineHeight: "1.6",
-                margin: 0,
-                fontSize: "15px",
-              }}>
+              className="text-xs text-blue-900 leading-relaxed m-0"
+              style={{ fontFamily: "'Nunito', sans-serif" }}>
               A unique QR code will be generated. Print it and attach it to your
               item for easy recovery if lost.
             </p>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
+            className="w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-200"
             style={{
-              padding: "14px 24px",
+              fontFamily: "'Poppins', sans-serif",
               background:
                 loading ? "#cbd5e1" : (
-                  "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                  "linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%)"
                 ),
-              color: "white",
-              border: "none",
-              borderRadius: "12px",
-              fontSize: "16px",
-              fontWeight: "600",
+              boxShadow: loading ? "none" : "0 4px 14px rgba(29,78,216,0.35)",
               cursor: loading ? "not-allowed" : "pointer",
-              transition: "all 0.2s",
-              marginTop: "8px",
             }}
             onMouseEnter={(e) => {
               if (!loading) {
-                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.transform = "translateY(-1px)";
                 e.currentTarget.style.boxShadow =
-                  "0 8px 16px rgba(37,99,235,0.3)";
+                  "0 8px 20px rgba(29,78,216,0.4)";
               }
             }}
             onMouseLeave={(e) => {
               if (!loading) {
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 14px rgba(29,78,216,0.35)";
               }
             }}>
             {loading ? "Registering..." : "Register Item"}

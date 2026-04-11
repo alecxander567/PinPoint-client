@@ -10,15 +10,14 @@ import EditItemModal from "../components/EditModal";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
 import Alert from "../components/Alert";
 import SkeletonLoader from "../components/SkeletonLoader";
-import StatsBar from "../components/Statsbar";
 import SearchInput from "../components/SearchInput";
 import ItemCard from "../components/ItemCard";
 import { Logo, PlusIcon } from "../components/Icons";
 import { NAV } from "../components/navConfig";
-import "../css/HomePage.css";
 import { useGetOwnerReports } from "../hooks/useReport";
 import { useReportCount } from "../hooks/useReportCount";
 import { useItemCount } from "../hooks/useItemcount";
+import "../index.css";
 
 const shimmerStyles = `
   @keyframes shimmer {
@@ -26,31 +25,15 @@ const shimmerStyles = `
     100% { background-position:  600px 0; }
   }
   .skeleton-block {
-    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+    background: linear-gradient(90deg, #1e3a8a 25%, #3730a3 50%, #1e3a8a 75%);
     background-size: 600px 100%;
     animation: shimmer 1.4s infinite linear;
     border-radius: 6px;
   }
   .skeleton-dark {
-    background: linear-gradient(90deg, rgba(255,255,255,0.12) 25%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.12) 75%) !important;
+    background: linear-gradient(90deg, rgba(255,255,255,0.08) 25%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0.08) 75%) !important;
     background-size: 600px 100% !important;
     animation: shimmer 1.4s infinite linear !important;
-  }
-  .search-input-light::placeholder { color: #94a3b8; }
-  .search-input-light:focus {
-    outline: none;
-    border-color: #93c5fd;
-    box-shadow: 0 0 0 3px rgba(147,197,253,0.3);
-  }
-  @media (max-width: 640px) {
-    .page-header-inner {
-      flex-direction: column !important;
-      align-items: center !important;
-      text-align: center !important;
-    }
-    .page-header-text {
-      text-align: center !important;
-    }
   }
 `;
 
@@ -104,13 +87,11 @@ function PageContent({
       ...items.find((i) => i.id === itemId),
       status: result.status,
     });
-
     if (result.status === "lost") {
       onLostCountChange((prev) => prev + 1);
     } else {
       onLostCountChange((prev) => Math.max(0, prev - 1));
     }
-
     showAlert(
       result.status === "lost" ?
         "Item marked as lost."
@@ -127,125 +108,140 @@ function PageContent({
       profile: "Profile",
     };
     return (
-      <div className="page-placeholder">
-        <div className="page-placeholder__icon-wrap">
+      <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
+        <div
+          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
+          style={{ background: "linear-gradient(135deg, #1d4ed8, #3730a3)" }}>
           {NAV.find((n) => n.key === page)?.Icon({ active: true })}
         </div>
-        <h2 className="page-placeholder__title">{labels[page]}</h2>
-        <p className="page-placeholder__desc">This section is coming soon.</p>
+        <h2 className="text-xl font-bold text-white mb-2">{labels[page]}</h2>
+        <p className="text-sm" style={{ color: "#bfdbfe" }}>
+          This section is coming soon.
+        </p>
       </div>
     );
   }
 
   if (loading) return <SkeletonLoader />;
 
-  const homeStats = [
-    { label: "Items", value: items.length, color: "#fbbf24" },
-    {
-      label: "Lost",
-      value: items.filter((i) => i.status === "lost").length,
-      color: "#f87171",
-    },
-    {
-      label: "Found",
-      value: items.filter((i) => i.status === "found").length,
-      color: "#34d399",
-    },
-  ];
-
   return (
-    <div style={{ width: "100%", minHeight: "calc(100vh - 144px)" }}>
+    <div className="w-full" style={{ minHeight: "calc(100vh - 144px)" }}>
       <style>{shimmerStyles}</style>
 
       <div
+        className="px-6 py-8 relative overflow-hidden"
         style={{
           background:
-            "linear-gradient(145deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%)",
-          color: "white",
-          padding: "28px 24px 24px",
+            "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
+          borderBottom: "1px solid rgba(99,102,241,0.3)",
         }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 340,
+            height: 340,
+            top: -90,
+            right: -90,
+            background: "rgba(255,255,255,0.06)",
+          }}
+        />
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 220,
+            height: 220,
+            bottom: -80,
+            left: 40,
+            background: "rgba(147,197,253,0.1)",
+            filter: "blur(48px)",
+          }}
+        />
+
+        <div className="max-w-screen-xl mx-auto relative z-10 flex flex-col items-center text-center gap-5 lg:flex-row lg:items-center lg:text-left lg:gap-6">
           <div
-            className="page-header-inner"
+            className="flex items-center justify-center w-14 h-14 rounded-2xl flex-shrink-0"
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "20px",
-              flexWrap: "wrap",
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.2)",
             }}>
+            <Logo size={28} color="white" />
+          </div>
+
+          <div>
+            <h1
+              className="text-3xl font-extrabold leading-tight tracking-tight m-0 text-white"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              Homepage
+            </h1>
+            <p
+              className="mt-1.5 text-sm"
+              style={{ color: "#bfdbfe", fontFamily: "'Nunito', sans-serif" }}>
+              Manage your registered items and track their status
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 flex-wrap lg:ml-auto">
             <div
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
               style={{
-                width: "56px",
-                height: "56px",
-                borderRadius: "12px",
-                background: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.25)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
               }}>
-              <Logo size={28} color="white" />
+              <span className="text-2xl font-bold text-white leading-none">
+                {items.length}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                Items
+              </span>
             </div>
-
             <div
-              className="page-header-text"
-              style={{ flex: 1, minWidth: "180px" }}>
-              <h1
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "clamp(24px, 4vw, 34px)",
-                  fontWeight: "800",
-                  margin: 0,
-                  lineHeight: 1.15,
-                }}>
-                Homepage
-              </h1>
-              <p
-                style={{
-                  margin: "6px 0 0",
-                  fontSize: "13px",
-                  opacity: 0.82,
-                  fontFamily: "'Nunito', sans-serif",
-                }}>
-                Manage your registered items and track their status
-              </p>
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
+              }}>
+              <span className="text-2xl font-bold text-red-300 leading-none">
+                {items.filter((i) => i.status === "lost").length}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                Lost
+              </span>
             </div>
-
-            <StatsBar stats={homeStats} />
+            <div
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
+              }}>
+              <span className="text-2xl font-bold text-emerald-300 leading-none">
+                {items.filter((i) => i.status === "found").length}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                Found
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "24px 20px 0",
-        }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "16px",
-            flexWrap: "wrap",
-            marginBottom: "24px",
-          }}>
+      <div className="max-w-screen-xl mx-auto px-5 pt-6 pb-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           {items.length > 0 && (
             <h2
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "16px",
-                fontWeight: "700",
-                color: "#0f172a",
-                margin: 0,
-              }}>
+              className="text-base font-bold text-slate-800 m-0"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
               {search ?
                 `Results for "${search}" (${filteredItems.length})`
               : `Your Items (${items.length})`}
             </h2>
           )}
+
           <SearchInput
             value={search}
             onChange={setSearch}
@@ -255,18 +251,12 @@ function PageContent({
         </div>
       </div>
 
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "0 20px 40px",
-        }}>
+      <div className="max-w-screen-xl mx-auto px-5 pb-10">
         {items.length > 0 && filteredItems.length > 0 && (
           <div
+            className="grid gap-5"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              gap: "20px",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
             }}>
             {filteredItems.map((item) => (
               <ItemCard
@@ -283,17 +273,19 @@ function PageContent({
         )}
 
         {items.length > 0 && filteredItems.length === 0 && (
-          <div style={{ textAlign: "center", padding: "60px 24px" }}>
+          <div className="text-center py-16 px-6">
             <p
-              style={{
-                fontFamily: "'Nunito', sans-serif",
-                color: "#64748b",
-                fontSize: "15px",
-                marginBottom: "12px",
-              }}>
-              No items match "<strong>{search}</strong>"
+              className="text-sm mb-3"
+              style={{ color: "#bfdbfe", fontFamily: "'Nunito', sans-serif" }}>
+              No items match "<strong className="text-white">{search}</strong>"
             </p>
-            <button onClick={() => setSearch("")} className="btn btn--ghost">
+            <button
+              onClick={() => setSearch("")}
+              className="px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors"
+              style={{
+                border: "1px solid rgba(255,255,255,0.25)",
+                background: "rgba(255,255,255,0.1)",
+              }}>
               Clear search
             </button>
           </div>
@@ -301,31 +293,64 @@ function PageContent({
 
         {items.length === 0 && (
           <div
+            className="mt-2 rounded-3xl text-center px-6 py-14"
             style={{
-              background: "white",
-              borderRadius: "24px",
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
-              padding: "56px 24px",
-              textAlign: "center",
-              marginTop: "8px",
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.12)",
             }}>
-            <h2
+            <div
+              className="flex items-center justify-center w-16 h-16 rounded-2xl mx-auto mb-5"
               style={{
-                margin: 0,
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "28px",
-                color: "#0f172a",
+                background: "rgba(255,255,255,0.15)",
+                border: "1px solid rgba(255,255,255,0.2)",
               }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <rect
+                  x="3"
+                  y="3"
+                  width="7"
+                  height="7"
+                  rx="1"
+                  stroke="#bfdbfe"
+                  strokeWidth="2"
+                />
+                <rect
+                  x="14"
+                  y="3"
+                  width="7"
+                  height="7"
+                  rx="1"
+                  stroke="#bfdbfe"
+                  strokeWidth="2"
+                />
+                <rect
+                  x="3"
+                  y="14"
+                  width="7"
+                  height="7"
+                  rx="1"
+                  stroke="#bfdbfe"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M14 14h2v2h-2zM18 14h3M14 18h3M18 18h3v3M14 21h2"
+                  stroke="#bfdbfe"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+            <h2
+              className="text-2xl font-bold text-white m-0"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
               No items yet
             </h2>
             <p
+              className="mt-3 mx-auto text-sm leading-relaxed"
               style={{
-                margin: "12px auto 0",
-                maxWidth: "520px",
-                color: "#64748b",
-                fontSize: "15px",
-                lineHeight: 1.7,
+                maxWidth: "480px",
+                color: "#bfdbfe",
+                fontFamily: "'Nunito', sans-serif",
               }}>
               Register your first item to get started. Once added, you can
               generate a QR code and track its status here.
@@ -384,19 +409,15 @@ function HomePage() {
   useEffect(() => {
     if (userId) fetchOwnerReports(userId);
   }, [userId]);
-
   useEffect(() => {
     setReportCount(reports.length);
   }, [reports.length]);
-
   useEffect(() => {
     if (userId) fetchUserItems(userId);
   }, [userId]);
-
   useEffect(() => {
     setLostCount(items.filter((i) => i.status === "lost").length);
   }, [items]);
-
   useEffect(() => {
     navigate(location.pathname, { replace: true, state: {} });
   }, []);
@@ -410,38 +431,46 @@ function HomePage() {
     setItems((prev) => prev.filter((i) => i.id !== deletedId));
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#f8fafc",
-        display: "flex",
-        flexDirection: "column",
-      }}>
+    <div className="flex flex-col min-h-screen">
       <Navbar activePage={activePage} onLogout={logout} />
 
-      <div className="mobile-header show-mobile">
-        <div className="mobile-header__brand">
-          <Logo size={24} />
-          <span className="mobile-header__brand-text">Item Finder</span>
+      <div
+        className="flex items-center justify-between px-4 py-3 lg:hidden"
+        style={{
+          background: "linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%)",
+          borderBottom: "1px solid rgba(255,255,255,0.1)",
+        }}>
+        <div className="flex items-center gap-2">
+          <Logo size={22} color="white" />
+          <span
+            className="text-white font-bold text-base"
+            style={{ fontFamily: "'Poppins', sans-serif" }}>
+            Item Finder
+          </span>
         </div>
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <div className="flex items-center gap-2">
           <button
             onClick={() => navigate("/add-item")}
-            className="mobile-header__add-btn">
+            className="flex items-center justify-center w-9 h-9 rounded-xl text-white transition-colors"
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}>
             <PlusIcon />
           </button>
           <button
             onClick={logout}
-            className="btn btn--ghost"
-            style={{ padding: "6px 14px", fontSize: "12px" }}>
+            className="px-3 py-1.5 rounded-xl text-white text-xs font-semibold transition-colors"
+            style={{
+              background: "rgba(255,255,255,0.12)",
+              border: "1px solid rgba(255,255,255,0.18)",
+            }}>
             Logout
           </button>
         </div>
       </div>
 
-      <main
-        className="main-content"
-        style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <main className="flex flex-1 flex-col pb-16">
         <PageContent
           page={activePage}
           items={items}

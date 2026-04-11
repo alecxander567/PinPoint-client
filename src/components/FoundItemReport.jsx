@@ -1,89 +1,28 @@
 import { useEffect, useMemo, useState } from "react";
 
-function cardStyle(extra = {}) {
-  return {
-    background: "rgba(255, 255, 255, 0.96)",
-    border: "1px solid rgba(148, 163, 184, 0.18)",
-    borderRadius: "28px",
-    boxShadow: "0 18px 48px rgba(15, 23, 42, 0.08)",
-    ...extra,
-  };
-}
+const labelClass =
+  "text-[10px] font-bold uppercase tracking-widest text-slate-400";
 
-function fieldStyle() {
-  return {
-    width: "100%",
-    padding: "14px 16px",
-    borderRadius: "16px",
-    border: "1px solid #dbe4f0",
-    background: "#f8fbff",
-    color: "#0f172a",
-    fontSize: "14px",
-    lineHeight: 1.5,
-    boxSizing: "border-box",
-    outline: "none",
-    resize: "vertical",
-  };
-}
-
-function fileInputButtonStyle(isSmallMobile) {
-  return {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    padding: isSmallMobile ? "12px 14px" : "13px 16px",
-    borderRadius: "16px",
-    border: "1px dashed #93c5fd",
-    background: "#f0f9ff",
-    color: "#075985",
-    fontSize: isSmallMobile ? "13px" : "14px",
-    fontWeight: 700,
-    cursor: "pointer",
-    boxSizing: "border-box",
-    textAlign: "center",
-  };
-}
+const inputClass = `
+  w-full px-4 py-3 rounded-xl text-sm text-slate-800
+  border border-slate-200 bg-slate-50
+  outline-none transition-all duration-150 resize-none
+  focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100
+`;
 
 function LoadingSkeleton() {
   return (
-    <div
-      style={{
-        maxWidth: "1180px",
-        margin: "0 auto",
-        padding: "24px 16px 40px",
-      }}>
-      <div style={{ display: "grid", gap: "20px" }}>
-        <div style={{ ...cardStyle(), padding: "32px" }}>
-          <div
-            style={{
-              width: "110px",
-              height: "12px",
-              borderRadius: "999px",
-              background: "#dbeafe",
-            }}
-          />
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "540px",
-              height: "56px",
-              borderRadius: "24px",
-              background: "#e2e8f0",
-              marginTop: "16px",
-            }}
-          />
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "420px",
-              height: "18px",
-              borderRadius: "999px",
-              background: "#f1f5f9",
-              marginTop: "16px",
-            }}
-          />
-        </div>
+    <div className="max-w-screen-xl mx-auto px-4 py-8">
+      <div
+        className="rounded-3xl p-8 animate-pulse"
+        style={{
+          background: "rgba(255,255,255,0.96)",
+          border: "1px solid rgba(148,163,184,0.18)",
+          boxShadow: "0 18px 48px rgba(15,23,42,0.08)",
+        }}>
+        <div className="h-3 w-24 rounded-full bg-blue-100 mb-4" />
+        <div className="h-12 w-3/4 rounded-2xl bg-slate-200 mb-4" />
+        <div className="h-4 w-1/2 rounded-full bg-slate-100" />
       </div>
     </div>
   );
@@ -101,17 +40,6 @@ export default function FoundItemReport({
   onUseCurrentLocation,
   onSubmit,
 }) {
-  const [viewportWidth, setViewportWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1280,
-  );
-
-  useEffect(() => {
-    if (typeof window === "undefined") return undefined;
-    const handleResize = () => setViewportWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const landmarkPreviewUrl = useMemo(
     () => (form.landmarkImage ? URL.createObjectURL(form.landmarkImage) : ""),
     [form.landmarkImage],
@@ -122,57 +50,31 @@ export default function FoundItemReport({
     return () => URL.revokeObjectURL(landmarkPreviewUrl);
   }, [landmarkPreviewUrl]);
 
-  const isTablet = viewportWidth < 1100;
-  const isMobile = viewportWidth < 900;
-  const isSmallMobile = viewportWidth < 640;
-
   const mapsUrlMatch = form.location.match(
     /https:\/\/maps\.google\.com\/\?q=[\d.,-]+/,
   );
 
-  if (loading) {
-    return <LoadingSkeleton />;
-  }
+  if (loading) return <LoadingSkeleton />;
 
   if (error || !item) {
     return (
-      <div
-        style={{
-          maxWidth: "920px",
-          margin: "0 auto",
-          padding: "32px 16px 40px",
-        }}>
-        <div style={{ ...cardStyle(), padding: "32px", textAlign: "center" }}>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "11px",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              fontWeight: 800,
-              color: "#dc2626",
-            }}>
+      <div className="max-w-screen-lg mx-auto px-4 py-10">
+        <div
+          className="rounded-3xl p-10 text-center"
+          style={{
+            background: "rgba(255,255,255,0.96)",
+            border: "1px solid rgba(148,163,184,0.18)",
+            boxShadow: "0 18px 48px rgba(15,23,42,0.08)",
+          }}>
+          <p className="text-xs font-bold uppercase tracking-widest text-red-500 m-0">
             Item unavailable
           </p>
           <h1
-            style={{
-              margin: "16px 0 0",
-              fontSize: "clamp(32px, 6vw, 48px)",
-              lineHeight: 1.05,
-              fontWeight: 800,
-              color: "#0f172a",
-              fontFamily: "'Poppins', sans-serif",
-            }}>
+            className="text-4xl font-extrabold text-slate-900 mt-4 m-0 leading-tight"
+            style={{ fontFamily: "'Poppins', sans-serif" }}>
             This QR link could not be loaded.
           </h1>
-          <p
-            style={{
-              margin: "16px auto 0",
-              maxWidth: "640px",
-              color: "#475569",
-              fontSize: "16px",
-              lineHeight: 1.7,
-            }}>
+          <p className="mt-4 text-slate-500 text-base leading-relaxed max-w-lg mx-auto">
             {error ||
               "The item record was not found or is temporarily unavailable."}
           </p>
@@ -182,200 +84,128 @@ export default function FoundItemReport({
   }
 
   return (
-    <div
-      style={{
-        width: "100%",
-        maxWidth: "1180px",
-        margin: "0 auto",
-        padding: isSmallMobile ? "16px 12px 28px" : "24px 16px 40px",
-        boxSizing: "border-box",
-      }}>
+    <div className="max-w-screen-xl mx-auto px-4 py-6 box-border">
       <section
+        className="rounded-3xl overflow-hidden mb-5"
         style={{
-          ...cardStyle(),
-          padding:
-            isSmallMobile ? "18px 16px"
-            : isMobile ? "24px 20px"
-            : "36px",
+          background:
+            "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
+          border: "1px solid rgba(99,102,241,0.3)",
         }}>
-        <p
-          style={{
-            margin: 0,
-            fontSize: "11px",
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            fontWeight: 800,
-            color: "#0369a1",
-          }}>
-          Item Finder
-        </p>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            justifyContent: "space-between",
-            alignItems: isMobile ? "stretch" : "flex-end",
-            gap: "24px",
-            marginTop: "16px",
-          }}>
-          <div style={{ maxWidth: "720px", minWidth: 0 }}>
-            <h1
-              style={{
-                margin: 0,
-                fontSize: isSmallMobile ? "31px" : "clamp(34px, 7vw, 56px)",
-                lineHeight: isSmallMobile ? 1.08 : 1.02,
-                fontWeight: 800,
-                color: "#0f172a",
-                fontFamily: "'Poppins', sans-serif",
-              }}>
-              Report where you found this item.
-            </h1>
-            <p
-              style={{
-                margin: "14px 0 0",
-                color: "#475569",
-                fontSize: isSmallMobile ? "14px" : "16px",
-                lineHeight: 1.75,
-                maxWidth: "620px",
-              }}>
-              Share the exact landmark, location, and any identifying details so
-              the owner can verify the sighting quickly.
-            </p>
-          </div>
+        <div className="relative px-6 py-7 overflow-hidden">
           <div
+            className="absolute rounded-full pointer-events-none"
             style={{
-              width: isMobile ? "100%" : "min(280px, 100%)",
-              minWidth: 0,
-              borderRadius: "22px",
-              padding: isSmallMobile ? "16px" : "18px 20px",
-              background: "#eff6ff",
-              border: "1px solid #dbeafe",
-              boxSizing: "border-box",
-            }}>
-            <p
+              width: 300,
+              height: 300,
+              top: -80,
+              right: -80,
+              background: "rgba(255,255,255,0.06)",
+            }}
+          />
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: 180,
+              height: 180,
+              bottom: -60,
+              left: 30,
+              background: "rgba(147,197,253,0.1)",
+              filter: "blur(40px)",
+            }}
+          />
+
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-end gap-5 lg:gap-8">
+            <div className="flex-1 min-w-0">
+              <p
+                className="text-[10px] font-bold uppercase tracking-widest m-0"
+                style={{
+                  color: "#bfdbfe",
+                  fontFamily: "'Poppins', sans-serif",
+                }}>
+                Item Finder
+              </p>
+              <h1
+                className="text-3xl sm:text-4xl font-extrabold text-white mt-2 m-0 leading-tight"
+                style={{ fontFamily: "'Poppins', sans-serif" }}>
+                Report where you found this item.
+              </h1>
+              <p
+                className="mt-2 text-sm leading-relaxed max-w-xl"
+                style={{
+                  color: "#bfdbfe",
+                  fontFamily: "'Nunito', sans-serif",
+                }}>
+                Share the exact landmark, location, and any identifying details
+                so the owner can verify the sighting quickly.
+              </p>
+            </div>
+
+            <div
+              className="rounded-2xl px-5 py-4 lg:min-w-[240px] flex-shrink-0"
               style={{
-                margin: 0,
-                color: "#0f172a",
-                fontSize: "14px",
-                fontWeight: 800,
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
               }}>
-              Help return this item faster
-            </p>
-            <p
-              style={{
-                margin: "6px 0 0",
-                color: "#0369a1",
-                fontSize: "13px",
-                lineHeight: 1.6,
-              }}>
-              Upload a clear landmark image and share your current location.
-            </p>
+              <p
+                className="text-sm font-bold text-white m-0"
+                style={{ fontFamily: "'Poppins', sans-serif" }}>
+                Help return this item faster
+              </p>
+              <p
+                className="mt-1.5 text-xs leading-relaxed m-0"
+                style={{
+                  color: "#bfdbfe",
+                  fontFamily: "'Nunito', sans-serif",
+                }}>
+                Upload a clear landmark image and share your current location.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            isMobile ? "minmax(0, 1fr)"
-            : isTablet ? "minmax(0, 1fr) minmax(0, 1fr)"
-            : "minmax(0, 1.05fr) minmax(0, 0.95fr)",
-          gap: "20px",
-          marginTop: "20px",
-          alignItems: "start",
-        }}>
-        <article
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+        <div
+          className="rounded-3xl overflow-hidden"
           style={{
-            ...cardStyle(),
-            padding: isSmallMobile ? "16px" : "20px",
-            minWidth: 0,
+            background: "rgba(255,255,255,0.97)",
+            border: "1px solid rgba(148,163,184,0.18)",
+            boxShadow: "0 18px 48px rgba(15,23,42,0.07)",
           }}>
           <div
+            className="flex items-center justify-center p-5"
             style={{
-              borderRadius: "24px",
-              overflow: "hidden",
-              background: "#e2e8f0",
-              minHeight:
-                isSmallMobile ? "180px"
-                : isMobile ? "220px"
-                : "280px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: isSmallMobile ? "16px" : "22px",
-              boxSizing: "border-box",
+              background: "linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)",
+              minHeight: "200px",
             }}>
             {item.image_url ?
               <img
                 src={item.image_url}
                 alt={item.name}
-                style={{
-                  width: "100%",
-                  maxWidth:
-                    isSmallMobile ? "190px"
-                    : isMobile ? "240px"
-                    : "320px",
-                  height:
-                    isSmallMobile ? "140px"
-                    : isMobile ? "180px"
-                    : "220px",
-                  objectFit: "contain",
-                  display: "block",
-                  margin: "0 auto",
-                }}
+                className="max-w-full object-contain rounded-2xl"
+                style={{ maxHeight: "220px" }}
               />
-            : <div
-                style={{
-                  minHeight:
-                    isSmallMobile ? "180px"
-                    : isMobile ? "220px"
-                    : "280px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "24px",
-                  textAlign: "center",
-                  color: "#64748b",
-                  background:
-                    "linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%)",
-                }}>
+            : <p className="text-slate-400 text-sm text-center">
                 No item image available
-              </div>
+              </p>
             }
           </div>
 
-          <div style={{ marginTop: "20px" }}>
+          <div className="px-6 py-5">
             <p
-              style={{
-                margin: 0,
-                fontSize: "11px",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                fontWeight: 800,
-                color: "#0369a1",
-              }}>
+              className={`${labelClass} m-0`}
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
               Item details
             </p>
             <h2
-              style={{
-                margin: "12px 0 0",
-                fontSize: isSmallMobile ? "24px" : "clamp(28px, 5vw, 40px)",
-                lineHeight: 1.1,
-                fontWeight: 800,
-                color: "#0f172a",
-                fontFamily: "'Poppins', sans-serif",
-              }}>
+              className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 m-0 leading-tight"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
               {item.name}
             </h2>
             <p
-              style={{
-                margin: "14px 0 0",
-                color: "#475569",
-                fontSize: isSmallMobile ? "14px" : "15px",
-                lineHeight: 1.8,
-                wordBreak: "break-word",
-              }}>
+              className="mt-3 text-sm text-slate-500 leading-relaxed break-words"
+              style={{ fontFamily: "'Nunito', sans-serif" }}>
               {item.description ||
                 "The owner did not add a description for this item."}
             </p>
@@ -383,90 +213,70 @@ export default function FoundItemReport({
               href={item.owner_fb_account_url || "https://facebook.com/"}
               target="_blank"
               rel="noreferrer"
+              className="inline-flex items-center justify-center mt-4 px-5 py-2.5 rounded-full text-sm font-bold text-white no-underline transition-all"
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: "18px",
-                padding: isSmallMobile ? "11px 14px" : "12px 18px",
-                borderRadius: "999px",
-                background: "#0f172a",
-                color: "#ffffff",
-                textDecoration: "none",
-                fontSize: isSmallMobile ? "13px" : "14px",
-                fontWeight: 800,
-                textAlign: "center",
+                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
+                boxShadow: "0 4px 12px rgba(29,78,216,0.3)",
+                fontFamily: "'Poppins', sans-serif",
               }}>
               Contact owner on Facebook
             </a>
           </div>
-        </article>
+        </div>
 
-        <article
+        <div
+          className="rounded-3xl"
           style={{
-            ...cardStyle(),
-            padding: isSmallMobile ? "16px" : "20px",
-            minWidth: 0,
+            background: "rgba(255,255,255,0.97)",
+            border: "1px solid rgba(148,163,184,0.18)",
+            boxShadow: "0 18px 48px rgba(15,23,42,0.07)",
           }}>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "11px",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              fontWeight: 800,
-              color: "#0369a1",
-            }}>
-            Submit report
-          </p>
-          <h2
-            style={{
-              margin: "12px 0 0",
-              fontSize:
-                isSmallMobile ? "24px"
-                : isMobile ? "28px"
-                : "34px",
-              lineHeight: 1.1,
-              fontWeight: 800,
-              color: "#0f172a",
-              fontFamily: "'Poppins', sans-serif",
-            }}>
-            Tell the owner where you saw it.
-          </h2>
-          <p
-            style={{
-              margin: "12px 0 0",
-              color: "#475569",
-              fontSize: isSmallMobile ? "13px" : "14px",
-              lineHeight: 1.7,
-            }}>
-            Specific details help the owner confirm the item faster.
-          </p>
+          <div className="px-6 pt-6 pb-2">
+            <p
+              className={`${labelClass} m-0`}
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              Submit report
+            </p>
+            <h2
+              className="text-2xl font-extrabold text-slate-900 mt-2 m-0 leading-tight"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              Tell the owner where you saw it.
+            </h2>
+            <p
+              className="mt-1.5 text-xs text-slate-400 leading-relaxed"
+              style={{ fontFamily: "'Nunito', sans-serif" }}>
+              Specific details help the owner confirm the item faster.
+            </p>
+          </div>
 
           <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (contactUrl) {
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (contactUrl)
                 window.open(contactUrl, "_blank", "noopener,noreferrer");
-              }
               onSubmit();
             }}
-            style={{
-              display: "grid",
-              gap: isSmallMobile ? "14px" : "16px",
-              marginTop: "22px",
-            }}>
-            <div style={{ display: "grid", gap: "8px" }}>
-              <span
-                style={{ fontSize: "14px", fontWeight: 800, color: "#0f172a" }}>
-                Landmark image
-              </span>
+            className="flex flex-col gap-4 px-6 pb-6 pt-4">
+            {/* Landmark image */}
+            <div className="flex flex-col gap-2">
+              <label
+                className={labelClass}
+                style={{ fontFamily: "'Poppins', sans-serif" }}>
+                Landmark Image
+              </label>
               <button
                 type="button"
-                style={fileInputButtonStyle(isSmallMobile)}
                 onClick={() =>
                   document.getElementById("landmark-input").click()
-                }>
+                }
+                className="w-full py-3 rounded-xl text-sm font-bold transition-colors"
+                style={{
+                  border: "1.5px dashed #93c5fd",
+                  background: "#f0f9ff",
+                  color: "#0369a1",
+                  fontFamily: "'Poppins', sans-serif",
+                  cursor: "pointer",
+                }}>
                 {form.landmarkImage ?
                   "Change uploaded image"
                 : "Upload a landmark image"}
@@ -475,112 +285,73 @@ export default function FoundItemReport({
                 id="landmark-input"
                 type="file"
                 accept="image/*"
-                style={{ display: "none" }}
-                onChange={(event) =>
-                  onChange("landmarkImage", event.target.files?.[0] || null)
+                className="hidden"
+                onChange={(e) =>
+                  onChange("landmarkImage", e.target.files?.[0] || null)
                 }
               />
               {form.landmarkImage && landmarkPreviewUrl && (
-                <div
-                  style={{
-                    border: "1px solid #dbeafe",
-                    background: "#ffffff",
-                    borderRadius: "18px",
-                    padding: "12px",
-                  }}>
+                <div className="rounded-2xl border border-blue-100 bg-white p-3">
                   <img
                     src={landmarkPreviewUrl}
                     alt="Landmark preview"
-                    style={{
-                      width: "100%",
-                      maxHeight: "180px",
-                      objectFit: "contain",
-                      display: "block",
-                      borderRadius: "12px",
-                      background: "#f8fafc",
-                    }}
+                    className="w-full rounded-xl object-contain bg-slate-50"
+                    style={{ maxHeight: "160px" }}
                   />
                   <button
                     type="button"
                     onClick={() => onChange("landmarkImage", null)}
-                    style={{
-                      marginTop: "10px",
-                      border: "none",
-                      background: "transparent",
-                      color: "#dc2626",
-                      fontSize: "13px",
-                      fontWeight: 700,
-                      cursor: "pointer",
-                      padding: 0,
-                    }}>
+                    className="mt-2 text-xs font-bold text-red-500 bg-transparent border-none cursor-pointer p-0">
                     Remove image
                   </button>
                 </div>
               )}
             </div>
-            <div style={{ display: "grid", gap: "8px" }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "10px",
-                  flexWrap: "wrap",
-                }}>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 800,
-                    color: "#0f172a",
-                  }}>
+
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <label
+                  className={labelClass}
+                  style={{ fontFamily: "'Poppins', sans-serif" }}>
                   Location
-                </span>
+                </label>
                 <button
                   type="button"
                   onClick={onUseCurrentLocation}
                   disabled={locating}
+                  className="text-xs font-bold px-3 py-1.5 rounded-full transition-colors"
                   style={{
                     border: "none",
-                    borderRadius: "999px",
-                    padding: "8px 12px",
-                    background: locating ? "#cbd5e1" : "#e0f2fe",
-                    color: locating ? "#475569" : "#0369a1",
-                    fontSize: "12px",
-                    fontWeight: 800,
+                    background: locating ? "#e2e8f0" : "rgba(29,78,216,0.1)",
+                    color: locating ? "#94a3b8" : "#1d4ed8",
                     cursor: locating ? "not-allowed" : "pointer",
+                    fontFamily: "'Poppins', sans-serif",
                   }}>
                   {locating ? "Getting location..." : "Use current location"}
                 </button>
               </div>
               <textarea
-                rows="3"
+                rows={3}
                 value={form.location}
-                onChange={(event) => onChange("location", event.target.value)}
+                onChange={(e) => onChange("location", e.target.value)}
                 placeholder="Tap 'Use current location' to share GPS coordinates, or paste a maps link"
-                style={fieldStyle()}
+                className={inputClass}
+                style={{ fontFamily: "'Nunito', sans-serif" }}
               />
               {mapsUrlMatch && (
                 <a
                   href={mapsUrlMatch[0]}
                   target="_blank"
                   rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold no-underline w-fit"
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    padding: "8px 14px",
-                    borderRadius: "999px",
                     background: "#f0fdf4",
                     border: "1px solid #bbf7d0",
                     color: "#15803d",
-                    fontSize: "13px",
-                    fontWeight: 800,
-                    textDecoration: "none",
-                    width: "fit-content",
                   }}>
                   <svg
-                    width="13"
-                    height="13"
+                    width="12"
+                    height="12"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -594,41 +365,48 @@ export default function FoundItemReport({
                 </a>
               )}
             </div>
-            <label style={{ display: "grid", gap: "8px" }}>
-              <span
-                style={{ fontSize: "14px", fontWeight: 800, color: "#0f172a" }}>
+
+            <div className="flex flex-col gap-2">
+              <label
+                className={labelClass}
+                style={{ fontFamily: "'Poppins', sans-serif" }}>
                 Message
-              </span>
+              </label>
               <textarea
-                rows="5"
+                rows={4}
                 value={form.message}
-                onChange={(event) => onChange("message", event.target.value)}
+                onChange={(e) => onChange("message", e.target.value)}
                 placeholder="Describe when you saw it and any details the owner would recognize."
-                style={fieldStyle()}
+                className={inputClass}
+                style={{ fontFamily: "'Nunito', sans-serif" }}
               />
-            </label>
+            </div>
 
             <button
               type="submit"
               disabled={submitting}
+              className="w-full py-3 rounded-xl text-sm font-bold text-white transition-all"
               style={{
-                width: "100%",
-                border: "none",
-                borderRadius: "999px",
-                padding: isSmallMobile ? "13px 16px" : "14px 18px",
-                background: submitting ? "#cbd5e1" : "#0284c7",
-                color: "#ffffff",
-                fontSize: isSmallMobile ? "13px" : "14px",
-                fontWeight: 800,
-                cursor: submitting ? "not-allowed" : "pointer",
+                fontFamily: "'Poppins', sans-serif",
+                background:
+                  submitting ? "#cbd5e1" : (
+                    "linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%)"
+                  ),
                 boxShadow:
-                  submitting ? "none" : "0 10px 24px rgba(2, 132, 199, 0.22)",
+                  submitting ? "none" : "0 4px 14px rgba(29,78,216,0.35)",
+                cursor: submitting ? "not-allowed" : "pointer",
+              }}
+              onMouseEnter={(e) => {
+                if (!submitting) e.currentTarget.style.opacity = "0.88";
+              }}
+              onMouseLeave={(e) => {
+                if (!submitting) e.currentTarget.style.opacity = "1";
               }}>
               {submitting ? "Submitting report..." : "Submit report"}
             </button>
           </form>
-        </article>
-      </section>
+        </div>
+      </div>
     </div>
   );
 }

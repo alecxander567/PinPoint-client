@@ -11,32 +11,18 @@ import FooterNav from "../components/Footer";
 import PrintQRModal from "../components/PrintQRModal";
 import Alert from "../components/Alert";
 import SkeletonLoader from "../components/SkeletonLoader";
-import StatsBar from "../components/Statsbar";
 import SearchInput from "../components/SearchInput";
 import ReturnedItemCard from "../components/ReturnedItemCard";
 import { Logo, PlusIcon } from "../components/Icons";
 
-const headerStyles = `
-  @media (max-width: 640px) {
-    .page-header-inner {
-      flex-direction: column !important;
-      align-items: center !important;
-      text-align: center !important;
-    }
-    .page-header-text {
-      text-align: center !important;
-    }
-  }
-`;
-
-const now = Date.now(); 
+const now = Date.now();
 
 function ReturnedPageContent({ resolvedReports, loading }) {
   const [selectedItemQR, setSelectedItemQR] = useState(null);
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [search, setSearch] = useState("");
 
-  const clearAlert = () => setAlert({ message: "", type: "success" }); 
+  const clearAlert = () => setAlert({ message: "", type: "success" });
 
   const filteredReports = resolvedReports.filter((report) => {
     const q = search.toLowerCase();
@@ -47,118 +33,150 @@ function ReturnedPageContent({ resolvedReports, loading }) {
     );
   });
 
-  const stats = [
-    { label: "Returned", value: resolvedReports.length, color: "#34d399" },
-    {
-      label: "This week",
-      value: resolvedReports.filter((r) => {
-        const diff = (now - new Date(r.created_at)) / (1000 * 60 * 60 * 24); 
-        return diff <= 7;
-      }).length,
-      color: "#fbbf24",
-    },
-    {
-      label: "Items",
-      value: new Set(resolvedReports.map((r) => r.item)).size,
-      color: "#60a5fa",
-    },
-  ];
+  const totalReturned = resolvedReports.length;
+
+  const thisWeekCount = resolvedReports.filter((r) => {
+    const diff = (now - new Date(r.created_at)) / (1000 * 60 * 60 * 24);
+    return diff <= 7;
+  }).length;
+
+  const uniqueItems = new Set(resolvedReports.map((r) => r.item)).size;
 
   if (loading) return <SkeletonLoader />;
 
   return (
-    <div style={{ width: "100%", minHeight: "calc(100vh - 144px)" }}>
-      <style>{headerStyles}</style>
-
+    <div className="w-full" style={{ minHeight: "calc(100vh - 144px)" }}>
       <div
+        className="px-6 py-8 relative overflow-hidden"
         style={{
           background:
-            "linear-gradient(145deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%)",
-          color: "white",
-          padding: "28px 24px 24px",
+            "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
+          borderBottom: "1px solid rgba(99,102,241,0.3)",
         }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 340,
+            height: 340,
+            top: -90,
+            right: -90,
+            background: "rgba(255,255,255,0.06)",
+          }}
+        />
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 220,
+            height: 220,
+            bottom: -80,
+            left: 40,
+            background: "rgba(147,197,253,0.1)",
+            filter: "blur(48px)",
+          }}
+        />
+
+        <div className="max-w-screen-xl mx-auto relative z-10 flex flex-col items-center text-center gap-5 lg:flex-row lg:items-center lg:text-left lg:gap-6">
           <div
-            className="page-header-inner"
+            className="flex items-center justify-center w-14 h-14 rounded-2xl flex-shrink-0"
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "20px",
-              flexWrap: "wrap",
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.2)",
             }}>
+            <Logo size={28} color="white" />
+          </div>
+
+          <div>
+            <h1
+              className="text-3xl font-extrabold leading-tight tracking-tight m-0 text-white"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              Returned Items
+            </h1>
+            <p
+              className="mt-1.5 text-sm"
+              style={{ color: "#bfdbfe", fontFamily: "'Nunito', sans-serif" }}>
+              Items that have been successfully found and returned to you
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 flex-wrap lg:ml-auto">
             <div
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
               style={{
-                width: "56px",
-                height: "56px",
-                borderRadius: "12px",
-                background: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.25)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
               }}>
-              <Logo size={28} color="white" />
+              <span className="text-2xl font-bold text-emerald-300 leading-none">
+                {totalReturned}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                Returned
+              </span>
             </div>
 
             <div
-              className="page-header-text"
-              style={{ flex: 1, minWidth: "180px" }}>
-              <h1
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "clamp(24px, 4vw, 34px)",
-                  fontWeight: "800",
-                  margin: 0,
-                  lineHeight: 1.15,
-                }}>
-                Returned Items
-              </h1>
-              <p
-                style={{
-                  margin: "6px 0 0",
-                  fontSize: "13px",
-                  opacity: 0.82,
-                  fontFamily: "'Nunito', sans-serif",
-                }}>
-                Items that have been successfully found and returned to you
-              </p>
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
+              }}>
+              <span className="text-2xl font-bold text-amber-300 leading-none">
+                {thisWeekCount}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                This week
+              </span>
             </div>
 
-            <StatsBar stats={stats} />
+            <div
+              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
+              }}>
+              <span className="text-2xl font-bold text-blue-300 leading-none">
+                {uniqueItems}
+              </span>
+              <span
+                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                style={{ color: "#bfdbfe" }}>
+                Items
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "24px 20px 40px",
-        }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "16px",
-            flexWrap: "wrap",
-            marginBottom: "24px",
-          }}>
+      <div className="max-w-screen-xl mx-auto px-5 pt-6 pb-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          {resolvedReports.length > 0 && (
+            <h2
+              className="text-base font-bold text-slate-800 m-0"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              {search ?
+                `Results for "${search}" (${filteredReports.length})`
+              : `Returned Items (${resolvedReports.length})`}
+            </h2>
+          )}
+
           <SearchInput
             value={search}
             onChange={setSearch}
             placeholder="Search returned items..."
-            width="min(360px, 100%)"
+            width="min(300px, 100%)"
           />
         </div>
+      </div>
 
-        {filteredReports.length > 0 ?
+      <div className="max-w-screen-xl mx-auto px-5 pb-10">
+        {resolvedReports.length > 0 && filteredReports.length > 0 && (
           <div
+            className="grid gap-5"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              gap: "20px",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
             }}>
             {filteredReports.map((report) => (
               <ReturnedItemCard
@@ -168,39 +186,92 @@ function ReturnedPageContent({ resolvedReports, loading }) {
               />
             ))}
           </div>
-        : <div
-            style={{
-              background: "white",
-              borderRadius: "24px",
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
-              padding: "56px 24px",
-              textAlign: "center",
-            }}>
-            <h2
+        )}
+
+        {resolvedReports.length > 0 && filteredReports.length === 0 && (
+          <div className="text-center py-16 px-6">
+            <p
+              className="text-sm mb-3 text-slate-500"
+              style={{ fontFamily: "'Nunito', sans-serif" }}>
+              No items match "
+              <strong className="text-slate-800">{search}</strong>"
+            </p>
+            <button
+              onClick={() => setSearch("")}
+              className="px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors"
               style={{
-                margin: 0,
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "28px",
-                color: "#0f172a",
+                border: "1px solid rgba(99,102,241,0.4)",
+                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
               }}>
-              {search ? "No matching items" : "No returned items yet"}
+              Clear search
+            </button>
+          </div>
+        )}
+
+        {resolvedReports.length === 0 && (
+          <div
+            className="mt-2 rounded-3xl text-center px-6 py-14"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(99,102,241,0.15)",
+              boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
+            }}>
+            <div
+              className="flex items-center justify-center w-16 h-16 rounded-2xl mx-auto mb-5"
+              style={{
+                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
+                opacity: 0.85,
+              }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M20 12V22H4V12"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M22 7H2v5h20V7z"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 22V7"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <h2
+              className="text-2xl font-bold text-slate-800 m-0"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              No returned items yet
             </h2>
             <p
-              style={{
-                margin: "12px auto 0",
-                maxWidth: "520px",
-                color: "#64748b",
-                fontSize: "15px",
-                lineHeight: 1.7,
-              }}>
-              {search ?
-                "Try a different search term or clear the search field."
-              : "Once a finder reports your lost item and you resolve the report, it will appear here."
-              }
+              className="mt-3 mx-auto text-sm leading-relaxed text-slate-500"
+              style={{ maxWidth: "480px", fontFamily: "'Nunito', sans-serif" }}>
+              Once a finder reports your lost item and you resolve the report,
+              it will appear here.
             </p>
           </div>
-        }
+        )}
       </div>
 
       <PrintQRModal
@@ -244,37 +315,47 @@ function ReturnedItemsPage() {
 
   return (
     <div
-      style={{
-        minHeight: "100vh",
-        background: "#f8fafc",
-        display: "flex",
-        flexDirection: "column",
-      }}>
+      className="flex flex-col min-h-screen"
+      style={{ background: "#f8fafc" }}>
       <Navbar activePage="returned" onLogout={logout} />
 
-      <div className="mobile-header show-mobile">
-        <div className="mobile-header__brand">
-          <Logo size={24} />
-          <span className="mobile-header__brand-text">Item Finder</span>
+      <div
+        className="flex items-center justify-between px-4 py-3 lg:hidden"
+        style={{
+          background: "linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%)",
+          borderBottom: "1px solid rgba(255,255,255,0.1)",
+        }}>
+        <div className="flex items-center gap-2">
+          <Logo size={22} color="white" />
+          <span
+            className="text-white font-bold text-base"
+            style={{ fontFamily: "'Poppins', sans-serif" }}>
+            Item Finder
+          </span>
         </div>
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <div className="flex items-center gap-2">
           <button
             onClick={() => navigate("/add-item")}
-            className="mobile-header__add-btn">
+            className="flex items-center justify-center w-9 h-9 rounded-xl text-white transition-colors"
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}>
             <PlusIcon />
           </button>
           <button
             onClick={logout}
-            className="btn btn--ghost"
-            style={{ padding: "6px 14px", fontSize: "12px" }}>
+            className="px-3 py-1.5 rounded-xl text-white text-xs font-semibold transition-colors"
+            style={{
+              background: "rgba(255,255,255,0.12)",
+              border: "1px solid rgba(255,255,255,0.18)",
+            }}>
             Logout
           </button>
         </div>
       </div>
 
-      <main
-        className="main-content"
-        style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <main className="flex flex-1 flex-col pb-16">
         <ReturnedPageContent
           resolvedReports={resolvedReports}
           loading={loading}

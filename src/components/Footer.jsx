@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { NAV } from "./navConfig";
 import ReportBadge from "./ReportBadge";
 import { useReportCount } from "../hooks/useReportCount";
-import { useItemCount } from "../hooks/useItemCount";
+import { useItemCount } from "../hooks/useItemcount";
 import { RETURNED_SEEN_KEY } from "./CountProviderItem";
 import axios from "axios";
 
@@ -18,6 +18,13 @@ const MOBILE_NAV_KEYS = [
   "profile",
 ];
 
+const badgeKeyMap = (key, { reportCount, lostCount, returnedCount }) => {
+  if (key === "reports") return reportCount;
+  if (key === "lost") return lostCount;
+  if (key === "returned") return returnedCount;
+  return 0;
+};
+
 function FooterNav({ activePage }) {
   const navigate = useNavigate();
   const { reportCount } = useReportCount();
@@ -29,7 +36,7 @@ function FooterNav({ activePage }) {
 
     if (key === "lost") {
       setLostCount(0);
-      navigate("/lost-item"); 
+      navigate("/lost-item");
       return;
     }
 
@@ -58,30 +65,59 @@ function FooterNav({ activePage }) {
       navigate("/home");
       return;
     }
-
     if (key === "activity" || key === "profile") return;
-
     navigate(`/${key}`);
   };
 
   return (
-    <div className="footer-nav show-mobile">
+    <div
+      className="lg:hidden flex items-stretch px-1 pt-1.5 pb-3 gap-0.5 fixed bottom-0 left-0 right-0 z-50 bg-white"
+      style={{ borderTop: "1px solid #e0e7ff" }}>
       {MOBILE_NAV_KEYS.map((key) => {
         const item = NAV.find((n) => n.key === key);
-        const active = activePage === key;
+        const isActive = activePage === key;
+        const count = badgeKeyMap(key, {
+          reportCount,
+          lostCount,
+          returnedCount,
+        });
+
         return (
           <button
             key={key}
             onClick={() => handleNavClick(key)}
-            className={`footer-nav__item ${active ? "footer-nav__item--active" : ""}`}>
-            <span style={{ position: "relative", display: "inline-flex" }}>
-              <item.Icon active={active} />
-              {key === "reports" && <ReportBadge count={reportCount} />}
-              {key === "lost" && <ReportBadge count={lostCount} />}
-              {key === "returned" && <ReportBadge count={returnedCount} />}
+            className="relative flex flex-col items-center gap-0.5 flex-1 pt-1.5 pb-1 rounded-lg transition-all duration-150"
+            style={
+              isActive ?
+                { background: "rgba(29,78,216,0.08)" }
+              : { background: "transparent" }
+            }
+            onMouseEnter={(e) => {
+              if (!isActive)
+                e.currentTarget.style.background = "rgba(29,78,216,0.05)";
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive) e.currentTarget.style.background = "transparent";
+            }}>
+            <span className="relative inline-flex">
+              <item.Icon active={isActive} />
+              {count > 0 && <ReportBadge count={count} />}
             </span>
-            <span className="footer-nav__label">{item.label}</span>
-            {active && <span className="footer-nav__dot" />}
+
+            <span
+              className="text-[10px] font-medium leading-none"
+              style={{ color: isActive ? "#1d4ed8" : "#94a3b8" }}>
+              {item.label}
+            </span>
+
+            {isActive && (
+              <span
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-[3px] rounded-full"
+                style={{
+                  background: "linear-gradient(90deg, #1d4ed8, #3730a3)",
+                }}
+              />
+            )}
           </button>
         );
       })}
