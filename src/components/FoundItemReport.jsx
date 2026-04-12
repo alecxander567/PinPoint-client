@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 const labelClass =
   "text-[10px] font-bold uppercase tracking-widest text-slate-400";

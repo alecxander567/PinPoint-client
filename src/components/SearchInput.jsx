@@ -2,7 +2,7 @@ function SearchInput({
   value,
   onChange,
   placeholder = "Search...",
-  width = "300px",
+  width = "100%",
 }) {
   return (
     <div className="relative" style={{ width }}>

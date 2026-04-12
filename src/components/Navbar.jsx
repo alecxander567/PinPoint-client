@@ -27,6 +27,10 @@ function Navbar({ activePage, onLogout }) {
       navigate("/home");
       return;
     }
+    if (key === "profile") {
+      navigate("/profile");
+      return;
+    }
     navigate(`/${key}`);
   };
 
@@ -55,7 +59,7 @@ function Navbar({ activePage, onLogout }) {
       </a>
 
       <div className="flex items-center gap-1">
-        {NAV.map(({ key, label, Icon }) => {
+        {NAV.map(({ key, label, Icon }) => {// eslint-disable-line
           const isActive = activePage === key;
           const count = badgeCounts[key] ?? 0;
           return (

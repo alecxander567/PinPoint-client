@@ -149,6 +149,58 @@ export function useFoundItemReport(itemId) {
   };
 }
 
+export function usePublicReport(token) {
+  const [report, setReport] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      if (!token) {
+        setError("Missing report link.");
+        setReport(null);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError("");
+
+      try {
+        const response = await api.get(
+          `/api/reports/public/${encodeURIComponent(token)}/`,
+        );
+        if (!cancelled) {
+          setReport(response.data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          const message =
+            err.response?.data?.error ||
+            err.response?.data?.detail ||
+            err.message ||
+            "Unable to load this report.";
+          setError(message);
+          setReport(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
+
+  return { report, loading, error };
+}
+
 export function useGetOwnerReports() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(false);

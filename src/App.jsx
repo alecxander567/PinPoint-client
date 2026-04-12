@@ -9,6 +9,9 @@ import FoundItemPage from "./pages/FoundItemPage";
 import ReportsPage from "./pages/ReportsPage";
 import LostItemsPage from "./pages/LostItemPage";
 import ReturnedItemsPage from "./pages/ReturnedItemsPage";
+import PublicReportPage from "./pages/PublicReportPage";
+import ProfilePage from "./pages/ProfilePage";
+import ReportViewPage from "./pages/ReportPageView";
 
 function App() {
   return (
@@ -16,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/report/:token" element={<PublicReportPage />} />
         <Route path="/register" element={<SignupPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -25,6 +29,8 @@ function App() {
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/lost-item" element={<LostItemsPage />} />
         <Route path="/returned" element={<ReturnedItemsPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/report/view/:token" element={<ReportViewPage />} />
       </Routes>
     </BrowserRouter>
   );

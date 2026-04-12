@@ -1,5 +1,3 @@
-/* ── Icons.jsx ─────────────────────────────────────────────── */
-
 export const Logo = ({ size = 28, color = "#2563eb" }) => (
   <svg width={size} height={size} viewBox="0 0 36 36" fill="none">
     <circle cx="15" cy="15" r="9" stroke={color} strokeWidth="2.5" />
@@ -16,7 +14,6 @@ export const Logo = ({ size = 28, color = "#2563eb" }) => (
       strokeLinecap="round"
     />
   </svg>
-  
 );
 
 export const HomeIcon = ({ active }) => (
@@ -137,7 +134,6 @@ export const PlusIcon = () => (
   </svg>
 );
 
-/* ── New: QrIcon ─────────────────────────────────────────── */
 export const QrIcon = ({ size = 24, color = "currentColor" }) => (
   <svg
     width={size}
@@ -158,7 +154,6 @@ export const QrIcon = ({ size = 24, color = "currentColor" }) => (
   </svg>
 );
 
-/* ── New: Printer Icon ───────────────────────────────────── */
 export const PrinterIcon = () => (
   <svg
     width="20"

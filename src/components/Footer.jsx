@@ -9,14 +9,7 @@ import axios from "axios";
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const api = axios.create({ baseURL: BASE_URL });
 
-const MOBILE_NAV_KEYS = [
-  "home",
-  "lost",
-  "returned",
-  "activity",
-  "reports",
-  "profile",
-];
+const MOBILE_NAV_KEYS = ["home", "lost", "returned", "reports", "profile"];
 
 const badgeKeyMap = (key, { reportCount, lostCount, returnedCount }) => {
   if (key === "reports") return reportCount;
@@ -65,7 +58,10 @@ function FooterNav({ activePage }) {
       navigate("/home");
       return;
     }
-    if (key === "activity" || key === "profile") return;
+    if (key === "profile") {
+      navigate("/profile");
+      return;
+    }
     navigate(`/${key}`);
   };
 

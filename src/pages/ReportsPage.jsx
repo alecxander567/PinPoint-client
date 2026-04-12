@@ -95,6 +95,7 @@ function ReportsContent({
 
   return (
     <div className="w-full" style={{ minHeight: "calc(100vh - 144px)" }}>
+      {/* Hero header */}
       <div
         className="px-6 py-8 relative overflow-hidden"
         style={{
@@ -149,213 +150,201 @@ function ReportsContent({
           </div>
 
           <div className="flex items-center justify-center gap-3 flex-wrap lg:ml-auto">
-            <div
-              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
-              style={{
-                background: "rgba(255,255,255,0.12)",
-                border: "1px solid rgba(255,255,255,0.18)",
-              }}>
-              <span className="text-2xl font-bold text-red-300 leading-none">
-                {totalReports}
-              </span>
-              <span
-                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
-                style={{ color: "#bfdbfe" }}>
-                Reports
-              </span>
-            </div>
-
-            <div
-              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
-              style={{
-                background: "rgba(255,255,255,0.12)",
-                border: "1px solid rgba(255,255,255,0.18)",
-              }}>
-              <span className="text-2xl font-bold text-emerald-300 leading-none">
-                {uniqueItems}
-              </span>
-              <span
-                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
-                style={{ color: "#bfdbfe" }}>
-                Items
-              </span>
-            </div>
-
-            <div
-              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
-              style={{
-                background: "rgba(255,255,255,0.12)",
-                border: "1px solid rgba(255,255,255,0.18)",
-              }}>
-              <span className="text-2xl font-bold text-amber-300 leading-none">
-                {selectedReports.length}
-              </span>
-              <span
-                className="text-[11px] font-medium mt-1 uppercase tracking-wide"
-                style={{ color: "#bfdbfe" }}>
-                Selected
-              </span>
-            </div>
+            {[
+              { value: totalReports, label: "Reports", color: "text-red-300" },
+              { value: uniqueItems, label: "Items", color: "text-emerald-300" },
+              {
+                value: selectedReports.length,
+                label: "Selected",
+                color: "text-amber-300",
+              },
+            ].map(({ value, label, color }) => (
+              <div
+                key={label}
+                className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+                style={{
+                  background: "rgba(255,255,255,0.12)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                }}>
+                <span className={`text-2xl font-bold leading-none ${color}`}>
+                  {value}
+                </span>
+                <span
+                  className="text-[11px] font-medium mt-1 uppercase tracking-wide"
+                  style={{ color: "#bfdbfe" }}>
+                  {label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="max-w-screen-xl mx-auto px-5 pt-6 pb-0">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div className="flex flex-wrap items-center gap-3">
+      {/* Body — px-4 on mobile, px-8 on sm+, px-10 on lg+ */}
+      <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-10">
+        {/* Toolbar */}
+        <div className="pt-6 pb-6">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            {/* Title */}
             {reports.length > 0 && (
               <h2
-                className="text-base font-bold text-slate-800 m-0"
+                className="text-base font-bold text-slate-800 m-0 flex-shrink-0"
                 style={{ fontFamily: "'Poppins', sans-serif" }}>
                 {reportSearch ?
                   `Results for "${reportSearch}" (${filteredReports.length})`
                 : `Reports (${reports.length})`}
               </h2>
             )}
-          </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <SearchInput
-              value={reportSearch}
-              onChange={setReportSearch}
-              placeholder="Search reports..."
-              width="min(260px, 100%)"
-            />
+            {/* Search + buttons — left on mobile, right on desktop */}
+            <div className="flex flex-wrap items-center gap-2 lg:ml-auto">
+              <SearchInput
+                value={reportSearch}
+                onChange={setReportSearch}
+                placeholder="Search reports..."
+                width="min(300px, 100%)"
+              />
 
-            <button
-              onClick={handleSelectAllReports}
-              disabled={!filteredReports.length}
-              className="px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
-              style={{
-                border: "1px solid #cbd5e1",
-                background: "white",
-                color: "#0f172a",
-                cursor: filteredReports.length ? "pointer" : "not-allowed",
-                opacity: filteredReports.length ? 1 : 0.5,
-              }}>
-              {allVisibleSelected ? "Unselect All" : "Select All"}
-            </button>
+              <button
+                onClick={handleSelectAllReports}
+                disabled={!filteredReports.length}
+                className="px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+                style={{
+                  border: "1px solid #cbd5e1",
+                  background: "white",
+                  color: "#0f172a",
+                  cursor: filteredReports.length ? "pointer" : "not-allowed",
+                  opacity: filteredReports.length ? 1 : 0.5,
+                  whiteSpace: "nowrap",
+                }}>
+                {allVisibleSelected ? "Unselect All" : "Select All"}
+              </button>
 
-            <button
-              onClick={handleDeleteSelectedReports}
-              disabled={!selectedReports.length || reportsDeleting}
-              className="px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
-              style={{
-                background:
-                  !selectedReports.length || reportsDeleting ?
-                    "#cbd5e1"
-                  : "linear-gradient(135deg, #ef4444, #dc2626)",
-                border: "none",
-                cursor:
-                  !selectedReports.length || reportsDeleting ?
-                    "not-allowed"
-                  : "pointer",
-                boxShadow:
-                  selectedReports.length && !reportsDeleting ?
-                    "0 4px 12px rgba(239,68,68,0.3)"
-                  : "none",
-              }}>
-              {reportsDeleting ?
-                "Deleting..."
-              : `Delete Selected${selectedReports.length ? ` (${selectedReports.length})` : ""}`
-              }
-            </button>
+              <button
+                onClick={handleDeleteSelectedReports}
+                disabled={!selectedReports.length || reportsDeleting}
+                className="px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
+                style={{
+                  background:
+                    !selectedReports.length || reportsDeleting ?
+                      "#cbd5e1"
+                    : "linear-gradient(135deg, #ef4444, #dc2626)",
+                  border: "none",
+                  cursor:
+                    !selectedReports.length || reportsDeleting ?
+                      "not-allowed"
+                    : "pointer",
+                  boxShadow:
+                    selectedReports.length && !reportsDeleting ?
+                      "0 4px 12px rgba(239,68,68,0.3)"
+                    : "none",
+                  whiteSpace: "nowrap",
+                }}>
+                {reportsDeleting ?
+                  "Deleting..."
+                : `Delete${selectedReports.length ? ` (${selectedReports.length})` : ""}`
+                }
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-screen-xl mx-auto px-5 pb-10">
-        {/* Has reports + has results */}
-        {reports.length > 0 && filteredReports.length > 0 && (
-          <div
-            className="grid gap-5"
-            style={{
-              gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-            }}>
-            {filteredReports.map((report) => (
-              <ReportCard
-                key={report.id}
-                report={report}
-                isSelected={selectedReports.includes(report.id)}
-                resolvingId={resolvingId}
-                onToggleSelect={toggleReportSelection}
-                onResolve={handleResolveReport}
-              />
-            ))}
-          </div>
-        )}
-
-        {reports.length > 0 && filteredReports.length === 0 && (
-          <div className="text-center py-16 px-6">
-            <p
-              className="text-sm mb-3 text-slate-500"
-              style={{ fontFamily: "'Nunito', sans-serif" }}>
-              No reports match "
-              <strong className="text-slate-800">{reportSearch}</strong>"
-            </p>
-            <button
-              onClick={() => setReportSearch("")}
-              className="px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors"
-              style={{
-                border: "1px solid rgba(99,102,241,0.4)",
-                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
-              }}>
-              Clear search
-            </button>
-          </div>
-        )}
-
-        {reports.length === 0 && (
-          <div
-            className="mt-2 rounded-3xl text-center px-6 py-14"
-            style={{
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(99,102,241,0.15)",
-              boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
-            }}>
+        {/* Cards */}
+        <div className="pb-10">
+          {reports.length > 0 && filteredReports.length > 0 && (
             <div
-              className="flex items-center justify-center w-16 h-16 rounded-2xl mx-auto mb-5"
+              className="grid gap-5"
               style={{
-                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
-                opacity: 0.85,
+                gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
               }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              {filteredReports.map((report) => (
+                <ReportCard
+                  key={report.id}
+                  report={report}
+                  isSelected={selectedReports.includes(report.id)}
+                  resolvingId={resolvingId}
+                  onToggleSelect={toggleReportSelection}
+                  onResolve={handleResolveReport}
                 />
-                <path
-                  d="M14 2v6h6"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M16 13H8M16 17H8M10 9H8"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
+              ))}
             </div>
-            <h2
-              className="text-2xl font-bold text-slate-800 m-0"
-              style={{ fontFamily: "'Poppins', sans-serif" }}>
-              No reports yet
-            </h2>
-            <p
-              className="mt-3 mx-auto text-sm leading-relaxed text-slate-500"
-              style={{ maxWidth: "480px", fontFamily: "'Nunito', sans-serif" }}>
-              Once a finder submits a report from your QR page, it will appear
-              here with the uploaded landmark image, shared location, and
-              message.
-            </p>
-          </div>
-        )}
+          )}
+
+          {reports.length > 0 && filteredReports.length === 0 && (
+            <div className="text-center py-16 px-6">
+              <p
+                className="text-sm mb-3 text-slate-500"
+                style={{ fontFamily: "'Nunito', sans-serif" }}>
+                No reports match "
+                <strong className="text-slate-800">{reportSearch}</strong>"
+              </p>
+              <button
+                onClick={() => setReportSearch("")}
+                className="px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors"
+                style={{
+                  border: "1px solid rgba(99,102,241,0.4)",
+                  background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
+                }}>
+                Clear search
+              </button>
+            </div>
+          )}
+
+          {reports.length === 0 && (
+            <div
+              className="mt-2 rounded-3xl text-center px-6 py-14"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(99,102,241,0.15)",
+                boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
+              }}>
+              <div
+                className="flex items-center justify-center w-16 h-16 rounded-2xl mx-auto mb-5"
+                style={{
+                  background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
+                  opacity: 0.85,
+                }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M14 2v6h6"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M16 13H8M16 17H8M10 9H8"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+              <h2
+                className="text-2xl font-bold text-slate-800 m-0"
+                style={{ fontFamily: "'Poppins', sans-serif" }}>
+                No reports yet
+              </h2>
+              <p
+                className="mt-3 mx-auto text-sm leading-relaxed text-slate-500"
+                style={{
+                  maxWidth: "480px",
+                  fontFamily: "'Nunito', sans-serif",
+                }}>
+                Once a finder submits a report from your QR page, it will appear
+                here with the uploaded landmark image, shared location, and
+                message.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       <Alert message={alert.message} type={alert.type} onClose={clearAlert} />
