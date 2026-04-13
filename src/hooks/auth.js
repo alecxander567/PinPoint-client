@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { requestNotificationPermission } from "../notification";
 
 const API_URL = "http://localhost:8000/api/users";
 
@@ -44,6 +45,9 @@ export function useLogin() {
       localStorage.setItem("refresh", res.data.refresh);
       localStorage.setItem("user_id", res.data.user_id);
       localStorage.setItem("name", res.data.name);
+
+      await requestNotificationPermission(res.data.user_id);
+
       navigate("/home");
       return { success: true };
     } catch (err) {

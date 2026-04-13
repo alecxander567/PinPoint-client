@@ -42,7 +42,7 @@ function Navbar({ activePage, onLogout }) {
 
   return (
     <nav className="hidden lg:flex items-center justify-between px-6 h-[60px] bg-white border-b border-indigo-100">
-      <a href="/" className="flex items-center gap-2.5 no-underline group">
+      <a href="/home" className="flex items-center gap-2.5 no-underline group">
         <div
           className="flex items-center justify-center w-8 h-8 rounded-lg"
           style={{ background: "linear-gradient(135deg, #1d4ed8, #3730a3)" }}>
@@ -59,7 +59,8 @@ function Navbar({ activePage, onLogout }) {
       </a>
 
       <div className="flex items-center gap-1">
-        {NAV.map(({ key, label, Icon }) => {// eslint-disable-line
+        {NAV.map(({ key, label, Icon }) => {
+          // eslint-disable-line
           const isActive = activePage === key;
           const count = badgeCounts[key] ?? 0;
           return (

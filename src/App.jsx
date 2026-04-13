@@ -9,7 +9,6 @@ import FoundItemPage from "./pages/FoundItemPage";
 import ReportsPage from "./pages/ReportsPage";
 import LostItemsPage from "./pages/LostItemPage";
 import ReturnedItemsPage from "./pages/ReturnedItemsPage";
-import PublicReportPage from "./pages/PublicReportPage";
 import ProfilePage from "./pages/ProfilePage";
 import ReportViewPage from "./pages/ReportPageView";
 
@@ -19,7 +18,6 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/report/:token" element={<PublicReportPage />} />
         <Route path="/register" element={<SignupPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
