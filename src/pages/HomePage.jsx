@@ -16,7 +16,7 @@ import { Logo, PlusIcon } from "../components/Icons";
 import { NAV } from "../components/navConfig";
 import { useGetOwnerReports } from "../hooks/useReport";
 import { useReportCount } from "../hooks/useReportCount";
-import { useItemCount } from "../hooks/useItemcount";
+import { useItemCount } from "../hooks/useItemCount";
 import "../index.css";
 
 const shimmerStyles = `

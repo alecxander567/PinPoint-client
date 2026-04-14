@@ -3,7 +3,7 @@ import { NAV } from "./navConfig";
 import { Logo, PlusIcon } from "./Icons";
 import ReportBadge from "./ReportBadge";
 import { useReportCount } from "../hooks/useReportCount";
-import { useItemCount } from "../hooks/useItemcount";
+import { useItemCount } from "../hooks/useItemCount";
 
 function Navbar({ activePage, onLogout }) {
   const navigate = useNavigate();

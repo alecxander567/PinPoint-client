@@ -5,7 +5,7 @@ import { useGetUserItems } from "../hooks/useItem";
 import { useGetOwnerReports } from "../hooks/useReport";
 import { useResolveReport } from "../hooks/useResolveReport";
 import { useReportCount } from "../hooks/useReportCount";
-import { useItemCount } from "../hooks/useItemcount";
+import { useItemCount } from "../hooks/useItemCount";
 import Navbar from "../components/Navbar";
 import FooterNav from "../components/Footer";
 import Alert from "../components/Alert";

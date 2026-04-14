@@ -14,7 +14,7 @@ import SearchInput from "../components/SearchInput";
 import { Logo, PlusIcon } from "../components/Icons";
 import { useReportCount } from "../hooks/useReportCount";
 import { useGetOwnerReports } from "../hooks/useReport";
-import { useItemCount } from "../hooks/useItemcount";
+import { useItemCount } from "../hooks/useItemCount";
 import LostItemCard from "../components/LostItemCard";
 
 const now = Date.now();

@@ -4,7 +4,7 @@ import { useLogout } from "../hooks/auth";
 import { useGetResolvedReports } from "../hooks/useGetResolvedReports";
 import { useGetOwnerReports } from "../hooks/useReport";
 import { useReportCount } from "../hooks/useReportCount";
-import { useItemCount } from "../hooks/useItemcount";
+import { useItemCount } from "../hooks/useItemCount";
 import { RETURNED_SEEN_KEY } from "../components/CountProviderItem";
 import Navbar from "../components/Navbar";
 import FooterNav from "../components/Footer";
