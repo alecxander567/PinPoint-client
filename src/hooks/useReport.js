@@ -118,7 +118,7 @@ export function useFoundItemReport(itemId) {
       payload.append("message", trimmedMessage);
       payload.append("landmark_image", form.landmarkImage);
 
-      const response = await api.post("/api/reports/submit/", payload);
+      const response = await api.post("/submit/", payload);
       setForm(initialForm);
       await fetchReports();
       return { ok: true, data: response.data };
@@ -218,7 +218,7 @@ export function useGetOwnerReports() {
     setError("");
 
     try {
-      const response = await api.get("/reports/list/", {
+      const response = await api.get("/list/", {
         params: { owner_id: ownerId },
       });
       setReports(response.data.reports || []);
@@ -248,7 +248,7 @@ export function useGetOwnerReports() {
 
     setDeleting(true);
     try {
-      const response = await api.delete("/reports/delete/", {
+      const response = await api.delete("/delete/", {
         data: {
           owner_id: ownerId,
           report_ids: reportIds,

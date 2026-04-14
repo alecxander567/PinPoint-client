@@ -31,7 +31,7 @@ export function useAddItem() {
       formData.append("description", description || "");
       formData.append("owner_fb_account_url", owner_fb_account_url || "");
       formData.append("image", image);
-      const response = await api.post("/items/add/", formData);
+      const response = await api.post("/add/", formData);
       return { data: response.data };
     } catch (err) {
       const message =
@@ -62,7 +62,7 @@ export function useGetUserItems() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get("/items/list/", {
+      const response = await api.get("/list/", {
         params: { owner_id },
       });
       setItems(response.data.items || []);
@@ -103,7 +103,7 @@ export function useEditItem() {
         formData.append("owner_fb_account_url", owner_fb_account_url);
       if (image) formData.append("image", image);
 
-      const response = await api.put(`/items/${item_id}/update/`, formData);
+      const response = await api.put(`/${item_id}/update/`, formData);
       return { data: response.data };
     } catch (err) {
       const message =
@@ -129,7 +129,7 @@ export function useDeleteItem() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.delete(`/items/${item_id}/delete/`);
+      const response = await api.delete(`/${item_id}/delete/`);
       return { data: response.data };
     } catch (err) {
       const message =

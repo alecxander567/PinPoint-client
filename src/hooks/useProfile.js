@@ -18,7 +18,7 @@ export function useGetProfile() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await api.get("/users/profile/", {
+      const { data } = await api.get("/profile/", {
         headers: authHeader(),
       });
       setProfile(data);
@@ -39,7 +39,7 @@ export function useUpdateProfile() {
     setLoading(true);
     try {
       const { data } = await api.patch(
-        "/users/profile/update/",
+        "/profile/update/",
         { name, messenger_link },
         { headers: authHeader() },
       );
@@ -82,7 +82,7 @@ export function useDeleteAccount() {
   const deleteAccount = async () => {
     setLoading(true);
     try {
-      const { data } = await api.delete("/users/profile/delete/", {
+      const { data } = await api.delete("/profile/delete/", {
         headers: authHeader(),
       });
       return { data };
@@ -103,7 +103,7 @@ export function useReportBug() {
     setLoading(true);
     try {
       const { data } = await api.post(
-        "/users/bug-report/",
+        "/bug-report/",
         { message },
         { headers: authHeader() },
       );

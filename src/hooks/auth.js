@@ -14,7 +14,7 @@ export function useSignup() {
     }
     try {
       setLoading(true);
-      await axios.post(`${API_URL}/users/signup/`, {
+      await axios.post(`${API_URL}/signup/`, {
         name: `${form.first_name} ${form.last_name}`,
         email: form.email,
         password: form.password,
@@ -37,7 +37,7 @@ export function useLogin() {
   const login = async (form) => {
     try {
       setLoading(true);
-      const res = await axios.post(`${API_URL}/users/login/`, {
+      const res = await axios.post(`${API_URL}/login/`, {
         email: form.email,
         password: form.password,
       });
@@ -85,7 +85,7 @@ export function useForgotPassword() {
     setLoading(true);
     setError("");
     try {
-      await axios.post(`${API_URL}/users/forgot-password/`, { email });
+      await axios.post(`${API_URL}/forgot-password/`, { email });
       setSent(true);
     } catch (err) {
       setError(
@@ -124,7 +124,7 @@ export function useResetPassword() {
     cleanToken = cleanToken.replace(/=/g, "");
 
     try {
-      await axios.post(`${API_URL}/users/reset-password/`, {
+      await axios.post(`${API_URL}/reset-password/`, {
         token: cleanToken,
         password,
       });

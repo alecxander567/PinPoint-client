@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_ITEMS_URL
+const API_BASE = import.meta.env.VITE_API_ITEMS_URL;
 
 export function useToggleItemLost() {
   const [togglingId, setTogglingId] = useState(null);
@@ -9,9 +9,7 @@ export function useToggleItemLost() {
   const toggleItemLost = async (itemId) => {
     setTogglingId(itemId);
     try {
-      const { data } = await axios.patch(
-        `${API_BASE}/api/items/${itemId}/toggle-lost/`,
-      );
+      const { data } = await axios.patch(`${API_BASE}/${itemId}/toggle-lost/`);
       return { status: data.status };
     } catch (err) {
       const message =

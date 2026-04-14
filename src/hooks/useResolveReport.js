@@ -8,7 +8,7 @@ export function useResolveReport() {
   const resolveReport = async (reportId) => {
     setResolvingId(reportId);
     try {
-      const response = await fetch(`${API_BASE}/reports/${reportId}/resolve/`, {
+      const response = await fetch(`${API_BASE}/${reportId}/resolve/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
       });
