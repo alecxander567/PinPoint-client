@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { NAV } from "./navConfig";
 import ReportBadge from "./ReportBadge";
 import { useReportCount } from "../hooks/useReportCount";
-import { useItemCount } from "../hooks/useItemcount";
+import { useItemCount } from "../hooks/useItemCount";
 import { RETURNED_SEEN_KEY } from "./CountProviderItem";
 import axios from "axios";
 
