@@ -35,7 +35,6 @@ export default function FoundItemReport({
   submitting,
   locating,
   error,
-  contactUrl,
   onChange,
   onUseCurrentLocation,
   onSubmit,
@@ -252,8 +251,6 @@ export default function FoundItemReport({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (contactUrl)
-                window.open(contactUrl, "_blank", "noopener,noreferrer");
               onSubmit();
             }}
             className="flex flex-col gap-4 px-6 pb-6 pt-4">

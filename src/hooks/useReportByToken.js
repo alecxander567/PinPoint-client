@@ -12,7 +12,7 @@ export function useReportByToken(token) {
     if (!token) return;
     setLoading(true);
     try {
-      const { data } = await api.get(`/reports/view/${token}/`);
+      const { data } = await api.get(`/view/${token}/`);
       setReport(data);
     } catch (err) {
       setError(err.response?.data?.error || "Report not found");
