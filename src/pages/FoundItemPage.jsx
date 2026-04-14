@@ -50,10 +50,19 @@ function FoundItemPage() {
       setAlert({ message: result.error, type: "error" });
       return;
     }
+
+    const reportViewUrl = result.data?.owner_view_url;
+    if (contactUrl && reportViewUrl) {
+      const messengerUrl = `${contactUrl}?text=${encodeURIComponent(
+        `Hi! I found your item "${item?.name}". Here's the report: ${reportViewUrl}`,
+      )}`;
+      window.open(messengerUrl, "_blank", "noopener,noreferrer");
+    }
+
     setAlert({
       message:
         contactUrl ?
-          "Report submitted successfully. Opening the owner's Messenger contact."
+          "Report submitted! Opening Messenger to notify the owner."
         : "Report submitted successfully.",
       type: "success",
     });
