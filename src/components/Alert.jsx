@@ -26,10 +26,10 @@ export default function Alert({ message, type = "success", onClose }) {
 
   return (
     <div
-      className={`fixed bottom-6 left-6 z-50 transition-all duration-300 ${
+      className={`fixed top-1/2 left-1/2 z-50 transition-all duration-300 ${
         visible ?
-          "opacity-100 translate-y-0"
-        : "opacity-0 translate-y-3 pointer-events-none"
+          "opacity-100 -translate-x-1/2 -translate-y-1/2"
+        : "opacity-0 -translate-x-1/2 -translate-y-1/3 pointer-events-none"
       }`}>
       <div className="w-72 rounded-xl overflow-hidden shadow-lg bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-500 text-white">
         <div className="flex items-start gap-3 p-4">
