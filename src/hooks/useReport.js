@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_REPORTS_URL;
+const REPORTS_URL = import.meta.env.VITE_API_REPORTS_URL;
+const ITEMS_URL = import.meta.env.VITE_API_ITEMS_URL;
 
-const api = axios.create({ baseURL: API_URL });
+const reportsApi = axios.create({ baseURL: REPORTS_URL });
+const itemsApi = axios.create({ baseURL: ITEMS_URL });
 
 const initialForm = {
   landmarkImage: null,
@@ -21,13 +23,13 @@ export function useFoundItemReport(itemId) {
   const [error, setError] = useState("");
 
   const fetchItem = async () => {
-    const response = await api.get(`/items/${itemId}/`);
+    const response = await itemsApi.get(`/${itemId}/`);
     setItem(response.data);
     return response.data;
   };
 
   const fetchReports = async () => {
-    const response = await api.get(`/reports/${itemId}/list/`);
+    const response = await reportsApi.get(`/${itemId}/list/`);
     setReports(response.data.reports || []);
     return response.data.reports || [];
   };
