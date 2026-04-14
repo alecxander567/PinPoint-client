@@ -23,7 +23,7 @@ export function useGetLostItems() {
 
     setError(null);
     try {
-      const response = await api.get("/items/filter/", {
+      const response = await api.get("/filter/", {
         params: { owner_id: ownerId, status: "lost" },
       });
       setLostItems(response.data.items || []);
