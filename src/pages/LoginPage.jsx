@@ -315,7 +315,7 @@ function LoginPage() {
               }}>
               <SearchPlusIcon />
             </div>
-            <span className="text-xl font-bold text-blue-900">Item Finder</span>
+            <span className="text-xl font-bold text-blue-900">PinPoint</span>
           </div>
 
           <div className="mb-8">

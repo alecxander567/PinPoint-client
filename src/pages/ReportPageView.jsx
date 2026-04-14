@@ -73,7 +73,7 @@ export default function ReportViewPage() {
         }}>
         <div className="max-w-2xl mx-auto px-5 py-7">
           <p className="text-xs font-bold uppercase tracking-widest text-blue-200 mb-1">
-            Item Finder
+            PinPoint
           </p>
           <h1
             className="text-2xl font-extrabold text-white leading-tight"

@@ -373,7 +373,7 @@ function LostItemsPage() {
           <span
             className="text-white font-bold text-base"
             style={{ fontFamily: "'Poppins', sans-serif" }}>
-            Item Finder
+            PinPoint
           </span>
         </div>
         <div className="flex items-center gap-2">
