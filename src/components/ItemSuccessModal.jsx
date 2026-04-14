@@ -15,118 +15,110 @@ const CheckIcon = () => (
   </svg>
 );
 
+const PrinterIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M6 9V2h12v7"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <rect
+      x="6"
+      y="14"
+      width="12"
+      height="8"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const ItemSuccessModal = ({ success, onRegisterAnother }) => {
   const navigate = useNavigate();
   const [showPrintModal, setShowPrintModal] = useState(false);
 
-  const btnStyle = {
-    padding: "10px 20px",
-    borderRadius: "10px",
-    fontWeight: "600",
-    fontSize: "14px",
-    border: "none",
-    cursor: "pointer",
-  };
-
   return (
     <>
-      <div
-        style={{
-          minHeight: "100vh",
-          background: "#f8fafc",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "16px",
-        }}>
-        <div
-          style={{
-            background: "white",
-            borderRadius: "20px",
-            padding: "32px 24px",
-            boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
-            maxWidth: "380px",
-            width: "100%",
-            textAlign: "center",
-          }}>
-          <div
-            style={{
-              width: "64px",
-              height: "64px",
-              background: "linear-gradient(135deg, #22c55e, #16a34a)",
-              borderRadius: "50%",
-              margin: "0 auto 16px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}>
-            <CheckIcon />
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+        <div className="w-full max-w-sm rounded-2xl overflow-hidden shadow-xl bg-white border border-slate-200">
+          {/* Accent bar */}
+          <div className="h-[3px] bg-gradient-to-r from-indigo-600 to-indigo-400" />
+
+          {/* Header */}
+          <div className="px-6 pt-6 pb-4 flex items-center justify-between">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider font-nunito text-slate-400">
+                Registration
+              </p>
+              <p className="text-lg font-bold font-poppins text-slate-800">
+                {success.name}
+              </p>
+            </div>
+            <div className="w-9 h-9 rounded-full bg-green-50 border border-green-200 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                <CheckIcon />
+              </div>
+            </div>
           </div>
 
-          <h2
-            style={{ fontSize: "24px", marginBottom: "8px", color: "#0f172a" }}>
-            Item Registered!
-          </h2>
-          <p
-            style={{
-              color: "#64748b",
-              marginBottom: "20px",
-              fontSize: "14px",
-            }}>
-            <strong>{success.name}</strong> is ready to go.
-          </p>
+          {/* Status pill */}
+          <div className="mx-6 mb-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 border border-green-200 text-green-700 text-xs font-semibold font-nunito">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+              Item registered successfully
+            </span>
+          </div>
 
+          {/* QR Code block */}
           {success.qr_code_url && (
-            <div style={{ marginBottom: "20px" }}>
+            <div className="mx-6 mb-4 rounded-xl bg-slate-50 border border-slate-200 p-5 flex flex-col items-center">
               <img
                 src={success.qr_code_url}
-                alt="QR"
-                style={{
-                  width: "120px",
-                  height: "120px",
-                  margin: "0 auto",
-                  border: "2px solid #e2e8f0",
-                  borderRadius: "10px",
-                  padding: "6px",
-                }}
+                alt="QR Code"
+                className="w-36 h-36 rounded-lg"
               />
+              <p className="mt-3 text-sm font-nunito text-slate-600">
+                Scan to report this item
+              </p>
             </div>
           )}
 
-          <button
-            onClick={() => setShowPrintModal(true)}
-            style={{
-              ...btnStyle,
-              width: "100%",
-              background: "#2563eb",
-              color: "white",
-              marginBottom: "12px",
-            }}>
-            🖨️ Print QR Code
-          </button>
+          {/* Helper text */}
+          <p className="mx-6 mb-4 text-xs font-nunito text-slate-500 text-center leading-relaxed">
+            Print and attach this QR code to your item so finders can report it.
+          </p>
 
-          <div style={{ display: "flex", gap: "10px" }}>
+          {/* Actions */}
+          <div className="px-6 pb-6 flex flex-col gap-2">
             <button
-              onClick={() => navigate("/home")}
-              style={{
-                ...btnStyle,
-                flex: 1,
-                background: "white",
-                color: "#64748b",
-                border: "1px solid #e2e8f0",
-              }}>
-              Back
+              onClick={() => setShowPrintModal(true)}
+              className="w-full py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold font-poppins flex items-center justify-center gap-2 transition">
+              <PrinterIcon />
+              Print QR Code
             </button>
-            <button
-              onClick={onRegisterAnother}
-              style={{
-                ...btnStyle,
-                flex: 1,
-                background: "#2563eb",
-                color: "white",
-              }}>
-              + Add
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => navigate("/home")}
+                className="flex-1 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold font-poppins transition">
+                Back
+              </button>
+              <button
+                onClick={onRegisterAnother}
+                className="flex-1 py-2.5 rounded-lg border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold font-poppins transition">
+                + Add another
+              </button>
+            </div>
           </div>
         </div>
       </div>
