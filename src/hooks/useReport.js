@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_REPORTS_URL;
 
-const api = axios.create({ baseURL: BASE_URL });
+const api = axios.create({ baseURL: API_URL });
 
 const initialForm = {
   landmarkImage: null,
