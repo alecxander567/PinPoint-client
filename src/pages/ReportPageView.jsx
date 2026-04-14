@@ -147,7 +147,7 @@ export default function ReportViewPage() {
         </section>
       </div>
 
-      <div className="max-w-2xl mx-auto px-5 py-3 pb-16 flex flex-col gap-5">
+      <div className="max-w-2xl mx-auto px-5 pb-16 flex flex-col gap-5">
         {/* Item card */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="flex flex-col items-center p-6 gap-4">
