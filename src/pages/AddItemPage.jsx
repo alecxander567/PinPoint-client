@@ -168,7 +168,7 @@ function AddItemPage() {
             <span
               className="text-white font-bold text-base"
               style={{ fontFamily: "'Poppins', sans-serif" }}>
-              Item Finder
+              PinPoint
             </span>
           </div>
 
