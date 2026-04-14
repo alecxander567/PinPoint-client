@@ -66,23 +66,75 @@ export default function ReportViewPage() {
           "linear-gradient(135deg, #f8fafc 0%, #eef5ff 52%, #e4efff 100%)",
       }}>
       {/* Header */}
+      {/* Header */}
       <div
         style={{
           background:
             "linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #312e81 100%)",
         }}>
-        <div className="max-w-2xl mx-auto px-5 py-7">
-          <p className="text-xs font-bold uppercase tracking-widest text-blue-200 mb-1">
-            PinPoint
-          </p>
-          <h1
-            className="text-2xl font-extrabold text-white leading-tight"
-            style={{ fontFamily: "'Poppins', sans-serif" }}>
-            Someone reported finding your item
-          </h1>
-          <p className="text-sm text-blue-200 mt-1">
-            Review the details below and contact the finder if it's yours.
-          </p>
+        <div className="relative px-6 py-7 overflow-hidden">
+          {/* Decorative circles */}
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: 300,
+              height: 300,
+              top: -80,
+              right: -80,
+              background: "rgba(255,255,255,0.06)",
+            }}
+          />
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: 180,
+              height: 180,
+              bottom: -60,
+              left: 30,
+              background: "rgba(147,197,253,0.1)",
+              filter: "blur(40px)",
+            }}
+          />
+
+          <div className="relative z-10">
+            <p
+              className="text-[10px] font-bold uppercase tracking-widest m-0"
+              style={{ color: "#bfdbfe", fontFamily: "'Poppins', sans-serif" }}>
+              PinPoint
+            </p>
+            <h1
+              className="text-3xl sm:text-4xl font-extrabold text-white mt-2 m-0 leading-tight"
+              style={{ fontFamily: "'Poppins', sans-serif" }}>
+              Someone reported finding your item
+            </h1>
+            <p
+              className="mt-2 text-sm leading-relaxed max-w-xl m-0"
+              style={{ color: "#bfdbfe", fontFamily: "'Nunito', sans-serif" }}>
+              Review the details below and contact the finder if it's yours.
+            </p>
+
+            {/* Info box */}
+            <div
+              className="rounded-2xl px-5 py-4 mt-4"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
+              }}>
+              <p
+                className="text-sm font-bold text-white m-0"
+                style={{ fontFamily: "'Poppins', sans-serif" }}>
+                Help return this item faster
+              </p>
+              <p
+                className="mt-1.5 text-xs leading-relaxed m-0"
+                style={{
+                  color: "#bfdbfe",
+                  fontFamily: "'Nunito', sans-serif",
+                }}>
+                Upload a clear landmark image and share your current location.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
