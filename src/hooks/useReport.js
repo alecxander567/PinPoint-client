@@ -120,7 +120,7 @@ export function useFoundItemReport(itemId) {
       payload.append("message", trimmedMessage);
       payload.append("landmark_image", form.landmarkImage);
 
-      const response = await api.post("/submit/", payload);
+      const response = await reportsApi.post("/submit/", payload);
       setForm(initialForm);
       await fetchReports();
       return { ok: true, data: response.data };
@@ -171,8 +171,8 @@ export function usePublicReport(token) {
       setError("");
 
       try {
-        const response = await api.get(
-          `/reports/public/${encodeURIComponent(token)}/`,
+        const response = await reportsApi.get(
+          `/view/${encodeURIComponent(token)}/`,
         );
         if (!cancelled) {
           setReport(response.data);
@@ -220,7 +220,7 @@ export function useGetOwnerReports() {
     setError("");
 
     try {
-      const response = await api.get("/list/", {
+      const response = await reportsApi.get("/list/", {
         params: { owner_id: ownerId },
       });
       setReports(response.data.reports || []);
@@ -250,7 +250,7 @@ export function useGetOwnerReports() {
 
     setDeleting(true);
     try {
-      const response = await api.delete("/delete/", {
+      const response = await reportsApi.delete("/delete/", {
         data: {
           owner_id: ownerId,
           report_ids: reportIds,
