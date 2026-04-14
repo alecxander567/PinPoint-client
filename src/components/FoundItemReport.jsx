@@ -122,7 +122,7 @@ export default function FoundItemReport({
                   color: "#bfdbfe",
                   fontFamily: "'Poppins', sans-serif",
                 }}>
-                Item Finder
+                PinPoint
               </p>
               <h1
                 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 m-0 leading-tight"
