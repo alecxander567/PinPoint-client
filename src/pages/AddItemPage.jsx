@@ -157,14 +157,7 @@ function AddItemPage() {
         }}>
         <div className="max-w-screen-lg mx-auto px-5 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div
-              className="flex items-center justify-center w-8 h-8 rounded-xl"
-              style={{
-                background: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.2)",
-              }}>
-              <Logo size={18} color="white" />
-            </div>
+            <Logo size={18} color="white" />
             <span
               className="text-white font-bold text-base"
               style={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -231,7 +224,8 @@ function AddItemPage() {
                 <img
                   src={preview}
                   alt="Preview"
-                  className="w-full h-full object-cover absolute inset-0"
+                  className="max-w-full max-h-full object-contain"
+                  style={{ maxHeight: "180px" }}
                 />
               : <div className="flex flex-col items-center gap-2 py-8 px-6 text-center">
                   <div
