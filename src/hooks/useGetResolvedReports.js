@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({ baseURL: BASE_URL });
 
@@ -21,7 +21,7 @@ export function useGetResolvedReports() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get("/api/reports/resolved/", {
+      const response = await api.get("/reports/resolved/", {
         params: { owner_id: ownerId },
       });
       setResolvedReports(response.data.reports || []);

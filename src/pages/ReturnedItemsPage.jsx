@@ -98,14 +98,14 @@ function ReturnedPageContent({ resolvedReports, loading }) {
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-3 flex-wrap lg:ml-auto">
+          <div className="flex items-center justify-center gap-2 flex-nowrap lg:gap-3 lg:ml-auto">
             <div
-              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              className="flex flex-col items-center justify-center px-4 py-3 rounded-xl min-w-[80px] lg:px-6 lg:min-w-[90px]"
               style={{
                 background: "rgba(255,255,255,0.12)",
                 border: "1px solid rgba(255,255,255,0.18)",
               }}>
-              <span className="text-2xl font-bold text-emerald-300 leading-none">
+              <span className="text-2xl font-bold text-white leading-none">
                 {totalReturned}
               </span>
               <span
@@ -116,12 +116,12 @@ function ReturnedPageContent({ resolvedReports, loading }) {
             </div>
 
             <div
-              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              className="flex flex-col items-center justify-center px-4 py-3 rounded-xl min-w-[80px] lg:px-6 lg:min-w-[90px]"
               style={{
                 background: "rgba(255,255,255,0.12)",
                 border: "1px solid rgba(255,255,255,0.18)",
               }}>
-              <span className="text-2xl font-bold text-amber-300 leading-none">
+              <span className="text-2xl font-bold text-red-300 leading-none">
                 {thisWeekCount}
               </span>
               <span
@@ -132,12 +132,12 @@ function ReturnedPageContent({ resolvedReports, loading }) {
             </div>
 
             <div
-              className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+              className="flex flex-col items-center justify-center px-4 py-3 rounded-xl min-w-[80px] lg:px-6 lg:min-w-[90px]"
               style={{
                 background: "rgba(255,255,255,0.12)",
                 border: "1px solid rgba(255,255,255,0.18)",
               }}>
-              <span className="text-2xl font-bold text-blue-300 leading-none">
+              <span className="text-2xl font-bold text-emerald-300 leading-none">
                 {uniqueItems}
               </span>
               <span

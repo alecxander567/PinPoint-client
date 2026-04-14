@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { requestNotificationPermission } from "../notification";
 
-const API_URL = "http://localhost:8000/api/users";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export function useSignup() {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ export function useSignup() {
     }
     try {
       setLoading(true);
-      await axios.post(`${API_URL}/signup/`, {
+      await axios.post(`${API_URL}/users/signup/`, {
         name: `${form.first_name} ${form.last_name}`,
         email: form.email,
         password: form.password,
@@ -37,7 +37,7 @@ export function useLogin() {
   const login = async (form) => {
     try {
       setLoading(true);
-      const res = await axios.post(`${API_URL}/login/`, {
+      const res = await axios.post(`${API_URL}/users/login/`, {
         email: form.email,
         password: form.password,
       });
@@ -85,7 +85,7 @@ export function useForgotPassword() {
     setLoading(true);
     setError("");
     try {
-      await axios.post(`${API_URL}/forgot-password/`, { email });
+      await axios.post(`${API_URL}/users/forgot-password/`, { email });
       setSent(true);
     } catch (err) {
       setError(
@@ -124,7 +124,7 @@ export function useResetPassword() {
     cleanToken = cleanToken.replace(/=/g, "");
 
     try {
-      await axios.post(`${API_URL}/reset-password/`, {
+      await axios.post(`${API_URL}/users/reset-password/`, {
         token: cleanToken,
         password,
       });

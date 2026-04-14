@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useResetPassword } from "../hooks/auth";
-import Alert from "../components/Alert"; // ← Your Alert component is now imported
+import Alert from "../components/Alert"; 
 
 const EyeIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">

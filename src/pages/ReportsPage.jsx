@@ -149,19 +149,19 @@ function ReportsContent({
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-3 flex-wrap lg:ml-auto">
+          <div className="flex items-center justify-center gap-2 flex-nowrap lg:gap-3 lg:ml-auto">
             {[
-              { value: totalReports, label: "Reports", color: "text-red-300" },
-              { value: uniqueItems, label: "Items", color: "text-emerald-300" },
+              { value: totalReports, label: "Reports", color: "text-white" },
+              { value: uniqueItems, label: "Items", color: "text-red-300" },
               {
                 value: selectedReports.length,
                 label: "Selected",
-                color: "text-amber-300",
+                color: "text-emerald-300",
               },
             ].map(({ value, label, color }) => (
               <div
                 key={label}
-                className="flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[90px]"
+                className="flex flex-col items-center justify-center px-4 py-3 rounded-xl min-w-[80px] lg:px-6 lg:min-w-[90px]"
                 style={{
                   background: "rgba(255,255,255,0.12)",
                   border: "1px solid rgba(255,255,255,0.18)",

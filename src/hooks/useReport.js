@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({ baseURL: BASE_URL });
 
@@ -21,13 +21,13 @@ export function useFoundItemReport(itemId) {
   const [error, setError] = useState("");
 
   const fetchItem = async () => {
-    const response = await api.get(`/api/items/${itemId}/`);
+    const response = await api.get(`/items/${itemId}/`);
     setItem(response.data);
     return response.data;
   };
 
   const fetchReports = async () => {
-    const response = await api.get(`/api/reports/${itemId}/list/`);
+    const response = await api.get(`/reports/${itemId}/list/`);
     setReports(response.data.reports || []);
     return response.data.reports || [];
   };
@@ -170,7 +170,7 @@ export function usePublicReport(token) {
 
       try {
         const response = await api.get(
-          `/api/reports/public/${encodeURIComponent(token)}/`,
+          `/reports/public/${encodeURIComponent(token)}/`,
         );
         if (!cancelled) {
           setReport(response.data);
@@ -218,7 +218,7 @@ export function useGetOwnerReports() {
     setError("");
 
     try {
-      const response = await api.get("/api/reports/list/", {
+      const response = await api.get("/reports/list/", {
         params: { owner_id: ownerId },
       });
       setReports(response.data.reports || []);
@@ -248,7 +248,7 @@ export function useGetOwnerReports() {
 
     setDeleting(true);
     try {
-      const response = await api.delete("/api/reports/delete/", {
+      const response = await api.delete("/reports/delete/", {
         data: {
           owner_id: ownerId,
           report_ids: reportIds,

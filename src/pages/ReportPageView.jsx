@@ -89,20 +89,21 @@ export default function ReportViewPage() {
       <div className="max-w-2xl mx-auto px-5 py-8 pb-16 flex flex-col gap-5">
         {/* Item card */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-4 p-5">
+          <div className="flex flex-col items-center p-6 gap-4">
             {report.item_image_url && (
               <img
                 src={report.item_image_url}
                 alt={report.item_name}
-                className="w-16 h-16 rounded-xl object-cover flex-shrink-0 bg-slate-100"
+                className="rounded-2xl object-contain bg-slate-50"
+                style={{ width: "100%", maxHeight: "200px" }}
               />
             )}
-            <div className="min-w-0">
+            <div className="text-center">
               <p className="text-xs font-semibold uppercase tracking-wider text-indigo-500 mb-0.5">
                 Your item
               </p>
               <h2
-                className="text-lg font-extrabold text-slate-800 truncate"
+                className="text-lg font-extrabold text-slate-800"
                 style={{ fontFamily: "'Poppins', sans-serif" }}>
                 {report.item_name}
               </h2>
@@ -126,12 +127,14 @@ export default function ReportViewPage() {
                 Landmark photo
               </p>
             </div>
-            <img
-              src={report.landmark_image_url}
-              alt="Landmark"
-              className="w-full object-cover"
-              style={{ maxHeight: "280px" }}
-            />
+            <div className="px-5 pb-5">
+              <img
+                src={report.landmark_image_url}
+                alt="Landmark"
+                className="w-full object-cover rounded-xl"
+                style={{ maxHeight: "280px" }}
+              />
+            </div>
           </div>
         )}
 
@@ -187,12 +190,9 @@ export default function ReportViewPage() {
           </div>
         </div>
 
-        {/* Contact button */}
-        {report.owner_fb_url && (
+        <div className="flex flex-col gap-3">
           <a
-            href={report.owner_fb_url}
-            target="_blank"
-            rel="noreferrer"
+            href="/login"
             className="w-full py-3.5 rounded-2xl text-sm font-bold text-white text-center no-underline transition-opacity hover:opacity-90"
             style={{
               background: "linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%)",
@@ -200,9 +200,21 @@ export default function ReportViewPage() {
               fontFamily: "'Poppins', sans-serif",
               display: "block",
             }}>
-            Contact finder on Messenger
+            Log in to Mark as Resolved
           </a>
-        )}
+
+          <button
+            onClick={() => window.close()}
+            className="w-full py-3.5 rounded-2xl text-sm font-bold text-slate-600 text-center transition-colors hover:bg-slate-100"
+            style={{
+              background: "white",
+              border: "1.5px solid #e2e8f0",
+              fontFamily: "'Poppins', sans-serif",
+              cursor: "pointer",
+            }}>
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );

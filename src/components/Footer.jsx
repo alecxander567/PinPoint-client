@@ -6,7 +6,7 @@ import { useItemCount } from "../hooks/useItemcount";
 import { RETURNED_SEEN_KEY } from "./CountProviderItem";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_URL;
 const api = axios.create({ baseURL: BASE_URL });
 
 const MOBILE_NAV_KEYS = ["home", "lost", "returned", "reports", "profile"];
@@ -36,7 +36,7 @@ function FooterNav({ activePage }) {
     if (key === "returned") {
       if (ownerId) {
         try {
-          const res = await api.get("/api/reports/resolved/", {
+          const res = await api.get("/reports/resolved/", {
             params: { owner_id: ownerId },
           });
           const total = res.data.count ?? res.data.reports?.length ?? 0;

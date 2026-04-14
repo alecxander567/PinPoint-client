@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 export function useResolveReport() {
   const [resolvingId, setResolvingId] = useState(null);
@@ -8,13 +8,10 @@ export function useResolveReport() {
   const resolveReport = async (reportId) => {
     setResolvingId(reportId);
     try {
-      const response = await fetch(
-        `${API_BASE}/api/reports/${reportId}/resolve/`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-        },
-      );
+      const response = await fetch(`${API_BASE}/reports/${reportId}/resolve/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+      });
 
       if (!response.ok) {
         const data = await response.json();

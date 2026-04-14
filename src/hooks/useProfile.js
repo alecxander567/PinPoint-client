@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000/api/users",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 const authHeader = () => ({
@@ -18,7 +18,7 @@ export function useGetProfile() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await api.get("/profile/", {
+      const { data } = await api.get("/users/profile/", {
         headers: authHeader(),
       });
       setProfile(data);
@@ -39,7 +39,7 @@ export function useUpdateProfile() {
     setLoading(true);
     try {
       const { data } = await api.patch(
-        "/profile/update/",
+        "/users/profile/update/",
         { name, messenger_link },
         { headers: authHeader() },
       );
@@ -61,7 +61,7 @@ export function useUpdatePassword() {
     setLoading(true);
     try {
       const { data } = await api.patch(
-        "/profile/update/",
+        "/users/profile/update/",
         { password: newPassword },
         { headers: authHeader() },
       );
@@ -82,7 +82,7 @@ export function useDeleteAccount() {
   const deleteAccount = async () => {
     setLoading(true);
     try {
-      const { data } = await api.delete("/profile/delete/", {
+      const { data } = await api.delete("/users/profile/delete/", {
         headers: authHeader(),
       });
       return { data };
@@ -103,7 +103,7 @@ export function useReportBug() {
     setLoading(true);
     try {
       const { data } = await api.post(
-        "/bug-report/",
+        "/users/bug-report/",
         { message },
         { headers: authHeader() },
       );

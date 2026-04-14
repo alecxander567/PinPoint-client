@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({ baseURL: BASE_URL });
 
@@ -23,11 +23,10 @@ export function useGetLostItems() {
 
     setError(null);
     try {
-      const response = await api.get("/api/items/filter/", {
+      const response = await api.get("/items/filter/", {
         params: { owner_id: ownerId, status: "lost" },
       });
       setLostItems(response.data.items || []);
-      console.log("API response:", response.data);  
     } catch (err) {
       setError(err.response?.data?.error || "Failed to fetch lost items.");
       setLostItems([]);
