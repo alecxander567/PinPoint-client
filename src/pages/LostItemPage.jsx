@@ -19,6 +19,9 @@ import LostItemCard from "../components/LostItemCard";
 
 const now = Date.now();
 
+const parseDate = (str) =>
+  new Date(str.includes("T") ? str : str + "T00:00:00");
+
 function LostPageContent({ lostItems, setLostItems, loading }) {
   const [selectedItemQR, setSelectedItemQR] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
@@ -54,20 +57,23 @@ function LostPageContent({ lostItems, setLostItems, loading }) {
   const totalLost = lostItems.length;
 
   const recentCount = lostItems.filter((i) => {
-    const diff = (now - new Date(i.created_at)) / (1000 * 60 * 60 * 24);
+    const diff = (now - parseDate(i.created_at)) / (1000 * 60 * 60 * 24);
     return diff <= 7;
   }).length;
 
   const oldestDays =
     lostItems.length > 0 ?
-      Math.floor(
-        (now -
-          new Date(
-            lostItems.reduce((a, b) =>
-              new Date(a.created_at) < new Date(b.created_at) ? a : b,
-            ).created_at,
-          )) /
-          (1000 * 60 * 60 * 24),
+      Math.max(
+        0,
+        Math.floor(
+          (now -
+            parseDate(
+              lostItems.reduce((a, b) =>
+                parseDate(a.created_at) < parseDate(b.created_at) ? a : b,
+              ).created_at,
+            ).getTime()) /
+            (1000 * 60 * 60 * 24),
+        ),
       )
     : null;
 
