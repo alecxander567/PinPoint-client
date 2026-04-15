@@ -296,13 +296,14 @@ function PageContent({
             className="mt-2 rounded-3xl text-center px-6 py-14"
             style={{
               background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.12)",
+              border: "1px solid rgba(99,102,241,0.15)",
+              boxShadow: "0 10px 28px rgba(15,23,42,0.05)",
             }}>
             <div
               className="flex items-center justify-center w-16 h-16 rounded-2xl mx-auto mb-5"
               style={{
-                background: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.2)",
+                background: "linear-gradient(135deg, #1d4ed8, #3730a3)",
+                opacity: 0.85,
               }}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
                 <rect
@@ -311,7 +312,7 @@ function PageContent({
                   width="7"
                   height="7"
                   rx="1"
-                  stroke="#bfdbfe"
+                  stroke="white"
                   strokeWidth="2"
                 />
                 <rect
@@ -320,7 +321,7 @@ function PageContent({
                   width="7"
                   height="7"
                   rx="1"
-                  stroke="#bfdbfe"
+                  stroke="white"
                   strokeWidth="2"
                 />
                 <rect
@@ -329,29 +330,25 @@ function PageContent({
                   width="7"
                   height="7"
                   rx="1"
-                  stroke="#bfdbfe"
+                  stroke="white"
                   strokeWidth="2"
                 />
                 <path
                   d="M14 14h2v2h-2zM18 14h3M14 18h3M18 18h3v3M14 21h2"
-                  stroke="#bfdbfe"
+                  stroke="white"
                   strokeWidth="2"
                   strokeLinecap="round"
                 />
               </svg>
             </div>
             <h2
-              className="text-2xl font-bold text-white m-0"
+              className="text-2xl font-bold text-slate-800 m-0"
               style={{ fontFamily: "'Poppins', sans-serif" }}>
               No items yet
             </h2>
             <p
-              className="mt-3 mx-auto text-sm leading-relaxed"
-              style={{
-                maxWidth: "480px",
-                color: "#bfdbfe",
-                fontFamily: "'Nunito', sans-serif",
-              }}>
+              className="mt-3 mx-auto text-sm leading-relaxed text-slate-500"
+              style={{ maxWidth: "480px", fontFamily: "'Nunito', sans-serif" }}>
               Register your first item to get started. Once added, you can
               generate a QR code and track its status here.
             </p>

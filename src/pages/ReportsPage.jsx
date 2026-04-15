@@ -25,6 +25,7 @@ function ReportsContent({
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [reportSearch, setReportSearch] = useState("");
   const [selectedReports, setSelectedReports] = useState([]);
+  const [resolvingAll, setResolvingAll] = useState(false);
 
   const { resolveReport, resolvingId } = useResolveReport();
 
@@ -86,6 +87,33 @@ function ReportsContent({
     }
     onReportResolved(reportId);
     showAlert(`Report resolved — "${itemName}" marked as found.`, "success");
+  };
+
+  const handleResolveSelectedReports = async () => {
+    if (!selectedReports.length) return;
+    setResolvingAll(true);
+    const results = await Promise.all(
+      selectedReports.map((id) => resolveReport(id)),
+    );
+    setResolvingAll(false);
+    const failed = results.filter((r) => r.error);
+    if (failed.length) {
+      showAlert(`${failed.length} report(s) could not be resolved.`, "error");
+    }
+    const resolvedIds = selectedReports.filter((_, i) => !results[i].error);
+    resolvedIds.forEach((id) => {
+      const report = reports.find((r) => r.id === id);
+      if (report) onReportResolved(id);
+    });
+    setSelectedReports((current) =>
+      current.filter((id) => resolvedIds.includes(id) === false),
+    );
+    if (!failed.length) {
+      showAlert(
+        `${resolvedIds.length} report(s) resolved successfully.`,
+        "success",
+      );
+    }
   };
 
   if (loading || reportsLoading) return <SkeletonLoader />;
@@ -196,8 +224,8 @@ function ReportsContent({
               </h2>
             )}
 
-            {/* Search + buttons — left on mobile, right on desktop */}
-            <div className="flex flex-wrap items-center gap-2 lg:ml-auto">
+            {/* Search + buttons */}
+            <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:ml-auto">
               <SearchInput
                 value={reportSearch}
                 onChange={setReportSearch}
@@ -205,46 +233,75 @@ function ReportsContent({
                 width="min(300px, 100%)"
               />
 
-              <button
-                onClick={handleSelectAllReports}
-                disabled={!filteredReports.length}
-                className="px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
-                style={{
-                  border: "1px solid #cbd5e1",
-                  background: "white",
-                  color: "#0f172a",
-                  cursor: filteredReports.length ? "pointer" : "not-allowed",
-                  opacity: filteredReports.length ? 1 : 0.5,
-                  whiteSpace: "nowrap",
-                }}>
-                {allVisibleSelected ? "Unselect All" : "Select All"}
-              </button>
+              {/* Action buttons — always grouped together */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleSelectAllReports}
+                  disabled={!filteredReports.length}
+                  className="flex-1 lg:flex-none px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+                  style={{
+                    border: "1px solid #cbd5e1",
+                    background: "white",
+                    color: "#0f172a",
+                    cursor: filteredReports.length ? "pointer" : "not-allowed",
+                    opacity: filteredReports.length ? 1 : 0.5,
+                    whiteSpace: "nowrap",
+                  }}>
+                  {allVisibleSelected ? "Unselect All" : "Select All"}
+                </button>
 
-              <button
-                onClick={handleDeleteSelectedReports}
-                disabled={!selectedReports.length || reportsDeleting}
-                className="px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
-                style={{
-                  background:
-                    !selectedReports.length || reportsDeleting ?
-                      "#cbd5e1"
-                    : "linear-gradient(135deg, #ef4444, #dc2626)",
-                  border: "none",
-                  cursor:
-                    !selectedReports.length || reportsDeleting ?
-                      "not-allowed"
-                    : "pointer",
-                  boxShadow:
-                    selectedReports.length && !reportsDeleting ?
-                      "0 4px 12px rgba(239,68,68,0.3)"
-                    : "none",
-                  whiteSpace: "nowrap",
-                }}>
-                {reportsDeleting ?
-                  "Deleting..."
-                : `Delete${selectedReports.length ? ` (${selectedReports.length})` : ""}`
-                }
-              </button>
+                <button
+                  onClick={handleResolveSelectedReports}
+                  disabled={!selectedReports.length || resolvingAll}
+                  className="flex-1 lg:flex-none px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
+                  style={{
+                    background:
+                      !selectedReports.length || resolvingAll ?
+                        "#cbd5e1"
+                      : "linear-gradient(135deg, #10b981, #059669)",
+                    border: "none",
+                    cursor:
+                      !selectedReports.length || resolvingAll ?
+                        "not-allowed"
+                      : "pointer",
+                    boxShadow:
+                      selectedReports.length && !resolvingAll ?
+                        "0 4px 12px rgba(16,185,129,0.3)"
+                      : "none",
+                    whiteSpace: "nowrap",
+                  }}>
+                  {resolvingAll ?
+                    "Resolving..."
+                  : `Resolve${selectedReports.length ? ` (${selectedReports.length})` : ""}`
+                  }
+                </button>
+
+                <button
+                  onClick={handleDeleteSelectedReports}
+                  disabled={!selectedReports.length || reportsDeleting}
+                  className="flex-1 lg:flex-none px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
+                  style={{
+                    background:
+                      !selectedReports.length || reportsDeleting ?
+                        "#cbd5e1"
+                      : "linear-gradient(135deg, #ef4444, #dc2626)",
+                    border: "none",
+                    cursor:
+                      !selectedReports.length || reportsDeleting ?
+                        "not-allowed"
+                      : "pointer",
+                    boxShadow:
+                      selectedReports.length && !reportsDeleting ?
+                        "0 4px 12px rgba(239,68,68,0.3)"
+                      : "none",
+                    whiteSpace: "nowrap",
+                  }}>
+                  {reportsDeleting ?
+                    "Deleting..."
+                  : `Delete${selectedReports.length ? ` (${selectedReports.length})` : ""}`
+                  }
+                </button>
+              </div>
             </div>
           </div>
         </div>
