@@ -186,7 +186,7 @@ function LostPageContent({ lostItems, setLostItems, loading }) {
       </div>
 
       <div className="max-w-screen-xl mx-auto px-5 pt-6 pb-0">
-        <div className="flex flex-wrap items-center gap-4 mb-6">
+        <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <h2
             className="text-base font-bold text-slate-800 m-0"
             style={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -195,12 +195,11 @@ function LostPageContent({ lostItems, setLostItems, loading }) {
             : `Lost Items (${lostItems.length})`}
           </h2>
 
-          <div className="ml-auto">
+          <div className="w-full sm:w-auto sm:ml-auto sm:max-w-[300px]">
             <SearchInput
               value={search}
               onChange={setSearch}
               placeholder="Search lost items..."
-              width="min(300px, 100%)"
             />
           </div>
         </div>
